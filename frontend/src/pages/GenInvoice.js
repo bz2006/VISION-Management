@@ -7,13 +7,13 @@ import "./getinvoice.css"
 function GenerateInvoice() {
 
   const [size] = useState('large');
-    const [invoiceNo,setInvoiceNo] =useState("")
-  const [Date,setDate] =useState("")
-  const [Marketplc,setMarketplc] =useState("")
-  const [Address,SetAddress] =useState("")
-  const [POno,setPOno] =useState("")
-  const [Vendorc,setVendorc] =useState("")
-  const [Mrpart,setMrpart] =useState("")
+  const [invoiceNo, setInvoiceNo] = useState("")
+  const [Date, setDate] = useState("")
+  const [Marketplc, setMarketplc] = useState("")
+  const [Address, SetAddress] = useState("")
+  const [POno, setPOno] = useState("")
+  const [Vendorc, setVendorc] = useState("")
+  const [Mrpart, setMrpart] = useState("")
   const [Models, setModels] = useState([])
   const [Instructions, setInstructions] = useState("")
   const [Acno, setAcno] = useState("")
@@ -28,7 +28,7 @@ function GenerateInvoice() {
     { value: 'bannnana', label: 'Banana' },
   ];
 
-  
+
 
   const handleChange = (value, index, field) => {
     const updatedModels = [...Models];
@@ -44,8 +44,10 @@ function GenerateInvoice() {
     updatedModels.splice(index, 1);
     setModels(updatedModels);
   };
-
-  console.log(Genmrp);
+  const Handledate = (date) => {
+    setDate(date.format("DD.MM.YYYY"));
+  };
+  console.log(invoiceNo, Date, Marketplc, Address, POno, Vendorc, Mrpart, Instructions, Acno, Taxmethod);
   return (
     <>
       <HeaderComp />
@@ -60,9 +62,9 @@ function GenerateInvoice() {
           </div>
           <div style={{ display: "flex", margin: "20px" }}>
 
-            <Input value={invoiceNo} onChange={(event)=>{setInvoiceNo(event.target.value)}} suffix="/24-25" placeholder="Invoice No (V001)" size='large' style={{ width: "200px", marginRight: "5%" }} />
-            <Input style={{ marginRight: "5%", width: "200px" }} value={"V005/24-25"} readOnly/>
-            <DatePicker format={"DD.MM.YYYY"} />
+            <Input value={invoiceNo} onChange={(event) => { setInvoiceNo(event.target.value) }} suffix="/24-25" placeholder="Invoice No (V001)" size='large' style={{ width: "200px", marginRight: "5%" }} />
+            <Input style={{ marginRight: "5%", width: "200px" }} value={"V005/24-25"} readOnly />
+            <DatePicker  onChange={Handledate} format={"DD.MM.YYYY"} />
           </div>
 
 
@@ -75,6 +77,8 @@ function GenerateInvoice() {
           <div style={{ display: "flex", margin: "20px" }}>
             <Select
               size={size}
+              value={Marketplc}
+              onChange={(value) => setMarketplc(value)}
               defaultValue="Market Place"
               style={{
                 width: 200, marginRight: "5%"
@@ -83,14 +87,16 @@ function GenerateInvoice() {
             />
             <Select
               size={size}
+              value={Address}
+              onChange={(value) => { SetAddress(value) }}
               defaultValue="Address"
               style={{
                 width: 200, marginRight: "5%"
               }}
               options={options}
             />
-            <Input placeholder="P.O Number" size='large' style={{ width: "200px", marginRight: "5%" }} />
-            <Input placeholder="Vendor Code" size='large' style={{ width: "200px", marginRight: "5%" }} />
+            <Input value={POno} onChange={(event) => { setPOno(event.target.value) }} placeholder="P.O Number" size='large' style={{ width: "200px", marginRight: "5%" }} />
+            <Input value={Vendorc} onChange={(event) => { setVendorc(event.target.value) }} placeholder="Vendor Code" size='large' style={{ width: "200px", marginRight: "5%" }} />
           </div>
 
 
@@ -100,6 +106,8 @@ function GenerateInvoice() {
           </div>
           <div style={{ display: "flex", margin: "20px" }}>
             <Select
+              value={Mrpart}
+              onChange={(value) => { setMrpart(value) }}
               size={size}
               defaultValue="MRP / Art No"
               style={{
@@ -143,9 +151,11 @@ function GenerateInvoice() {
             <h5 style={{ marginRight: "18%" }}>Tax Method</h5>
           </div>
           <div style={{ display: "flex", margin: "20px" }}>
-            <Input placeholder="Instructions" size='large' style={{ width: "200px", marginRight: "5%" }} />
+            <Input value={Instructions} onChange={(event) => { setInstructions(event.target.value) }} placeholder="Instructions" size='large' style={{ width: "200px", marginRight: "5%" }} />
             <Select
               size={size}
+              value={Acno}
+              onChange={(value) => { setAcno(value) }}
               defaultValue="A/c No"
               style={{
                 width: 200, marginRight: "5%"
@@ -154,6 +164,8 @@ function GenerateInvoice() {
             />
             <Select
               size={size}
+              value={Taxmethod}
+              onChange={(value) => { setTaxmethod(value) }}
               defaultValue="Tax Method"
               style={{
                 width: 200,
@@ -161,8 +173,8 @@ function GenerateInvoice() {
               options={options}
             />
           </div>
-          <div style={{ display: "flex", margin: "20px" , marginTop: "40px"}}>
-            <Checkbox checked={addgst} onChange={(event)=>{setAddgst(event.target.value)}} size="large" style={{ color: "white", marginRight: "5%" }}>Add to GST records</Checkbox>
+          <div style={{ display: "flex", margin: "20px", marginTop: "40px" }}>
+            <Checkbox checked={addgst} onChange={(event) => { setAddgst(event.target.value) }} size="large" style={{ color: "white", marginRight: "5%" }}>Add to GST records</Checkbox>
             <Checkbox checked={Genmrp} onChange={(event) => setGenmrp(event.target.checked)} size="large" style={{ color: "white", marginRight: "5%" }}>Generate MRP</Checkbox>
           </div>
           <button onClick={handleAdd}>generate</button>

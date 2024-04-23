@@ -1,0 +1,60 @@
+.tabdiv {
+    padding: 30px;
+}
+
+.table-container {
+    display: flex;
+    align-items: center;
+
+    justify-content: center;
+
+    .ant-table-thead {
+        .ant-table-cell {
+            background-color: rgb(13, 13, 13);
+            color: white;
+            width: 250px;
+        }
+
+    }
+
+    .ant-table-cell {
+        background-color: #1f1f1f;
+        color: white;
+
+    }
+
+    .ant-table-wrapper .ant-table-tbody .ant-table-row>.ant-table-cell-row-hover {
+        background-color: #313131;
+        color: white
+    }
+}
+
+.ant-modal .ant-modal-content {
+    background-color: #1f1f1f;
+    color: white;
+
+    .ant-modal-title {
+        color: white;
+    }
+
+    .ant-modal-close {
+        color: white;
+    }
+}
+
+.ant-modal .ant-modal-header {
+    background-color: #1f1f1f;
+    color: white;
+}
+
+.ant-select .ant-select-arrow {
+    color: black;
+}
+
+.ant-select-dropdown .ant-select-item-option-content {
+    color: black;
+}
+
+:where(.css-dev-only-do-not-override-mzwlov).ant-select-single.ant-select-lg.ant-select-open .ant-select-selection-item {
+    color: black;
+}

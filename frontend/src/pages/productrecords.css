@@ -58,3 +58,11 @@
 :where(.css-dev-only-do-not-override-mzwlov).ant-select-single.ant-select-lg.ant-select-open .ant-select-selection-item {
     color: black;
 }
+
+.ant-empty-normal .ant-empty-description{
+    color: white;
+}
+
+.ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder:hover>th, :where(.css-dev-only-do-not-override-mzwlov).ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder:hover>td, :where(.css-dev-only-do-not-override-mzwlov).ant-table-wrapper .ant-table-tbody>tr.ant-table-placeholder {
+    background:#313131;
+}

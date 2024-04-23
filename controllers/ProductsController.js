@@ -1,0 +1,122 @@
+import Products from "../models/ProductsRec.js";
+
+
+export const CreateProducts = async (req, res) => {
+    try {
+        const catlog = req.params.catlog
+        const prodlist  = req.body; 
+
+        let productcat = await Products.findOne({ catlogname: catlog });
+
+        if (!productcat) {
+            productcat = new Products({
+                catlogname: catlog,
+                products: []
+
+            });
+            for (const product of prodlist) {
+                productcat.products.push({
+                  model: product.model,
+                  mrp: product.mrp,
+                  unitPrice: product.unitPrice,
+                  articleNo: product.articleNo,
+                });
+              }
+        } else {
+
+            return res.status(403).json({ error: 'Catlog aldready exist' });
+        }
+
+
+        await productcat.save();
+
+        res.status(200).json({productcat});
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+export const UpdateProducts = async (req, res) => {
+    try {
+        const catlogid = req.params.id
+        const catname = req.body["catname"]
+        const prodlist  = []; 
+        for (const product of req.body["Models"]) {
+            prodlist.push({
+              model: product.Model,
+              mrp: product.MRP,
+              unitPrice: product.unitprice,
+              articleNo: product.artno,
+            });
+          }
+console.log(prodlist)
+        let productcat = await Products.findByIdAndUpdate(
+            catlogid,
+            {
+                catlogname:catname,
+                products:prodlist
+            },
+            { new: true }
+
+        )
+
+        if (!productcat) {
+            return res.status(404).json({ error: 'Product not found or cannot be updated.' });
+        }
+        res.json({ message: 'Product updated successfully', updatedProduct: productcat });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+export const getallcatlogs = async (req, res) => {
+
+    try {
+        const catlogs = await Products.find({});
+
+        if (catlogs.length === 0) {
+            return res.status(404).json({ success: false, message: 'No orders found for this user.' });
+        }
+        return res.json(catlogs);
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+
+export const getCatlogbyname = async (req, res) => {
+    const catlog = req.params.catlogname;
+console.log(catlog)
+    try {
+        const rescatlog = await Products.find({ catlogname: catlog });
+
+        if (rescatlog.length === 0) {
+            return res.status(404).json({ success: false, message: 'No catlog found ' });
+        }
+
+        return res.json(rescatlog);
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+
+
+export const deleteCart = async (req, res) => {
+    try {
+        const { userId } = req.params; // Assuming userId is passed as a parameter
+
+        // Find the cart associated with the userId and delete it
+        const deletedCart = await Cart.findOneAndDelete({ userId });
+
+        if (!deletedCart) {
+            return res.status(404).json({ error: 'Cart not found' });
+        }
+
+        res.status(200).json({ message: 'Cart deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+

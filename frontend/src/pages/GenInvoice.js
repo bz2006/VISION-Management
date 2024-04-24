@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import HeaderComp from "../components/header"
-import { Select, Input, InputNumber, Checkbox, DatePicker } from "antd";
+import axios from 'axios';
+import { Select, Input, InputNumber, Checkbox, DatePicker, Spin } from "antd";
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import "./getinvoice.css"
 
@@ -22,13 +23,54 @@ function GenerateInvoice() {
   const [Genmrp, setGenmrp] = useState(true)
 
 
+  const [fetchcatlog, setFetchcatlog] = useState("")
+  const [spinning, setSpinning] = useState(false);
+  const [Catlog, setCatlog] = useState([])
+  const [Markets, setMarkets] = useState([])
+  const [catModels, setcatModels] = useState([])
+
   const options = [
     { value: 'orange', label: 'Orange' },
     { value: 'banana', label: 'bbbbb' },
     { value: 'bannnana', label: 'Banana' },
   ];
 
+  const FetchMarkets = async () => {
+    try {
+        setSpinning(true);
+        const res = await axios.get("/api/v1/records/markets/get-markets")
+        setSpinning(false);
+        console.log(res.data["markets"])
+        setMarkets(res.data["markets"].map(market => ({ value: market._id, label: market.marketname })))
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+useEffect(() => {
+  FetchMarkets()
+}, [])
 
+
+  const FetchCatlog = async () => {
+    console.log("calog fetch")
+    try {
+      
+        setSpinning(true);
+        const res = await axios.get(`/api/v1/records/products/get-catlog/${fetchcatlog}`)
+        setSpinning(false);
+        setCatlog(res.data.map(catlog => ({ value: catlog.catlogname, label: catlog.catlogname })))
+        setCatlog(res.data.map(catlog => ({ value: catlog.model, label: catlog.model })))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
+
+
+  // ----------------------------------------------------------------
 
   const handleChange = (value, index, field) => {
     const updatedModels = [...Models];
@@ -50,6 +92,7 @@ function GenerateInvoice() {
   console.log(invoiceNo, Date, Marketplc, Address, POno, Vendorc, Mrpart, Instructions, Acno, Taxmethod);
   return (
     <>
+    <Spin spinning={spinning} fullscreen size='large' />
       <HeaderComp />
       <div style={{ padding: "30px" }}>
         <div className='invdiv'>
@@ -78,12 +121,15 @@ function GenerateInvoice() {
             <Select
               size={size}
               value={Marketplc}
-              onChange={(value) => setMarketplc(value)}
+              onChange={(value) => {
+                setMarketplc(value);
+                setFetchcatlog(value);
+                FetchCatlog()}}
               defaultValue="Market Place"
               style={{
                 width: 200, marginRight: "5%"
               }}
-              options={options}
+              options={Markets}
             />
             <Select
               size={size}

@@ -102,21 +102,20 @@ console.log(catlog)
 };
 
 
-export const deleteCart = async (req, res) => {
+export const deleteCatlog= async (req, res) => {
     try {
-        const { userId } = req.params; // Assuming userId is passed as a parameter
-
-        // Find the cart associated with the userId and delete it
-        const deletedCart = await Cart.findOneAndDelete({ userId });
-
-        if (!deletedCart) {
-            return res.status(404).json({ error: 'Cart not found' });
-        }
-
-        res.status(200).json({ message: 'Cart deleted successfully' });
+      const  id  = req.params.id;
+      await Products.findByIdAndDelete(id);
+      res.status(200).send({
+        success: true,
+        message: "catlog Deleted Successfully",
+      });
     } catch (error) {
-        res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).send({
+        success: false,
+        message: "error while deleting catlog",
+        error,
+      });
     }
-};
-
+  };
 

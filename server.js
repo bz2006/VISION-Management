@@ -5,6 +5,7 @@ import connectdb from "./config/db.js";
 import cors from "cors"
 import bodyParser from 'body-parser';
 import ProductRoute from "./routes/ProductRoute.js"
+import MarketsRoute from"./routes/MarketsRoute.js"
 
 
 
@@ -24,7 +25,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}));
 
 app.use(bodyParser.json());
-app.use("/api/v1/records",ProductRoute)
+app.use("/api/v1/records/products",ProductRoute)
+app.use("/api/v1/records/markets",MarketsRoute)
 
 app.get("/", (req, res) => {
     res.send("<h1>Welcome to VISION-Mangement</h1>");

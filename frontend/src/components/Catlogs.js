@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import "../pages/productrecords.css"
 import axios from "axios"
-import { Select, Table, Modal, message, Button, Popconfirm, Input } from "antd";
+import { Select, Table, Modal, message, Button, Popconfirm, Input, Spin } from "antd";
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 
 
 function Catlogs() {
 
 
-  
+
     const [fetchcatlog, setFetchcatlog] = useState("")
     const [Catlog, setCatlog] = useState([])
     const [catname, setcatname] = useState("")
+    const [spinning, setSpinning] = useState(false);
     const [tcatname, settcatname] = useState("")
     const [Catlogid, setCatlogid] = useState("")
     const [updatecatlog, setupdatecatlog] = useState(false);
@@ -36,7 +37,9 @@ function Catlogs() {
     const AddCatlog = async () => {
         setaddcatlog(false)
         try {
+            setSpinning(true);
             await axios.post(`/api/v1/records/products/${catname}`, Models)
+            setSpinning(false);
             window.location.reload();
         } catch (error) {
 
@@ -45,7 +48,9 @@ function Catlogs() {
     const UpdateCatlog = async () => {
         setupdatecatlog(false)
         try {
-            await axios.post(`/api/v1/records/update-products/${Catlogid}`, { catname, Models })
+            setSpinning(true);
+            await axios.post(`/api/v1/records/products/update-products/${Catlogid}`, { catname, Models })
+            setSpinning(false);
             window.location.reload();
         } catch (error) {
 
@@ -55,7 +60,9 @@ function Catlogs() {
     const FetchCatlog = async () => {
         try {
             let keyvalue = 0
+            setSpinning(true);
             const res = await axios.get(`/api/v1/records/products/get-catlog/${fetchcatlog}`)
+            setSpinning(false);
             setCatlogid(res.data[0]["_id"])
             settcatname(res.data[0]["catlogname"])
             setcatname(res.data[0]["catlogname"])
@@ -70,10 +77,17 @@ function Catlogs() {
             console.log(error)
         }
     }
-    console.log(catname)
-
-
-    console.log(Models)
+    const handleCatlogtDelete = async (id) => {
+        try {
+            console.log(id, "delete")
+            setSpinning(true);
+            await axios.delete(`/api/v1/records/products/delete-catlog/${Catlogid}`);
+            setSpinning(false);
+            window.location.reload();
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
     const handleAddupdate = async () => {
         const newModel = { Model: '', MRP: 0, unitprice: 0, artno: '' };
@@ -132,40 +146,41 @@ function Catlogs() {
 
     return (
         <>
-        <div>
-            <Select
-                size='large'
-                value={fetchcatlog}
-                onChange={(value) => setFetchcatlog(value)}
-                defaultValue="Market Place"
-                style={{
-                    width: 200, marginRight: "5%"
-                }}
-                options={options}
-            />
-            <Button type="primary" style={{ marginRight: "50px" }} onClick={FetchCatlog}>Fetch Catlog</Button>
             <div>
-                <div style={{ display: "flex" }}>
-                    <h1 style={{ color: "white", marginRight: "450px" }}>Catlog : {tcatname}</h1>
-                    <Button type="primary" style={{ marginRight: "50px" }} onClick={() => setaddcatlog(true)}>Add</Button>
-                    <Button type="primary" style={{ marginRight: "50px" }} onClick={() => { setModels(Catlog); setupdatecatlog(true) }}>Update</Button>
-                    <Popconfirm
-                        title="Delete Market Place"
-                        description="Are you sure to delete this Market Place?"
-                        onConfirm={confirm}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button danger>Delete</Button>
-                    </Popconfirm>
-                </div>
+                <Spin spinning={spinning} fullscreen size='large' />
+                <Select
+                    size='large'
+                    value={fetchcatlog}
+                    onChange={(value) => setFetchcatlog(value)}
+                    defaultValue="Market Place"
+                    style={{
+                        width: 200, marginRight: "5%"
+                    }}
+                    options={options}
+                />
+                <Button type="primary" style={{ marginRight: "50px" }} onClick={FetchCatlog}>Fetch Catlog</Button>
+                <div>
+                    <div style={{ display: "flex" }}>
+                        <h1 style={{ color: "white", marginRight: "450px" }}>Catlog : {tcatname}</h1>
+                        <Button type="primary" style={{ marginRight: "50px" }} onClick={() => setaddcatlog(true)}>Add</Button>
+                        <Button type="primary" style={{ marginRight: "50px" }} onClick={() => { setModels(Catlog); setupdatecatlog(true) }}>Update</Button>
+                        <Popconfirm
+                            title="Delete Market Place"
+                            description="Are you sure to delete this Market Place?"
+                            onConfirm={handleCatlogtDelete}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button danger>Delete</Button>
+                        </Popconfirm>
+                    </div>
 
-                <div className="table-container">
-                    <Table columns={prcolumns} dataSource={Catlog} style={{ width: "fit-content", fontSize: "50px" }} />
+                    <div className="table-container">
+                        <Table columns={prcolumns} dataSource={Catlog} style={{ width: "fit-content", fontSize: "50px" }} />
+                    </div>
                 </div>
             </div>
-        </div>
-        <>
+            <>
                 <Modal
                     title="Add Catlog"
                     centered

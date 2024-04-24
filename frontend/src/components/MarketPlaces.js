@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import "../pages/productrecords.css"
 import axios from "axios"
-import { Select, Table, Modal, message, Button, Popconfirm, Input } from "antd";
+import { Select, Table, Modal, message, Button, Popconfirm, Spin, Input } from "antd";
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 
 
@@ -11,6 +11,7 @@ function MarketPlaces() {
     const [fetchcatlog, setFetchcatlog] = useState("")
     const [catname, setcatname] = useState("")
     const [tcatname, settcatname] = useState("")
+    const [spinning, setSpinning] = useState(false);
 
 
     const [marketname, setmarketname] = useState("")
@@ -18,10 +19,18 @@ function MarketPlaces() {
     const [address, setaddress] = useState([""])
     const [vendorcode, setvendorcode] = useState("")
     const [Catlog, setCatlog] = useState("")
+    const [Markets, setMarkets] = useState([])
 
-    console.log(address)
+    const [upmarketname, setupmarketname] = useState("")
+    const [upgst, setupgst] = useState("")
+    const [upaddress, setupaddress] = useState([""])
+    const [upvendorcode, setupvendorcode] = useState("")
+    const [upCatlog, setupCatlog] = useState("")
+    const [marketupdates, setmarketupdates] = useState([])
 
-    const [Catlogid, setCatlogid] = useState("")
+
+    const [Marketid, setMarketid] = useState("")
+
     const [updatemp, setupdatemp] = useState(false);
     const [addmp, setaddmp] = useState(false);
     const [updatecatlog, setupdatecatlog] = useState(false);
@@ -32,27 +41,99 @@ function MarketPlaces() {
     const GetCatlog = async () => {
         setaddcatlog(false)
         try {
-            const res = await axios.get("/api/v1/records/products/get-catlogs")
-            setoptions(res.data.map(catlog => ({ value: catlog.catlogname, label: catlog.catlogname })))
+                    const res = await axios.get("/api/v1/records/products/get-catlogs")
+               setoptions(res.data.map(catlog => ({ value: catlog.catlogname, label: catlog.catlogname })))
         } catch (error) {
 
         }
     }
-    //console.log(Catlog)
+    const FetchMarkets = async () => {
+        try {
+            setSpinning(true);
+            const res = await axios.get("/api/v1/records/markets/get-markets")
+            setSpinning(false);
+            setMarkets(res.data["markets"].map((data) => ({
+                key: data["_id"],
+                market: data["marketname"],
+                gst: data["gstNo"],
+                address: data["address"],
+                vendor: data["vendorcode"],
+                catlog: data["linkedcatlog"]
+            })))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
-        GetCatlog()
+        FetchMarkets()
     }, [])
 
 
-    const handleAddupdate = async () => {
-        const newModel = { Model: '', MRP: 0, unitprice: 0, artno: '' };
-        setModels([...Models, newModel]);
+    const AddMarket = async () => {
+        setaddmp(false)
+        try {
+            setSpinning(true);
+            await axios.post("/api/v1/records/markets/new-market", { marketname, gst, address, vendorcode, Catlog })
+            setSpinning(false);
+            window.location.reload();
+        } catch (error) {
+
+        }
+    }
+    const handlemarketDelete = async (id) => {
+        try {
+            console.log(id,"delete")
+            setSpinning(true);
+            await axios.delete(`/api/v1/records/markets/delete-market/${id}`);
+            FetchMarkets()
+            setSpinning(false);
+        } catch (error) {
+           console.log(error)
+        }
+    };
+   
+
+    const HandleUpdateinit = (record) => {
+        GetCatlog()
+        setupdatemp(true)
+        setMarketid(record["key"])
+        setupmarketname(record["market"])
+        setupgst(record["gst"])
+        setupvendorcode(record["vendor"])
+        setupaddress(record["address"])
+        setupCatlog(record["catlog"])
+    }
+    const UpdateMarket = async () => {
+        setupdatemp(false)
+        console.log(upmarketname, upgst, upaddress, upvendorcode, upCatlog)
+        try {
+            setSpinning(true);
+           await axios.post(`/api/v1/records/markets/update-market/${Marketid}`, { upmarketname, upgst, upaddress, upvendorcode, upCatlog })
+            setSpinning(false);
+            window.location.reload();
+        } catch (error) {
+
+        }
+    }
+
+    const handleChangeUpdate = (value, index) => {
+        const updatedAddresses = [...upaddress];
+        updatedAddresses[index] = value;
+        setupaddress(updatedAddresses);
     };
 
-    const handleChangeupdate = (value, index, field) => {
-        const updatedModels = [...Models];
-        updatedModels[index][field] = value;
-        setModels(updatedModels);
+
+    const handleAddUpdate = () => {
+        const updatedAddresses = [...upaddress, ""];
+        setupaddress(updatedAddresses);
+    };
+
+
+    const handleDeleteUpdate = (index) => {
+        const updatedAddresses = [...upaddress];
+        updatedAddresses.splice(index, 1);
+        setupaddress(updatedAddresses);
     };
 
     const handleChange = (value, index) => {
@@ -72,10 +153,7 @@ function MarketPlaces() {
         updatedAddresses.splice(index, 1);
         setaddress(updatedAddresses);
     };
-    const confirm = (e) => {
-        console.log(e);
-        message.success('Market Place deleted');
-    };
+   
 
 
 
@@ -83,18 +161,18 @@ function MarketPlaces() {
     const mpcolumns = [
         {
             title: 'Market Name',
-            dataIndex: 'Market',
-            key: 'Market',
+            dataIndex: 'market',
+            key: 'market',
         },
         {
             title: 'GST No',
-            dataIndex: 'GST',
-            key: 'GST',
+            dataIndex: 'gst',
+            key: 'gst',
         },
         {
             title: 'Address',
-            dataIndex: 'Address',
-            key: 'Address',
+            dataIndex: 'address',
+            key: 'address',
         },
         {
             title: 'Vendor Code',
@@ -103,54 +181,43 @@ function MarketPlaces() {
         },
         {
             title: 'Catlog',
-            dataIndex: 'Catlog',
-            key: 'Catlog',
+            dataIndex: 'catlog',
+            key: 'catlog',
         },
         {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
                 <>
-                    <Button type="primary" onClick={() => setupdatemp(true)}>Update</Button>
+                    <Button type="primary" onClick={() => { HandleUpdateinit(record) }}>Update</Button>
                     <Popconfirm
                         title="Delete Market Place"
                         description="Are you sure to delete this Market Place?"
-                        onConfirm={confirm}
+                        onConfirm={() => handlemarketDelete(record["key"])}
                         okText="Yes"
                         cancelText="No"
                     >
-                        <Button danger>Delete</Button>
+                        <Button danger >Delete</Button>
                     </Popconfirm>
                 </>
             ),
         },
     ];
-    const mpdata = [
-        {
-            key: '1',
-            Market: 'AGGAPE',
-            GST: "32AEQPC7004Q",
-            Address: ["PATTIMATTION P.O KOCHI", "Kerala", "Ph: 123456789",],
-            vendor: "",
-            Catlog: "KERALA",
-
-        },
-
-    ];
 
 
     return (
         <>
-            <Button type="primary" style={{ marginRight: "50px" }} onClick={() => setaddmp(true)}>Add</Button>
+            <Spin spinning={spinning} fullscreen size='large' />
+            <Button type="primary" style={{ marginRight: "50px" }} onClick={() => { GetCatlog(); setaddmp(true); }}>Add</Button>
             <div className="table-container">
-                <Table columns={mpcolumns} dataSource={mpdata} style={{ width: "fit-content", fontSize: "50px" }} />
+                <Table columns={mpcolumns} dataSource={Markets} style={{ width: "fit-content", fontSize: "50px" }} />
             </div>
             <>
                 <Modal
                     title="Add Market Place"
                     centered
                     open={addmp}
-                    onOk={() => setaddmp(false)}
+                    onOk={AddMarket}
                     onCancel={() => setaddmp(false)}
                     width={800}
                 >
@@ -226,12 +293,11 @@ function MarketPlaces() {
                     title="Update Market Place"
                     centered
                     open={updatemp}
-                    onOk={() => setupdatemp(false)}
+                    onOk={UpdateMarket}
                     onCancel={() => setupdatemp(false)}
                     width={1000}
                 >
                     <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-
                         <div style={{ display: "flex", flexDirection: "row" }}>
                             <h5 style={{ marginRight: "24%" }}>Market Name</h5>
                             <h5 style={{ marginRight: "28%" }}>GST No</h5>
@@ -240,22 +306,22 @@ function MarketPlaces() {
 
                         <div >
                             <Input
-                                value={marketname}
-                                onChange={(event) => setmarketname(event.target.value)}
+                                value={upmarketname}
+                                onChange={(event) => setupmarketname(event.target.value)}
                                 placeholder="Market Name"
                                 size='large'
                                 style={{ width: "200px", marginRight: "50px" }}
                             />
                             <Input
-                                value={gst}
-                                onChange={(event) => setgst(event.target.value)}
+                                value={upgst}
+                                onChange={(event) => setupgst(event.target.value)}
                                 placeholder="GST No"
                                 size='large'
                                 style={{ width: "200px", marginRight: "50px" }}
                             />
                             <Input
-                                value={vendorcode}
-                                onChange={(event) => setvendorcode(event.target.value)}
+                                value={upvendorcode}
+                                onChange={(event) => setupvendorcode(event.target.value)}
                                 placeholder="Vendor Code"
                                 size='large'
                                 style={{ width: "200px", marginRight: "50px" }}
@@ -267,27 +333,25 @@ function MarketPlaces() {
                         </div>
                         <div style={{ display: "flex", flexDirection: "row" }}>
                             <div style={{ display: "flex", flexDirection: "column", marginRight: "20px", alignItems: "center" }}>
-                                {address.map((addr, index) => (
+                                {upaddress.map((address, index) => (
                                     <div key={index} style={{ marginBottom: "10px" }}>
                                         <Input
-                                            value={addr}
-                                            onChange={(e) => handleChange(e.target.value, index)}
+                                            value={address}
+                                            onChange={(e) => handleChangeUpdate(e.target.value, index)}
                                             placeholder="Address"
                                             size='large'
                                             style={{ width: "250px", marginRight: "10px" }}
                                         />
-                                        <DeleteOutlined onClick={() => handleDelete(index)} style={{ fontSize: "20px", marginTop: "5px" }} />
+                                        <DeleteOutlined onClick={() => handleDeleteUpdate(index)} style={{ fontSize: "20px", marginTop: "5px" }} />
                                     </div>
                                 ))}
-                                <PlusOutlined style={{ fontSize: "40px", marginRight: "100px", marginLeft: "30px" }} onClick={handleAdd} />
-
-
+                                <PlusOutlined style={{ fontSize: "40px", marginRight: "100px", marginLeft: "30px" }} onClick={handleAddUpdate} />
                             </div>
 
                             <Select
                                 size='large'
-                                value={Catlog}
-                                onChange={(value) => setCatlog(value)}
+                                value={upCatlog}
+                                onChange={(value) => setupCatlog(value)}
                                 defaultValue="Market Place"
                                 style={{
                                     width: 200, marginRight: "5%"

@@ -1,18 +1,20 @@
 import express from "express";
-import { CreateProducts, UpdateProducts, getCatlogbyname, getallcatlogs } from "../controllers/ProductsController.js";
+import { CreateProducts, UpdateProducts, deleteCatlog, getCatlogbyname, getallcatlogs } from "../controllers/ProductsController.js";
 
 const router = express.Router();
 
 
 
 
-router.post("/products/:catlog",CreateProducts);
+router.post("/:catlog",CreateProducts);
 
 router.post("/update-products/:id",UpdateProducts);
 
-router.get("/products/get-catlogs",getallcatlogs);
+router.get("/get-catlogs",getallcatlogs);
 
-router.get("/products/get-catlog/:catlogname",getCatlogbyname);
+router.get("/get-catlog/:catlogname",getCatlogbyname);
+
+router.delete("/delete-catlog/:id",deleteCatlog)
 
 
 export default router;

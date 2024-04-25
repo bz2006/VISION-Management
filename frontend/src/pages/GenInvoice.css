@@ -53,11 +53,17 @@
 
 .marketdet {
     border: 1px solid black;
-    width: 229.5px;
-   
-    height: 90px;
+    width: 231.5px;
+       height: fit-content;
 }
 .marketadrs{
+    margin: 0;
+    text-align: start;
+    color: black;
+    font-size: 10px;
+    padding-left: 10px;
+}
+.marketadrs1{
     margin: 0;
     text-align: start;
     color: black;
@@ -65,8 +71,7 @@
     padding-left: 10px;
 }
 .gst{
-    margin-top: 7px;
-    height: 9px;
+    height: fit-content;
     display: flex;
     flex-direction: row;
     border-top: 1px solid black;
@@ -75,6 +80,7 @@
     font-size: 10px;
     color: black;
     padding: 1px;
+    padding-right: 2px;
     width: 38.5px;
     border-right: 1px solid black;
     margin: 0px;
@@ -86,21 +92,53 @@
     margin: 0px;
 }
 .billdet1{
-    width: 80px;
+    width: 79px;
+    margin-left: -1px;
+   align-content: center;
+    border-right: 1px solid black;
+    border-bottom: 1.5px solid black;
+    height: 19.5px;
+    padding: 1.5px;
+}
+.billdet1v{
+    width: 79px;
     margin-left: -1px;
     border-right: 1px solid black;
-    border-bottom: 1px solid black;
+    border-bottom: 0px solid black;
+    height: 19.5px;
+    padding: 1.5px;
+}
+.billdet2{
+    width: 131px;
+    align-content: center;
+    margin-left: -1px;
+    border-right: 0px solid black;
+    border-bottom: 1.5px solid black;
+    height: 19.5px;
+    padding: 1.5px;
+}
+.billdet2v{
+    width: 131px;
+    margin-left: -1px;
+    border-right: 0px solid black;
+    border-bottom: 0px solid black;
+    height: 18.5px;
+    padding: 1.5px;
 }
 .billtype {
-    border: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 0.5px solid black;
+    border-bottom: 0.5px solid black;
+    border-left: 0.5px solid black;
     width: 145px;
-    height: 90px;
+    height: 90.5px;
 }
 
 .billdet {
     border: 1px solid black;
-    width: 211px;
-    height: 90px;
+    width: 215px;
+    height: 90.5px;
+    
 }
 
 /* ----------------------------------------------------------------- */
@@ -137,7 +175,7 @@
 
 .grosshead {
     border: 1px solid black;
-    width: 129px;
+    width: 131px;
     height: 30px;
 }
 
@@ -146,37 +184,37 @@
 .mrp {
     border: 1px solid black;
     width: 40px;
-    height: 270px;
+    height: 272px;
 }
 
 .model {
     border: 1px solid black;
     width: 187px;
-    height: 270px;
+    height: 272px;
 }
 
 .hsn {
     border: 1px solid black;
     width: 60px;
-    height: 270px;
+    height: 272px;
 }
 
 .unit {
     border: 1px solid black;
     width: 81px;
-    height: 270px;
+    height: 272px;
 }
 
 .qty {
     border: 1px solid black;
     width: 80px;
-    height: 270px;
+    height: 272px;
 }
 
 .gross {
     border: 1px solid black;
-    width: 129px;
-    height: 270px;
+    width: 131px;
+    height: 272px;
 }
 
 /* ---------------------------------------------------- */
@@ -215,7 +253,7 @@
 }
 
 .bill {
-    width: 133px;
+    width: 134.5px;
     justify-items: center;
    
 }

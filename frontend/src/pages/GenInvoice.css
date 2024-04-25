@@ -1,0 +1,426 @@
+.page {
+    height: 842px;
+    width: 595px;
+    background-color: white;
+    padding: 25px;
+}
+
+.invmain {
+    background-color: yellowgreen;
+    height: 842px;
+    width: 595px;
+}
+
+/* ------------change to auto------------------ */
+
+.head {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.subhead {
+    display: flex;
+    flex-direction: column;
+    padding-left: 30px;
+    margin-top: 0px;
+}
+
+.compadrs {
+    margin-bottom: -18px;
+    font-size: 10.5px;
+    color: black;
+}
+
+.compmadrs {
+    margin-bottom: -18.5px;
+    font-size: 12px;
+    color: black;
+}
+
+/* -------------head content  ----------- */
+
+
+.invcontent {
+    width: 100%;
+    border: 0.5px solid black;
+    height: 400px;
+}
+
+.marketdet {
+    border: 1px solid black;
+    width: 229.5px;
+   
+    height: 90px;
+}
+.marketadrs{
+    margin: 0;
+    text-align: start;
+    color: black;
+    font-size: 12px;
+    padding-left: 10px;
+}
+.gst{
+    margin-top: 7px;
+    height: 9px;
+    display: flex;
+    flex-direction: row;
+    border-top: 1px solid black;
+}
+.gst1{
+    font-size: 10px;
+    color: black;
+    padding: 1px;
+    width: 38.5px;
+    border-right: 1px solid black;
+    margin: 0px;
+}
+.gst2{
+    font-size: 10px;
+    padding: 1px;
+    color: black;
+    margin: 0px;
+}
+.billdet1{
+    width: 80px;
+    margin-left: -1px;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+.billtype {
+    border: 1px solid black;
+    width: 145px;
+    height: 90px;
+}
+
+.billdet {
+    border: 1px solid black;
+    width: 211px;
+    height: 90px;
+}
+
+/* ----------------------------------------------------------------- */
+
+.mrphead {
+    border: 1px solid black;
+    width: 40px;
+    height: 30px;
+}
+
+.modelhead {
+    border: 1px solid black;
+    width: 187px;
+    height: 30px;
+}
+
+.hsnhead {
+    border: 1px solid black;
+    width: 60px;
+    height: 30px;
+}
+
+.unithead {
+    border: 1px solid black;
+    width: 81px;
+    height: 30px;
+}
+
+.qtyhead {
+    border: 1px solid black;
+    width: 80px;
+    height: 30px;
+}
+
+.grosshead {
+    border: 1px solid black;
+    width: 129px;
+    height: 30px;
+}
+
+/* ------------------------------------------ */
+
+.mrp {
+    border: 1px solid black;
+    width: 40px;
+    height: 270px;
+}
+
+.model {
+    border: 1px solid black;
+    width: 187px;
+    height: 270px;
+}
+
+.hsn {
+    border: 1px solid black;
+    width: 60px;
+    height: 270px;
+}
+
+.unit {
+    border: 1px solid black;
+    width: 81px;
+    height: 270px;
+}
+
+.qty {
+    border: 1px solid black;
+    width: 80px;
+    height: 270px;
+}
+
+.gross {
+    border: 1px solid black;
+    width: 129px;
+    height: 270px;
+}
+
+/* ---------------------------------------------------- */
+.blank {
+    width: 40px;
+    height: 150px;
+}
+
+.amountname {
+    height: 200px;
+    width: 83.5px;
+}
+
+.amtncont {
+    /* border-bottom: 0.1px solid black;
+    border-right: 0.1px solid black;
+    border-left: 0.1px solid black; */
+    color: black;
+    margin: 0;
+    text-align: end;
+    padding: 5px;
+    font-size: 10px;
+
+}
+.billcont {
+    border-bottom: 0.1px solid black;
+    border-right: 0.1px solid black;
+    border-left: 0.1px solid black;
+    color: black;
+    margin: 0;
+    text-align: center;
+    background-color: gainsboro;
+    padding: 5px;
+    font-size: 10px;
+
+}
+
+.bill {
+    width: 133px;
+    justify-items: center;
+   
+}
+
+.comapny {
+    padding-top: 10px;
+    padding-left: 50px;
+    height: fit-content;
+    width: 340px;
+}
+
+.comapnycont {
+    margin: 0;
+    color: black;
+}
+
+
+
+
+
+/*
+.marketadrs{
+    width: 240px;
+    border: 1px solid black;
+        height: 80px;
+}
+.billhead{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.billtype{
+    width: 165px;
+    background-color: aquamarine;
+    height: 80px;
+}
+.billdetails{
+    width: 201px; 
+    border: 1px solid black;
+        height: 80px;
+}
+.invno{
+    width: 70px; 
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid black;
+        height: 30px;
+}
+.invnocont{
+    width: 125px; 
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid black;
+        height: 30px;
+}
+.date{
+    width: 70px; 
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid black;
+        height: 20px;
+}
+.datecont{
+    width: 125px; 
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid black;
+        height: 20px;
+}
+.po{
+    width: 70px; 
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid black;
+        height: 30px;
+}
+.pocont{
+    width: 125px; 
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid black;
+        height: 30px;
+}
+.gstno{
+    border: 1px solid black;
+    height: 15px;
+    display: flex;
+    flex-direction: row;
+}
+.gstcont1{
+    width: 39px;
+    margin-left: -1px;
+    margin-top: -1px;
+    background-color: blue;
+    border: 1px solid black;
+    height: 15px;
+}
+.commodity{
+    width: 195px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid rgb(0, 0, 0);
+    
+}
+.auth{
+    width: 161px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid rgb(0, 0, 0);
+}
+.vendor{
+    width: 70px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid rgb(0, 0, 0);
+}
+.vendorcode{
+    width: 125px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid rgb(0, 0, 0);
+}
+.inbodyhead{
+    width: fit-content;
+    margin-left: -0.5px;
+    margin-top: -1px;
+    border: 1px solid black;
+    height: 30px;
+    display: flex;
+    flex-direction: row;
+}
+.mrp{
+    width: 38.3px;
+    border: 1px solid black;
+    height: 30px;
+}
+.models{
+    width: 195px;
+    margin-left: -1px;
+    border: 1px solid black;
+    height: 30px;
+}
+.hsn{
+    width: 68.5px;
+    border: 1px solid black;
+    height: 30px;
+}
+.uniprice{
+    width: 89.5px;
+    border: 1px solid black;
+    height: 30px;
+}
+.qty{
+    width: 68.5px;
+    border: 1px solid black;
+    height: 30px;
+}
+.grprice{
+    width: 126px;
+    border: 1px solid black;
+    height: 30px;
+}
+.invcontent2{
+    display: flex;
+    flex-direction: row;
+}
+.mrpcont{
+    width: 39px;
+    margin-left: -0.5px;
+    margin-top: -1px;
+    border: 1px solid black;
+    height: 272px;
+}
+.modelscont{
+    width: 196.5px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid black;
+    height: 272px;
+}
+.hsncont{
+    width: 70px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid rgb(0, 0, 0);
+    height: 272px;
+}
+.unitpricecont{
+    width: 91px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid rgb(0, 0, 0);
+    height: 272px;
+}
+.qtycont{
+    width: 70px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid black;
+    height: 272px;
+}
+.grpricecont{
+    width: 127px;
+    margin-left: -1px;
+    margin-top: -1px;
+    border: 1px solid black;
+    height: 272px;
+} */

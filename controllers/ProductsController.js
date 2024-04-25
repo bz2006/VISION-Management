@@ -50,7 +50,7 @@ export const UpdateProducts = async (req, res) => {
               articleNo: product.artno,
             });
           }
-console.log(prodlist)
+
         let productcat = await Products.findByIdAndUpdate(
             catlogid,
             {
@@ -94,7 +94,7 @@ console.log(catlog)
         if (rescatlog.length === 0) {
             return res.status(404).json({ success: false, message: 'No catlog found ' });
         }
-
+console.log(rescatlog[0]["id"])
         return res.json(rescatlog);
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server Error' });

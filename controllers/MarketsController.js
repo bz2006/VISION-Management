@@ -50,7 +50,26 @@ export const GetallMarkets = async (req, res) => {
       });
     }
   };
-
+  export const GetMarketbyid = async (req, res) => {
+    const id = req.params.id;
+    try {
+      const markets = await Markets.findById(id);
+      const linkedcatlog = markets["linkedcatlog"]
+      const vendorcode =markets["vendorcode"]
+      res.status(200).send({
+        success: true,
+        linkedcatlog,vendorcode
+  
+      });
+    } catch (error) {
+      console.log(error)
+      res.status(500).send({
+        success: false,
+        error,
+        message: "Error while getting all markets",
+      });
+    }
+  };
   
 export const UpdateMarket = async (req, res) => {
     try {

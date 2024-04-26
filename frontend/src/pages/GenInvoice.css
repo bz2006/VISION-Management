@@ -1,16 +1,32 @@
 .page {
-    height: 842px;
-    width: 595px;
-    background-color: white;
-    padding: 25px;
+    width: 755px;
+    height: 1110px;
+    background-color: rgb(255, 255, 255);
+    padding: 30px;
 }
 
 .invmain {
-    background-color: yellowgreen;
+    margin-left: 22px;
     height: 842px;
-    width: 595px;
+    width: 744px;
 }
-
+@media print {
+    /* Define page size */
+    @page {
+      size: A4;
+      margin: 0;
+    }
+  .printbtn{
+    display: none;
+  }
+    /* Define size for the page content */
+    .page {
+      width: 100%; /* Adjust to fit the width of A4 */
+      height: auto; /* Let the height adjust proportionally */
+      /* Add any other necessary styles */
+    }
+  }
+  
 /* ------------change to auto------------------ */
 
 .head {
@@ -47,42 +63,47 @@
 
 .invcontent {
     width: 100%;
-    border: 0.5px solid black;
+    border: 0.5px solid ;
     height: 400px;
 }
 
 .marketdet {
-    border: 1px solid black;
-    width: 231.5px;
-       height: fit-content;
+    border: 0.5px solid black;
+    border-right: 0px solid black;
+    width: 294.5px;
+    display: flex;
+    flex-direction: column;
+    height: 111px;
+    justify-content: space-between;
 }
 .marketadrs{
+    align-self: flex-end;
     margin: 0;
     text-align: start;
     color: black;
-    font-size: 10px;
+    font-size: 13px;
     padding-left: 10px;
 }
 .marketadrs1{
     margin: 0;
     text-align: start;
     color: black;
-    font-size: 12px;
+    font-size: 15px;
     padding-left: 10px;
 }
 .gst{
     height: fit-content;
     display: flex;
     flex-direction: row;
-    border-top: 1px solid black;
+    border-top: 0.5px solid black;
 }
 .gst1{
     font-size: 10px;
     color: black;
     padding: 1px;
-    padding-right: 2px;
+    padding-right: 6.65px;
     width: 38.5px;
-    border-right: 1px solid black;
+    border-right: 0.5px solid black;
     margin: 0px;
 }
 .gst2{
@@ -92,129 +113,201 @@
     margin: 0px;
 }
 .billdet1{
-    width: 79px;
-    margin-left: -1px;
+    width: 95px;
+    margin-left: 0px;
    align-content: center;
-    border-right: 1px solid black;
-    border-bottom: 1.5px solid black;
-    height: 19.5px;
+    border-right: 0.5px solid black;
+    border-bottom: 0.5px solid black;
+    height: 24.5px;
+    padding: 1.5px;
+}
+.billdet1t{
+    width: 95px;
+    margin-left: 0px;
+    border-top: 0.5px solid black;
+   align-content: center;
+    border-right: 0.5px solid black;
+    border-bottom: 0.5px solid black;
+    height: 24.5px;
     padding: 1.5px;
 }
 .billdet1v{
-    width: 79px;
-    margin-left: -1px;
-    border-right: 1px solid black;
+    width: 95px;
+    margin-left: 0px;
+    border-right: 0.5px solid black;
     border-bottom: 0px solid black;
-    height: 19.5px;
+    height: 24.5px;
+    padding: 1.5px;
+}
+.billdet2t{
+    width: 166px;
+    align-content: center;
+    border-top: 0.5px solid black;
+    margin-left: -1px;
+    border-right: 0.5px solid black;
+    border-bottom: 0.5px solid black;
+    height: 24.5px;
     padding: 1.5px;
 }
 .billdet2{
-    width: 131px;
+    width: 166px;
     align-content: center;
     margin-left: -1px;
-    border-right: 0px solid black;
-    border-bottom: 1.5px solid black;
-    height: 19.5px;
+    border-right: 0.5px solid black;
+    border-bottom: 0.5px solid black;
+    height: 24.5px;
     padding: 1.5px;
 }
 .billdet2v{
-    width: 131px;
+    width: 166px;
     margin-left: -1px;
-    border-right: 0px solid black;
+    border-right: 0.5px solid black;
     border-bottom: 0px solid black;
-    height: 18.5px;
+    height: 24.5px;
     padding: 1.5px;
 }
 .billtype {
-    border-top: 1px solid black;
-    border-right: 0.5px solid black;
-    border-bottom: 0.5px solid black;
+    border-top: 0.5px solid black;
+    border-right: -0.5px solid black;
+    border-bottom: -0.5px solid black;
     border-left: 0.5px solid black;
-    width: 145px;
-    height: 90.5px;
+    width: 180px;
+    height: 111px;
 }
 
 .billdet {
-    border: 1px solid black;
-    width: 215px;
-    height: 90.5px;
+    border-left: 1px solid black;
+    width: 267px;
+    height: 111px;
     
 }
 
 /* ----------------------------------------------------------------- */
 
 .mrphead {
-    border: 1px solid black;
-    width: 40px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    font-size: 10px;
+    width: 44px;
+    color: black;
     height: 30px;
 }
 
 .modelhead {
-    border: 1px solid black;
-    width: 187px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 246px;
+    color: black;
+    font-size: 10px;
     height: 30px;
 }
 
 .hsnhead {
     border: 1px solid black;
-    width: 60px;
+    width: 80.5px;
+    color: black;
+    font-size: 10px;
     height: 30px;
 }
 
 .unithead {
     border: 1px solid black;
-    width: 81px;
+    width: 95.5px;
+    color: black;
+    font-size: 10px;
     height: 30px;
 }
 
 .qtyhead {
     border: 1px solid black;
-    width: 80px;
+    width: 95px;
+    color: black;
+    font-size: 10px;
     height: 30px;
 }
 
 .grosshead {
-    border: 1px solid black;
-    width: 131px;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    border-right: 0.5px solid black;
+    width: 165.5px;
+    font-size: 10px;
+    color: black;
     height: 30px;
 }
 
 /* ------------------------------------------ */
 
 .mrp {
-    border: 1px solid black;
-    width: 40px;
-    height: 272px;
+    border-left: 1px solid black;
+  
+    border-bottom: 1px solid black;
+    width: 46px;
+    color: black;
+    display: table;
+    vertical-align: top;
+    height: 450px;
 }
 
 .model {
-    border: 1px solid black;
-    width: 187px;
-    height: 272px;
+    border-left: 1px solid black;
+    
+    border-bottom: 1px solid black;
+    width: 248px;
+    vertical-align: top;
+    color: black;
+    display: table;
+    height: 450px;
 }
 
 .hsn {
-    border: 1px solid black;
-    width: 60px;
-    height: 272px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 83px;
+    display: table;
+    color: black;
+    vertical-align: top;
+    height: 450px;
 }
 
 .unit {
-    border: 1px solid black;
-    width: 81px;
-    height: 272px;
+    color: black;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 97.5px;
+    display: table;
+    vertical-align: top;
+    height: 450px;
 }
 
 .qty {
-    border: 1px solid black;
-    width: 80px;
-    height: 272px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 98px;
+    color: black;
+    vertical-align: top;
+    display: table;
+    
+    height: 450px;
+}
+.totalqty{
+    height: 20px;
+    display: table-row;
+    color: black;
+    vertical-align: bottom;
+    width: 50px;
+    border-top: 1px solid black;
 }
 
 .gross {
-    border: 1px solid black;
-    width: 131px;
-    height: 272px;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    width: 168px;
+    vertical-align: top;
+    display: table;
+    color: black;
+    height: 450px;
 }
 
 /* ---------------------------------------------------- */
@@ -236,24 +329,25 @@
     margin: 0;
     text-align: end;
     padding: 5px;
+    padding-top: 11.5px;
     font-size: 10px;
 
 }
 .billcont {
-    border-bottom: 0.1px solid black;
-    border-right: 0.1px solid black;
-    border-left: 0.1px solid black;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
     color: black;
     margin: 0;
     text-align: center;
-    background-color: gainsboro;
     padding: 5px;
-    font-size: 10px;
-
+    font-size: 15px;
 }
 
+
+
 .bill {
-    width: 134.5px;
+    width: 168.5px;
     justify-items: center;
    
 }
@@ -262,7 +356,7 @@
     padding-top: 10px;
     padding-left: 50px;
     height: fit-content;
-    width: 340px;
+    width: 440.5px;
 }
 
 .comapnycont {
@@ -271,7 +365,17 @@
 }
 
 
-
+.print-btn{
+    position: absolute;
+  }
+  
+  /* Display only the contentToPrint div when printing */
+  @media print {
+  
+    .print-btn{
+      display: none;
+    }
+  }
 
 
 /*

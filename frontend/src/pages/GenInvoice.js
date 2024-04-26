@@ -1,13 +1,21 @@
 import React from 'react'
-import HeaderComp from '../components/header'
-import "./GenInvoice.css"
+import "./GenInvoice.css";
+import ReactToPrint from 'react-to-print';
 
-function GenerateInvoice() {
+class GenerateInvoice extends React.Component {
+
+   
+
+    render() {
     return (
         <>
-            <HeaderComp />
-            <div style={{ display: "flex", justifyContent: "center", padding: "30px" }}>
-                <div className='page'>
+        <ReactToPrint
+        
+                    trigger={() => <button className='printbtn'>Print</button>}
+                    content={() => this.componentRef}
+                />
+            <div >
+                <div className='page' ref={el => (this.componentRef = el)}>
                     <div className='invmain'>
                         <div className='head'>
                             <img style={{ width: "45%", height: "35%" }} src='https://static.wixstatic.com/media/c1ec53_cdb43083bb05441ca9fb28a5027a7306~mv2.webp' alt='' ></img>
@@ -33,8 +41,6 @@ function GenerateInvoice() {
                                                 <h6 className='marketadrs'>Aggape hills Pattimattom</h6>
                                                 <h6 className='marketadrs'>Kochi Kerala </h6>
                                                 <h6 className='marketadrs'>Ph: 1234567891 </h6>
-                                                <h6 className='marketadrs'>Ph: 1234567891 </h6>
-                                                
                                             </div>
                                         </div>
 
@@ -50,66 +56,76 @@ function GenerateInvoice() {
                                     </div>
                                     <div className='billtype'>
                                         <div>
-                                            <h6 style={{ color: "black",textAlign:"center" }}>CASH BILL</h6>
+                                            <h6 style={{ color: "black",textAlign:"center" ,fontSize:"15px"}}>CASH BILL</h6>
                                         </div>
                                     </div>
                                     <div className='billdet'>
 
                                         <div style={{ display: "flex", flexDirection: "row" }}>
-                                            <div className='billdet1'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"11px" ,textAlign:"start"}}>Invoice No</h6>
+                                            <div className='billdet1t'>
+                                                <h6 style={{color:"black", margin: "0px",fontSize:"13px",paddingLeft:"2px" ,textAlign:"start"}}>Invoice No</h6>
                                             </div>
-                                            <div className='billdet2'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"11px",justifyContent:"center" }}>V005/24-25</h6>
+                                            <div className='billdet2t'>
+                                                <h6 style={{color:"black", margin: "0px",fontSize:"14px",paddingLeft:"2px",justifyContent:"center" }}>V005/24-25</h6>
                                             </div>
                                         </div>
 
                                         <div style={{ display: "flex", flexDirection: "row" }}>
                                             <div className='billdet1'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"11px",textAlign:"start",justifyContent:"center" }}>Date</h6>
+                                                <h6 style={{color:"black", margin: "0px",fontSize:"13px",textAlign:"start",paddingLeft:"2px",justifyContent:"center" }}>Date</h6>
                                             </div>
                                             <div className='billdet2'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"11px",justifyContent:"center" }}>25.04.2024</h6>
+                                                <h6 style={{color:"black", margin: "0px",fontSize:"14px",justifyContent:"center",paddingLeft:"2px" }}>25.04.2024</h6>
                                             </div>
                                         </div>
                                         <div style={{ display: "flex", flexDirection: "row" }}>
                                             <div className='billdet1'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"11px",textAlign:"start",justifyContent:"center" }}>PO Number</h6>
+                                                <h6 style={{color:"black", margin: "0px",fontSize:"13px",textAlign:"start",paddingLeft:"2px",justifyContent:"center" }}>PO Number</h6>
                                             </div>
                                             <div className='billdet2'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"11px",justifyContent:"center" }}>4501238901</h6>
+                                                <h6 style={{color:"black", margin: "0px",fontSize:"14px",justifyContent:"center",paddingLeft:"2px" }}>4501238901</h6>
                                             </div>
                                         </div>
 
                                         <div style={{ display: "flex", flexDirection: "row" }}>
                                             <div className='billdet1v'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"11px",textAlign:"start",justifyContent:"center" }}>Vendor code</h6>
+                                                <h6 style={{color:"black", margin: "0px",fontSize:"13px",textAlign:"start",justifyContent:"center",paddingLeft:"2px" }}>Vendor code</h6>
                                             </div>
                                             <div className='billdet2v'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"11px",justifyContent:"center" }}>110070</h6>
+                                                <h6 style={{color:"black", margin: "0px",fontSize:"14px",justifyContent:"center" ,paddingLeft:"2px"}}>110070</h6>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             <table style={{ borderCollapse: "collapse" }}>
                                 <tr>
-                                    <th className='mrphead'>mrp</th>
-                                    <th className='modelhead'>model</th>
-                                    <th className='hsnhead'>hsn</th>
-                                    <th className='unithead'>unit</th>
-                                    <th className='qtyhead'>qty</th>
-                                    <th className='grosshead'>gross</th>
+                                    <th className='mrphead'>Article No</th>
+                                    <th className='modelhead'>COMMODITY</th>
+                                    <th className='hsnhead'>HSN CODE</th>
+                                    <th className='unithead'>UNIT PRICE</th>
+                                    <th className='qtyhead'>QUANTITY</th>
+                                    <th className='grosshead'>GROSS PRICE</th>
                                 </tr>
                             </table>
-                            <table style={{ borderCollapse: "collapse" }}>
-                                <tr>
-                                    <th className='mrp'>mrp</th>
+                            <table style={{ borderCollapse: "collapse",border:"0px" }}>
+                                <div style={{display:"flex",flexDirection:"row"}}>
+                                    <th className='mrp'>
+                                        mrp
+                                        
+                                        </th>
                                     <th className='model'>model</th>
                                     <th className='hsn'>hsn</th>
                                     <th className='unit'>unit</th>
-                                    <th className='qty'>qty</th>
-                                    <th className='gross'>gross</th>
-                                </tr>
+                                    <th className='qty' >
+                                        <h6 style={{margin:"0px",fontSize:"10px"}}>qty</h6>
+                                        <h6 style={{margin:"0px"}}>qty</h6>
+                                        <h6 style={{margin:"0px"}}>qty</h6>
+                                        <h6 style={{margin:"0px"}}>qty</h6>
+                                    <h6 className='totalqty'>total</h6>
+                                    </th>
+                                    <th className='gross'>test</th>
+                                    
+                                </div>
                             </table>
 
 
@@ -155,6 +171,6 @@ function GenerateInvoice() {
 
     )
 }
-
+}
 export default GenerateInvoice
 

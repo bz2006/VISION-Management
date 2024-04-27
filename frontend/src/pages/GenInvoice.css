@@ -48,13 +48,18 @@
 
 .compadrs {
     margin-bottom: -18px;
-    font-size: 10.5px;
+    font-size: 12px;
+    font-family: Rubik;
+    
+    font-weight: 500;
     color: black;
 }
 
 .compmadrs {
     margin-bottom: -18.5px;
-    font-size: 12px;
+    font-family: Rubik;
+    font-weight:580;
+    font-size: 13px;
     color: black;
 }
 
@@ -69,9 +74,10 @@
 
 .marketdet {
     border: 0.5px solid black;
-    border-right: 0px solid black;
-    width: 294.5px;
+    border-right: 0.5px solid black;
+    width: 293.5px;
     display: flex;
+    margin-right: 0.5px;
     flex-direction: column;
     height: 111px;
     justify-content: space-between;
@@ -81,6 +87,8 @@
     margin: 0;
     text-align: start;
     color: black;
+    font-family: Rubik;
+    font-weight: 450;
     font-size: 13px;
     padding-left: 10px;
 }
@@ -88,11 +96,14 @@
     margin: 0;
     text-align: start;
     color: black;
-    font-size: 15px;
+    font-family: Rubik;
+    font-weight: 500;
+    font-size: 13px;
     padding-left: 10px;
+    padding-top: 5px;
 }
 .gst{
-    height: fit-content;
+    height: 17px;
     display: flex;
     flex-direction: row;
     border-top: 0.5px solid black;
@@ -100,22 +111,28 @@
 .gst1{
     font-size: 10px;
     color: black;
-    padding: 1px;
-    padding-right: 6.65px;
+    padding: 2px;
+    padding-right: 5.5px;
+    font-family: Rubik;
+    font-weight: 500;
     width: 38.5px;
     border-right: 0.5px solid black;
     margin: 0px;
 }
 .gst2{
-    font-size: 10px;
+    font-size: 12px;
     padding: 1px;
     color: black;
+    font-weight: 500;
+    font-family: Rubik;
     margin: 0px;
 }
 .billdet1{
     width: 95px;
+    font-family: Rubik;
     margin-left: 0px;
    align-content: center;
+   border-left: 0.5px solid black;
     border-right: 0.5px solid black;
     border-bottom: 0.5px solid black;
     height: 24.5px;
@@ -124,6 +141,9 @@
 .billdet1t{
     width: 95px;
     margin-left: 0px;
+    border-left: 0.5px solid black;
+    font-family: Rubik;
+    font-weight: 400;
     border-top: 0.5px solid black;
    align-content: center;
     border-right: 0.5px solid black;
@@ -134,9 +154,11 @@
 .billdet1v{
     width: 95px;
     margin-left: 0px;
+    border-left: 0.5px solid black;
+    font-family: Rubik;
     border-right: 0.5px solid black;
     border-bottom: 0px solid black;
-    height: 24.5px;
+        height: 24.5px;
     padding: 1.5px;
 }
 .billdet2t{
@@ -145,6 +167,8 @@
     border-top: 0.5px solid black;
     margin-left: -1px;
     border-right: 0.5px solid black;
+    font-weight:900;
+    font-family: Rubik;
     border-bottom: 0.5px solid black;
     height: 24.5px;
     padding: 1.5px;
@@ -153,6 +177,8 @@
     width: 166px;
     align-content: center;
     margin-left: -1px;
+    font-family: Rubik;
+    font-weight:600;
     border-right: 0.5px solid black;
     border-bottom: 0.5px solid black;
     height: 24.5px;
@@ -160,6 +186,8 @@
 }
 .billdet2v{
     width: 166px;
+    font-family: Rubik;
+    font-weight:600;
     margin-left: -1px;
     border-right: 0.5px solid black;
     border-bottom: 0px solid black;
@@ -168,17 +196,17 @@
 }
 .billtype {
     border-top: 0.5px solid black;
-    border-right: -0.5px solid black;
-    border-bottom: -0.5px solid black;
-    border-left: 0.5px solid black;
-    width: 180px;
+    width: 180.5px;
+    margin-right: 0px;
+    font-family: Rubik;
+    padding-right: 0px;
     height: 111px;
 }
 
 .billdet {
-    border-left: 1px solid black;
     width: 267px;
     height: 111px;
+    font-family: Rubik;
     
 }
 
@@ -187,8 +215,10 @@
 .mrphead {
     border-left: 1px solid black;
     border-bottom: 1px solid black;
-    font-size: 10px;
+    font-size: 12px;
     width: 44px;
+    font-family: Rubik;
+    font-weight:550;
     color: black;
     height: 30px;
 }
@@ -197,8 +227,10 @@
     border-left: 1px solid black;
     border-bottom: 1px solid black;
     width: 246px;
+    font-family: Rubik;
+    font-weight:550;
     color: black;
-    font-size: 10px;
+    font-size: 13px;
     height: 30px;
 }
 
@@ -206,7 +238,9 @@
     border: 1px solid black;
     width: 80.5px;
     color: black;
-    font-size: 10px;
+    font-size: 13px;
+    font-family: Rubik;
+    font-weight:550;
     height: 30px;
 }
 
@@ -214,7 +248,9 @@
     border: 1px solid black;
     width: 95.5px;
     color: black;
-    font-size: 10px;
+    font-size: 13px;
+    font-family: Rubik;
+    font-weight:550;
     height: 30px;
 }
 
@@ -222,7 +258,9 @@
     border: 1px solid black;
     width: 95px;
     color: black;
-    font-size: 10px;
+    font-family: Rubik;
+    font-weight:550;
+    font-size: 13px;
     height: 30px;
 }
 
@@ -231,7 +269,9 @@
     border-bottom: 1px solid black;
     border-right: 0.5px solid black;
     width: 165.5px;
-    font-size: 10px;
+    font-family: Rubik;
+    font-weight:550;
+    font-size: 13px;
     color: black;
     height: 30px;
 }
@@ -240,7 +280,6 @@
 
 .mrp {
     border-left: 1px solid black;
-  
     border-bottom: 1px solid black;
     width: 46px;
     color: black;
@@ -295,6 +334,7 @@
     display: table-row;
     color: black;
     vertical-align: bottom;
+    font-size: 14px;
     width: 50px;
     border-top: 1px solid black;
 }
@@ -309,6 +349,13 @@
     color: black;
     height: 450px;
 }
+.inovicecontent{
+    margin: 0;
+    font-size: 14px;
+    font-family: Rubik;
+    font-weight:450;
+    margin-top: 5px;
+}
 
 /* ---------------------------------------------------- */
 .blank {
@@ -318,7 +365,7 @@
 
 .amountname {
     height: 200px;
-    width: 83.5px;
+    width: 114.5px;
 }
 
 .amtncont {
@@ -328,9 +375,11 @@
     color: black;
     margin: 0;
     text-align: end;
+    font-family: Rubik;
+    font-weight: 500;
     padding: 5px;
-    padding-top: 11.5px;
-    font-size: 10px;
+    padding-top: 9px;
+    font-size: 12px;
 
 }
 .billcont {
@@ -339,6 +388,8 @@
     border-left: 1px solid black;
     color: black;
     margin: 0;
+    font-family: Rubik;
+    font-weight: 500;
     text-align: center;
     padding: 5px;
     font-size: 15px;
@@ -347,7 +398,7 @@
 
 
 .bill {
-    width: 168.5px;
+    width: 169.5px;
     justify-items: center;
    
 }
@@ -361,6 +412,8 @@
 
 .comapnycont {
     margin: 0;
+    font-family: Rubik;
+    font-weight: 470;
     color: black;
 }
 

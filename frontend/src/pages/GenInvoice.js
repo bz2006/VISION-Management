@@ -1,25 +1,104 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import "./GenInvoice.css";
+import { Spin } from "antd";
 import ReactToPrint from 'react-to-print';
+import { Toast } from 'react-bootstrap';
 
-class GenerateInvoice extends React.Component {
+const GenerateInvoice = () => {
 
-   
+    const [spinning, setSpinning] = useState(false);
 
-    render() {
+    const componentRef = useRef(null);
+    const [InvDet, setInvDet] = useState([])
+    const [Items, setItems] = useState([])
+    const [Markadrs, setMarkadrs] = useState([])
+    const [Catlog, setCatlog] = useState([])
+    const [BillContent, setBillContent] = useState([])
+    const [vendorcode, setvendorcode] = useState("")
+    const [GSTIN, setGSTIN] = useState("")
+    const [Markname, setMarkname] = useState("")
+    const [Total, setTotal] = useState(0)
+    const [Tax, setTax] = useState(0)
+    const [perm, setperm] = useState(true)
+
+
+
+    useEffect(() => {
+        setSpinning(true);
+        const inv = localStorage.getItem("Invdet");
+        const invObject = JSON.parse(inv);
+        setInvDet(invObject[0])
+        setItems(invObject[0]["items"])
+        setMarkadrs(invObject[0]["marketDet"]["address"])
+        setCatlog(invObject[0]["catlog"])
+        setvendorcode(invObject[0]["marketDet"]["vendorcode"])
+        setGSTIN(invObject[0]["marketDet"]["gstNo"])
+        setMarkname(invObject[0]["marketDet"]["marketname"])
+
+        setSpinning(false);
+    }, [])
+
+
+
+    function Organize(input) {
+        const productInfo = [];
+        input.forEach(item => {
+            const product = Catlog.find(p => p.model === item.selectValue);
+            if (product) {
+                const grossPrice = item.inputValue * product.unitPrice;
+                const info = {
+                    model: item.selectValue,
+                    mrp: product.mrp,
+                    unitPrice: product.unitPrice,
+                    artno: product.artno || null,
+                    quantity: item.inputValue,
+                    grossPrice: grossPrice
+                };
+                productInfo.push(info);
+            }
+        });
+        return productInfo;
+    }
+const Calculate= (Bill)=>{
+    let total = 0
+    let tax =0
+    for (let cal of Bill){
+        total = total+cal.grossPrice
+    }
+    setTotal(total)
+     tax = total * 0.09;
+    setTax(tax)
+    console.log("tt",total,tax)
+}
+
+    const Bill = Organize(Items);
+    useEffect(() => {
+        if (Bill.length !== 0 || perm === true) {
+            setBillContent(Bill);
+            setperm(false);
+            Calculate(Bill)
+        }
+    }, [perm]);
+
+    console.log(BillContent)
+
+
+
+
+
     return (
         <>
-        <ReactToPrint
-        
-                    trigger={() => <button className='printbtn'>Print</button>}
-                    content={() => this.componentRef}
-                />
+            <Spin spinning={spinning} fullscreen size='large' />
+            <ReactToPrint
+                trigger={() => <button className='printbtn'>Print</button>}
+                content={() => componentRef.current}
+            />
             <div >
-                <div className='page' ref={el => (this.componentRef = el)}>
+                <div className='page' ref={componentRef}>
                     <div className='invmain'>
                         <div className='head'>
                             <img style={{ width: "45%", height: "35%" }} src='https://static.wixstatic.com/media/c1ec53_cdb43083bb05441ca9fb28a5027a7306~mv2.webp' alt='' ></img>
-                            <h1 style={{ color: "black", fontSize: "x-large" }}>Tax Invoice</h1>
+                            <h1 style={{ color: "black", fontSize: "xx-large" }}>Tax Invoice</h1>
                         </div>
                         <div className='subhead'>
                             <h4 className='compmadrs'>VISION INDUSTRIES</h4>
@@ -32,74 +111,75 @@ class GenerateInvoice extends React.Component {
                         </div>
                         <h6 style={{ color: "black", marginBottom: "0px" }}>To,</h6>
                         <div className='invcontent'>
-                                <div style={{ display: "flex", flexDirection: "row" }}>
-                                    <div className='marketdet'>
-                                        <div style={{ display: "flex", flexDirection: "row" }}>
-                                            <h6 style={{ color: "black", textAlign: "start", marginTop: "0" }}>M/s</h6>
-                                            <div style={{marginBottom:"5px"}}>
-                                                <h6 className='marketadrs1'>AGGAPE </h6>
-                                                <h6 className='marketadrs'>Aggape hills Pattimattom</h6>
-                                                <h6 className='marketadrs'>Kochi Kerala </h6>
-                                                <h6 className='marketadrs'>Ph: 1234567891 </h6>
-                                            </div>
+                            <div style={{ display: "flex", flexDirection: "row" }}>
+                                <div className='marketdet'>
+                                    <div style={{ display: "flex", flexDirection: "row" }}>
+                                        <h6 style={{ color: "black", textAlign: "start", marginTop: "0" }}>M/s</h6>
+                                        <div style={{ marginBottom: "5px" }}>
+                                            <h6 className='marketadrs1'>{Markname}</h6>
+                                            {Markadrs.length > 0 && Markadrs.map((adr, index) => (
+                                                <h6 key={index} className='marketadrs'>{adr}</h6>
+                                            ))}
+                                            {/* char length ------------------------------ */}
                                         </div>
-
-                                        <div className='gst'>
-                                            <div>
-                                                <h6 className='gst1'>GST No</h6>
-                                            </div>
-                                            <div>
-                                                <h6 className='gst2'>32AEQPC70041ZB</h6>
-                                            </div>
-                                        </div>
-
                                     </div>
-                                    <div className='billtype'>
+
+                                    <div className='gst'>
                                         <div>
-                                            <h6 style={{ color: "black",textAlign:"center" ,fontSize:"15px"}}>CASH BILL</h6>
+                                            <h6 className='gst1'>GST No</h6>
+                                        </div>
+                                        <div>
+                                            <h6 className='gst2'>{GSTIN}</h6>
                                         </div>
                                     </div>
-                                    <div className='billdet'>
 
-                                        <div style={{ display: "flex", flexDirection: "row" }}>
-                                            <div className='billdet1t'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"13px",paddingLeft:"2px" ,textAlign:"start"}}>Invoice No</h6>
-                                            </div>
-                                            <div className='billdet2t'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"14px",paddingLeft:"2px",justifyContent:"center" }}>V005/24-25</h6>
-                                            </div>
-                                        </div>
+                                </div>
+                                <div className='billtype'>
+                                    <div>
+                                        <h6 style={{ color: "black", textAlign: "center", fontSize: "15px", fontFamily: "Rubik", fontWeight: "500" }}>CASH BILL</h6>
+                                    </div>
+                                </div>
+                                <div className='billdet'>
 
-                                        <div style={{ display: "flex", flexDirection: "row" }}>
-                                            <div className='billdet1'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"13px",textAlign:"start",paddingLeft:"2px",justifyContent:"center" }}>Date</h6>
-                                            </div>
-                                            <div className='billdet2'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"14px",justifyContent:"center",paddingLeft:"2px" }}>25.04.2024</h6>
-                                            </div>
+                                    <div style={{ display: "flex", flexDirection: "row" }}>
+                                        <div className='billdet1t'>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "13px", paddingLeft: "2px", textAlign: "start", fontWeight: "500" }}>Invoice No</h6>
                                         </div>
-                                        <div style={{ display: "flex", flexDirection: "row" }}>
-                                            <div className='billdet1'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"13px",textAlign:"start",paddingLeft:"2px",justifyContent:"center" }}>PO Number</h6>
-                                            </div>
-                                            <div className='billdet2'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"14px",justifyContent:"center",paddingLeft:"2px" }}>4501238901</h6>
-                                            </div>
+                                        <div className='billdet2t'>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", paddingLeft: "2px", justifyContent: "center", fontWeight: "600" }}>{InvDet.invNo}</h6>
                                         </div>
+                                    </div>
 
-                                        <div style={{ display: "flex", flexDirection: "row" }}>
-                                            <div className='billdet1v'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"13px",textAlign:"start",justifyContent:"center",paddingLeft:"2px" }}>Vendor code</h6>
-                                            </div>
-                                            <div className='billdet2v'>
-                                                <h6 style={{color:"black", margin: "0px",fontSize:"14px",justifyContent:"center" ,paddingLeft:"2px"}}>110070</h6>
-                                            </div>
+                                    <div style={{ display: "flex", flexDirection: "row" }}>
+                                        <div className='billdet1'>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "13px", textAlign: "start", paddingLeft: "2px", justifyContent: "center", fontWeight: "500" }}>Date</h6>
+                                        </div>
+                                        <div className='billdet2'>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", justifyContent: "center", paddingLeft: "2px", fontWeight: "600" }}>{InvDet.Date}</h6>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: "flex", flexDirection: "row" }}>
+                                        <div className='billdet1'>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "13px", textAlign: "start", paddingLeft: "2px", justifyContent: "center", fontWeight: "500" }}>PO Number</h6>
+                                        </div>
+                                        <div className='billdet2'>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", justifyContent: "center", paddingLeft: "2px", fontWeight: "600" }}>{InvDet.PO}</h6>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: "flex", flexDirection: "row" }}>
+                                        <div className='billdet1v'>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "13px", textAlign: "start", justifyContent: "center", paddingTop: "4px", paddingLeft: "2px", fontWeight: "500" }}>Vendor code</h6>
+                                        </div>
+                                        <div className='billdet2v'>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", justifyContent: "center", paddingLeft: "2px", paddingTop: "3px", fontWeight: "600" }}>{vendorcode}</h6>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                             <table style={{ borderCollapse: "collapse" }}>
                                 <tr>
-                                    <th className='mrphead'>Article No</th>
+                                    {InvDet.mrp === "MRP" ? <th className='mrphead'>MRP</th> : <th className='mrphead'>Article No</th>}
                                     <th className='modelhead'>COMMODITY</th>
                                     <th className='hsnhead'>HSN CODE</th>
                                     <th className='unithead'>UNIT PRICE</th>
@@ -107,24 +187,44 @@ class GenerateInvoice extends React.Component {
                                     <th className='grosshead'>GROSS PRICE</th>
                                 </tr>
                             </table>
-                            <table style={{ borderCollapse: "collapse",border:"0px" }}>
-                                <div style={{display:"flex",flexDirection:"row"}}>
+                            <table style={{ borderCollapse: "collapse", border: "0px" }}>
+                                <div style={{ display: "flex", flexDirection: "row" }}>
+                                    {BillContent.length > 0 && BillContent.map((model, index) => (
+                                        console.log(model.model)
+
+                                    ))}
                                     <th className='mrp'>
-                                        mrp
-                                        
-                                        </th>
-                                    <th className='model'>model</th>
-                                    <th className='hsn'>hsn</th>
-                                    <th className='unit'>unit</th>
-                                    <th className='qty' >
-                                        <h6 style={{margin:"0px",fontSize:"10px"}}>qty</h6>
-                                        <h6 style={{margin:"0px"}}>qty</h6>
-                                        <h6 style={{margin:"0px"}}>qty</h6>
-                                        <h6 style={{margin:"0px"}}>qty</h6>
-                                    <h6 className='totalqty'>total</h6>
+                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                            <h6 className='inovicecontent'>{model.mrp}</h6>
+                                        ))}
+
                                     </th>
-                                    <th className='gross'>test</th>
-                                    
+                                    <th className='model'>
+                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                            <h6 className='inovicecontent'>{model.model}</h6>
+                                        ))}
+                                    </th>
+                                    <th className='hsn'>
+                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                            <h6 className='inovicecontent'>9103</h6>
+                                        ))}
+                                    </th>
+                                    <th className='unit'>
+                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                            <h6 className='inovicecontent'>{model.unitPrice}</h6>
+                                        ))}
+                                    </th>
+                                    <th className='qty' >
+                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                            <h6 className='inovicecontent'>{model.quantity}</h6>
+                                        ))}
+                                    </th>
+                                    <th className='gross'>
+                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                            <h6 className='inovicecontent'>{model.grossPrice}</h6>
+                                        ))}
+                                    </th>
+
                                 </div>
                             </table>
 
@@ -151,11 +251,11 @@ class GenerateInvoice extends React.Component {
                                         <h6 className='amtncont'>GRAND TOTAL</h6>
                                     </div>
                                     <div className='bill'>
-                                        <h6 className='billcont'>1233</h6>
-                                        <h6 className='billcont'>1233</h6>
-                                        <h6 className='billcont'>12</h6>
-                                        <h6 className='billcont'>12</h6>
-                                        <h6 className='billcont'>12345</h6>
+                                        <h6 className='billcont'>{Total}</h6>
+                                        <h6 className='billcont'>{Total}</h6>
+                                        <h6 className='billcont'>{Tax}</h6>
+                                        <h6 className='billcont'>{Tax}</h6>
+                                        <h6 className='billcont'>{Math.ceil(Total + Tax + Tax)}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -171,6 +271,6 @@ class GenerateInvoice extends React.Component {
 
     )
 }
-}
+
 export default GenerateInvoice
 

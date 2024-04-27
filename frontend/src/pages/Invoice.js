@@ -3,10 +3,12 @@ import HeaderComp from "../components/header"
 import axios from 'axios';
 import { Select, Input, InputNumber, Checkbox, DatePicker, Spin } from "antd";
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { useNavigate } from "react-router-dom";
 import "./getinvoice.css"
 
 function Invoice() {
 
+  const navigate=useNavigate()
   const [size] = useState('large');
   const [invoiceNo, setInvoiceNo] = useState("")
   const [Date, setDate] = useState("")
@@ -28,6 +30,7 @@ function Invoice() {
   const [Catlog, setCatlog] = useState([])
   const [Markets, setMarkets] = useState([])
   const [Modellist, setModellist] = useState([])
+  const [SelectedMarket, setSelectedMarket] = useState([])
 
 
   const options = [
@@ -35,7 +38,36 @@ function Invoice() {
     { value: 'banana', label: 'bbbbb' },
     { value: 'bannnana', label: 'Banana' },
   ];
-console.log(Models)
+  const mrporart = [
+    { value: 'MRP', label: 'MRP' },
+    { value: 'Article No', label: 'Article No' }
+  ];
+
+
+  const GenerateInvoice = async()=>{
+    const res = await axios.get(`/api/v1/records/products/get-catlog/${fetchcatlog}`)
+    console.log(res.data[0]["products"])
+    const invData= [{
+        invNo:invoiceNo+"/24-25",
+        Date:Date,
+        marketDet:SelectedMarket,
+        PO:POno,
+        mrp:Mrpart,
+        items:Models,
+        catlog:res.data[0]['products'],
+        Instructions:Instructions,
+        Acno:Acno,
+        tax:Taxmethod
+
+    }]
+   localStorage.setItem("Invdet", JSON.stringify(invData));
+   navigate("/generate-invoice")
+}
+
+
+
+
+
   const FetchMarkets = async () => {
     try {
       setSpinning(true);
@@ -60,7 +92,9 @@ console.log(Models)
 
       setSpinning(true);
       const res = await axios.get(`/api/v1/records/markets/get-market/${id}`)
+      setSelectedMarket(res.data["markets"])
       let catlog = (res.data["linkedcatlog"])
+      setFetchcatlog(catlog)
       setVendorc(res.data["vendorcode"])
       const rescatlog = await axios.get(`/api/v1/records/products/get-catlog/${catlog}`)
       setSpinning(false);
@@ -162,7 +196,7 @@ console.log(Models)
               style={{
                 width: 200, marginRight: "5%"
               }}
-              options={options}
+              options={mrporart}
             />
             <div style={{ display: "flex", flexDirection: "column", minWidth: "450px", alignItems: "center" }}>
 
@@ -226,7 +260,7 @@ console.log(Models)
             <Checkbox checked={addgst} onChange={(event) => { setAddgst(event.target.value) }} size="large" style={{ color: "white", marginRight: "5%" }}>Add to GST records</Checkbox>
             <Checkbox checked={Genmrp} onChange={(event) => setGenmrp(event.target.checked)} size="large" style={{ color: "white", marginRight: "5%" }}>Generate MRP</Checkbox>
           </div>
-          <button onClick={handleAdd}>generate</button>
+          <button onClick={GenerateInvoice}>generate</button>
         </div>
       </div>
     </>

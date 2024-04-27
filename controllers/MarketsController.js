@@ -58,7 +58,7 @@ export const GetallMarkets = async (req, res) => {
       const vendorcode =markets["vendorcode"]
       res.status(200).send({
         success: true,
-        linkedcatlog,vendorcode
+        linkedcatlog,vendorcode,markets
   
       });
     } catch (error) {

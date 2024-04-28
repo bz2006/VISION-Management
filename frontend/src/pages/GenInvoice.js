@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from 'react'
 import "./GenInvoice.css";
 import { Spin } from "antd";
 import ReactToPrint from 'react-to-print';
-import { Toast } from 'react-bootstrap';
 
 const GenerateInvoice = () => {
 
@@ -17,8 +16,11 @@ const GenerateInvoice = () => {
     const [vendorcode, setvendorcode] = useState("")
     const [GSTIN, setGSTIN] = useState("")
     const [Markname, setMarkname] = useState("")
+    const [Instrucion, setinstruction] = useState("")
+    const [VehicleNo, setVehicleNo] = useState("")
     const [Total, setTotal] = useState(0)
     const [Tax, setTax] = useState(0)
+    const [Tqty, setTqty] = useState(0)
     const [perm, setperm] = useState(true)
 
 
@@ -34,7 +36,8 @@ const GenerateInvoice = () => {
         setvendorcode(invObject[0]["marketDet"]["vendorcode"])
         setGSTIN(invObject[0]["marketDet"]["gstNo"])
         setMarkname(invObject[0]["marketDet"]["marketname"])
-
+        setinstruction(invObject[0]["Instructions"])
+        setVehicleNo(invObject[0]["VehicleNo"])
         setSpinning(false);
     }, [])
 
@@ -59,17 +62,19 @@ const GenerateInvoice = () => {
         });
         return productInfo;
     }
-const Calculate= (Bill)=>{
-    let total = 0
-    let tax =0
-    for (let cal of Bill){
-        total = total+cal.grossPrice
+    const Calculate = (Bill) => {
+        let total = 0
+        let tax = 0
+        let quantity = 0
+        for (let cal of Bill) {
+            total = total + cal.grossPrice
+            quantity = quantity + cal.quantity
+        }
+        setTqty(quantity)
+        setTotal(total)
+        tax = total * 0.09;
+        setTax(tax)
     }
-    setTotal(total)
-     tax = total * 0.09;
-    setTax(tax)
-    console.log("tt",total,tax)
-}
 
     const Bill = Organize(Items);
     useEffect(() => {
@@ -78,6 +83,7 @@ const Calculate= (Bill)=>{
             setperm(false);
             Calculate(Bill)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [perm]);
 
     console.log(BillContent)
@@ -93,7 +99,7 @@ const Calculate= (Bill)=>{
                 trigger={() => <button className='printbtn'>Print</button>}
                 content={() => componentRef.current}
             />
-            <div >
+            <div style={{display: "flex", justifyContent: "center",}}>
                 <div className='page' ref={componentRef}>
                     <div className='invmain'>
                         <div className='head'>
@@ -120,7 +126,6 @@ const Calculate= (Bill)=>{
                                             {Markadrs.length > 0 && Markadrs.map((adr, index) => (
                                                 <h6 key={index} className='marketadrs'>{adr}</h6>
                                             ))}
-                                            {/* char length ------------------------------ */}
                                         </div>
                                     </div>
 
@@ -203,6 +208,7 @@ const Calculate= (Bill)=>{
                                         {BillContent.length > 0 && BillContent.map((model, index) => (
                                             <h6 className='inovicecontent'>{model.model}</h6>
                                         ))}
+                                        <h6 className='instruction'>{Instrucion}</h6>
                                     </th>
                                     <th className='hsn'>
                                         {BillContent.length > 0 && BillContent.map((model, index) => (
@@ -211,17 +217,18 @@ const Calculate= (Bill)=>{
                                     </th>
                                     <th className='unit'>
                                         {BillContent.length > 0 && BillContent.map((model, index) => (
-                                            <h6 className='inovicecontent'>{model.unitPrice}</h6>
+                                            <h6 className='inovicecontent'>{model.unitPrice}.00</h6>
                                         ))}
                                     </th>
                                     <th className='qty' >
                                         {BillContent.length > 0 && BillContent.map((model, index) => (
                                             <h6 className='inovicecontent'>{model.quantity}</h6>
                                         ))}
+                                        <h6 className='totalqty'>{Tqty}</h6>
                                     </th>
                                     <th className='gross'>
                                         {BillContent.length > 0 && BillContent.map((model, index) => (
-                                            <h6 className='inovicecontent'>{model.grossPrice}</h6>
+                                            <h6 className='inovicecontent'>{model.grossPrice}.00</h6>
                                         ))}
                                     </th>
 
@@ -239,6 +246,8 @@ const Calculate= (Bill)=>{
                                     <h6 className='comapnycont'>A/C No: 37647177049 </h6>
                                     <h6 className='comapnycont'>IFS Code :SBIN0001108 </h6>
                                     <h6 className='comapnycont'>Branch: State Bank of India Ambalamedu</h6>
+                                    <br/><br/><br/><br/>
+                                    {VehicleNo?<h6 className='contbottom' style={{ fontWeight: "400", fontSize: "13px" }}>Vehicle No : {VehicleNo}</h6>:null}
 
 
                                 </div>
@@ -251,20 +260,26 @@ const Calculate= (Bill)=>{
                                         <h6 className='amtncont'>GRAND TOTAL</h6>
                                     </div>
                                     <div className='bill'>
-                                        <h6 className='billcont'>{Total}</h6>
-                                        <h6 className='billcont'>{Total}</h6>
-                                        <h6 className='billcont'>{Tax}</h6>
-                                        <h6 className='billcont'>{Tax}</h6>
+                                        <h6 className='billcont'>{Total}.00</h6>
+                                        <h6 className='billcont'>{Total}.00</h6>
+                                        <h6 className='billcont'>{Tax.toFixed(2)}</h6>
+                                        <h6 className='billcont'>{Tax.toFixed(2)}</h6>
                                         <h6 className='billcont'>{Math.ceil(Total + Tax + Tax)}</h6>
+                                        <br/><br/><br/>
+                                        <h6 className='contbottom' style={{ fontWeight: "500", fontSize: "13px",}}>For Authorized Signatory</h6>
                                     </div>
+                                    
                                 </div>
                             </div>
-
-
-
+                            <br />
+                            {/* <div style={{ display: "flex", flexDirection: "row" }}>
+                                <h6 className='contbottom' style={{ fontWeight: "400", fontSize: "13px" }}>Vehicle No : {VehicleNo}</h6>
+                                <h6 className='contbottom' style={{ fontWeight: "500", fontSize: "13px",}}>For Authorized Signatory</h6>
+                            </div> */}
                         </div>
 
                     </div>
+
                 </div>
             </div>
         </>

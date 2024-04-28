@@ -309,6 +309,7 @@ function MarketPlaces() {
                                 value={upmarketname}
                                 onChange={(event) => setupmarketname(event.target.value)}
                                 placeholder="Market Name"
+                                maxLength={22}
                                 size='large'
                                 style={{ width: "200px", marginRight: "50px" }}
                             />
@@ -339,6 +340,7 @@ function MarketPlaces() {
                                             value={address}
                                             onChange={(e) => handleChangeUpdate(e.target.value, index)}
                                             placeholder="Address"
+                                            maxLength={22}
                                             size='large'
                                             style={{ width: "250px", marginRight: "10px" }}
                                         />

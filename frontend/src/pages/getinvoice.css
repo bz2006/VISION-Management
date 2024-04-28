@@ -5,7 +5,7 @@
     padding: 40px;
 }
 .ant-select .ant-select-arrow {
-    color: black;
+    color: rgb(255, 255, 255);
 }
 
 .ant-select-dropdown .ant-select-item-option-content {
@@ -44,4 +44,20 @@
 }
 :where(.css-dev-only-do-not-override-mzwlov).ant-select-single.ant-select-lg.ant-select-open .ant-select-selection-item {
     color: #878787;
+}
+
+:where(.css-dev-only-do-not-override-mzwlov).ant-picker-outlined {
+    background:#1f1f1f;
+    border-width: 1px;
+    border-style: solid;
+    color: white;
+    border-color: #d9d9d9;
+}
+:where(.css-dev-only-do-not-override-mzwlov).ant-picker .ant-picker-input >input::placeholder{
+    text-overflow: ellipsis;
+
+    color: white;
+}
+:where(.css-dev-only-do-not-override-mzwlov).ant-picker .ant-picker-suffix {
+    color: white;
 }

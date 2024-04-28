@@ -3,6 +3,7 @@
     height: 1110px;
     background-color: rgb(255, 255, 255);
     padding: 30px;
+    
 }
 
 .invmain {
@@ -338,7 +339,13 @@
     width: 50px;
     border-top: 1px solid black;
 }
-
+.instruction{
+    vertical-align: bottom;
+    display: table-row;
+    font-family: Rubik;
+    font-size: 11px;
+    font-weight: 500;
+}
 .gross {
     border-bottom: 1px solid black;
     border-left: 1px solid black;
@@ -415,8 +422,13 @@
     font-family: Rubik;
     font-weight: 470;
     color: black;
+    font-size: 15px;
 }
-
+.contbottom{
+    margin: 0;
+    color: black;
+    font-family: Rubik;
+}
 
 .print-btn{
     position: absolute;

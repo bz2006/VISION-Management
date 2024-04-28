@@ -13,7 +13,6 @@ function Invoice() {
   const [invoiceNo, setInvoiceNo] = useState("")
   const [Date, setDate] = useState("")
   const [Marketplc, setMarketplc] = useState("")
-  const [Address, SetAddress] = useState("")
   const [POno, setPOno] = useState("")
   const [Vendorc, setVendorc] = useState("")
   const [Mrpart, setMrpart] = useState("")
@@ -21,6 +20,7 @@ function Invoice() {
   const [Instructions, setInstructions] = useState("")
   const [Acno, setAcno] = useState("")
   const [Taxmethod, setTaxmethod] = useState("")
+  const [VehicleNo, setVehicleNo] = useState("")
   const [addgst, setAddgst] = useState(true)
   const [Genmrp, setGenmrp] = useState(true)
 
@@ -56,6 +56,7 @@ function Invoice() {
         items:Models,
         catlog:res.data[0]['products'],
         Instructions:Instructions,
+        VehicleNo:VehicleNo,
         Acno:Acno,
         tax:Taxmethod
 
@@ -126,7 +127,7 @@ function Invoice() {
   const Handledate = (date) => {
     setDate(date.format("DD.MM.YYYY"));
   };
-  console.log(invoiceNo, Date, Marketplc,Models, Address, POno, Vendorc, Mrpart, Instructions, Acno, Taxmethod);
+  console.log(invoiceNo, Date, Marketplc,Models, POno, Vendorc, Mrpart, Instructions, Acno, Taxmethod);
   return (
     <>
       <Spin spinning={spinning} fullscreen size='large' />
@@ -150,8 +151,7 @@ function Invoice() {
 
           <div style={{ display: "flex", paddingLeft: "20px", marginBottom: "-25px" }}>
             <h5 style={{ marginRight: "17%" }}>Market Place</h5>
-            <h5 style={{ marginRight: "19%" }}>Address</h5>
-            <h5 style={{ marginRight: "18%" }}>P.O No</h5>
+            <h5 style={{ marginRight: "19%" }}>P.O No</h5>
             <h5 >Vendor Code</h5>
           </div>
           <div style={{ display: "flex", margin: "20px" }}>
@@ -168,16 +168,7 @@ function Invoice() {
               }}
               options={Markets}
             />
-            <Select
-              size={size}
-              value={Address}
-              onChange={(value) => { SetAddress(value) }}
-              defaultValue="Address"
-              style={{
-                width: 200, marginRight: "5%"
-              }}
-              options={options}
-            />
+            
             <Input value={POno} onChange={(event) => { setPOno(event.target.value) }} placeholder="P.O Number" size='large' style={{ width: "200px", marginRight: "5%" }} />
             <Input readOnly value={Vendorc} onChange={(event) => { setVendorc(event.target.value) }} placeholder="Vendor Code" size='large' style={{ width: "200px", marginRight: "5%" }} />
           </div>
@@ -230,11 +221,13 @@ function Invoice() {
 
           <div style={{ display: "flex", paddingLeft: "20px", marginBottom: "-25px" }}>
             <h5 style={{ marginRight: "17%" }}>Instructions</h5>
-            <h5 style={{ marginRight: "19%" }}>A/c No</h5>
-            <h5 style={{ marginRight: "18%" }}>Tax Method</h5>
+            <h5 style={{ marginRight: "19%" }}>Vehicle No</h5>
+            <h5 style={{ marginRight: "18%" }}>A/c No</h5>
+            <h5 >Tax Method</h5>
           </div>
           <div style={{ display: "flex", margin: "20px" }}>
-            <Input value={Instructions} onChange={(event) => { setInstructions(event.target.value) }} placeholder="Instructions" size='large' style={{ width: "200px", marginRight: "5%" }} />
+            <Input value={Instructions} maxLength={25} onChange={(event) => { setInstructions(event.target.value) }} placeholder="Instructions" size='large' style={{ width: "200px", marginRight: "5%" }} />
+            <Input value={VehicleNo} maxLength={15} onChange={(event) => { setVehicleNo(event.target.value) }} placeholder="Vehicle No" size='large' style={{ width: "200px", marginRight: "5%" }} />
             <Select
               size={size}
               value={Acno}
@@ -255,6 +248,7 @@ function Invoice() {
               }}
               options={options}
             />
+           
           </div>
           <div style={{ display: "flex", margin: "20px", marginTop: "40px" }}>
             <Checkbox checked={addgst} onChange={(event) => { setAddgst(event.target.value) }} size="large" style={{ color: "white", marginRight: "5%" }}>Add to GST records</Checkbox>

@@ -9,6 +9,7 @@ export const AddtoGSTrecord = async (req, res) => {
     const invNo = req.body["invNo"]
     const date = req.body["date"]
     const poNo = req.body["poNo"]
+    const mrpart = req.body["mrpart"]
     const billCont = req.body["billCont"]
     const grandtotal = req.body["grandtotal"]
     const subtotal =req.body["subtotal"]
@@ -27,6 +28,7 @@ export const AddtoGSTrecord = async (req, res) => {
         invNo: invNo,
         date: date,
         poNo: poNo,
+        mrpart:mrpart,
         billCont: billCont,
         grandtotal:grandtotal,
         subtotal: subtotal,

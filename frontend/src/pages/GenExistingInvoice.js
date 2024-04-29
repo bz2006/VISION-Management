@@ -2,8 +2,10 @@ import React, { useRef, useEffect, useState } from 'react'
 import "./GenInvoice.css";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios"
-import { Spin, Button, Modal } from "antd";
+import { Spin } from "antd";
 import ReactToPrint from 'react-to-print';
+import * as Icons from '@ant-design/icons';
+const { PrinterOutlined } = Icons;
 
 const GenerateExistingInvoice = () => {
 
@@ -29,19 +31,34 @@ const GenerateExistingInvoice = () => {
     const [confirm, setconfirm] = useState(false)
 
 
+    const FetchCatlog = async (id) => {
+        console.log("calog fetch")
+        try {
+
+            setSpinning(true);
+            const res = await axios.get(`/api/v1/records/markets/get-market/${id}`)
+            setMarkadrs(res.data["markets"]["address"])
+            setMarkname(res.data["markets"]["marketname"])
+            setGSTIN(res.data["markets"]["gstNo"])
+            setvendorcode(res.data["markets"]["vendorcode"])
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
     useEffect(() => {
         setSpinning(true);
         const inv = localStorage.getItem("ExistingInvoice");
         const invObject = JSON.parse(inv);
         console.log(invObject)
         if (invObject !== null) {
+            FetchCatlog(invObject.marketid)
             setInvDet(invObject)
             setItems(invObject["billCont"])
             // setMarkadrs(invObject[0]["marketDet"]["address"])
             // setMarkname(invObject["marketname"])
-            // setinstruction(invObject["Instructions"])
-            // setVehicleNo(invObject["VehicleNo"])
-            // setmarketid(invObject["marketid"])
+
             setSpinning(false);
         } else {
             navigate("/all-invoices")
@@ -50,20 +67,20 @@ const GenerateExistingInvoice = () => {
 
     }, [])
 
-    console.log(InvDet["billCont"].length);
-
+ 
 
     return (
         <>
             <Spin spinning={spinning} fullscreen size='large' />
-            <ReactToPrint
-                trigger={() => <Button className='printbtn' >Print</Button>}
-                content={() => componentRef.current}
-            />
-
+            <div className='printhead'>
+                <ReactToPrint
+                    trigger={() => <PrinterOutlined className='printbtn' style={{ fontSize: "30px" }} />}
+                    content={() => componentRef.current}
+                />
+            </div>
 
             <div style={{ display: "flex", justifyContent: "center", }}>
-                <div className='page' ref={componentRef}>
+                <div className='page' ref={componentRef} id='page'>
                     <div className='invmain'>
                         <div className='head'>
                             <img style={{ width: "45%", height: "35%" }} src='https://static.wixstatic.com/media/c1ec53_cdb43083bb05441ca9fb28a5027a7306~mv2.webp' alt='' ></img>
@@ -147,7 +164,7 @@ const GenerateExistingInvoice = () => {
                             </div>
                             <table style={{ borderCollapse: "collapse" }}>
                                 <tr>
-                                    {InvDet.mrp === "MRP" ? <th className='mrphead'>MRP</th> : <th className='mrphead'>Article No</th>}
+                                    {InvDet.mrpart === "MRP" ? <th className='mrphead'>MRP</th> : <th className='mrphead'>Article No</th>}
                                     <th className='modelhead'>COMMODITY</th>
                                     <th className='hsnhead'>HSN CODE</th>
                                     <th className='unithead'>UNIT PRICE</th>
@@ -187,7 +204,7 @@ const GenerateExistingInvoice = () => {
                                         {Items.length > 0 && Items.map((model, index) => (
                                             <h6 className='inovicecontent'>{model.quantity}</h6>
                                         ))}
-                                        <h6 className='totalqty'>{Tqty}</h6>
+                                        <h6 className='totalqty'>{InvDet.Tqty}</h6>
                                     </th>
                                     <th className='gross'>
                                         {Items.length > 0 && Items.map((model, index) => (
@@ -197,9 +214,6 @@ const GenerateExistingInvoice = () => {
 
                                 </div>
                             </table>
-
-
-
 
                             <div style={{ display: "flex", flexDirection: "row" }}>
 
@@ -227,19 +241,19 @@ const GenerateExistingInvoice = () => {
                                         <h6 className='amtncont'>GRAND TOTAL</h6>
                                     </div>
                                     <div className='bill'>
-                                        <h6 className='billcont'>{Total}.00</h6>
-                                        <h6 className='billcont'>{Total}.00</h6>
+                                        <h6 className='billcont'>{InvDet.subtotal}.00</h6>
+                                        <h6 className='billcont'>{InvDet.subtotal}.00</h6>
                                         {InvDet.taxmeth === "18%" ?
                                             <>
-                                                <h6 className='billcont'>{Tax.toFixed(2)}</h6>
-                                                <h6 className='billcont'>{Math.ceil(GrandTotal)}</h6>
+                                                <h6 className='billcont'>{InvDet.tax}</h6>
+                                                <h6 className='billcont'>{Math.ceil(InvDet.grandtotal)}</h6>
                                                 <br /><br /><br /><br />
                                             </>
                                             :
                                             <>
-                                                <h6 className='billcont'>{Tax.toFixed(2)}</h6>
-                                                <h6 className='billcont'>{Tax.toFixed(2)}</h6>
-                                                <h6 className='billcont'>{Math.ceil(GrandTotal)}</h6>
+                                                <h6 className='billcont'>{InvDet.tax}.00</h6>
+                                                <h6 className='billcont'>{InvDet.tax}.00</h6>
+                                                <h6 className='billcont'>{Math.ceil(InvDet.grandtotal)}</h6>
                                                 <br /><br /><br />
                                             </>}
                                         <h6 className='contbottom' style={{ fontWeight: "500", fontSize: "13px", }}>For Authorized Signatory</h6>

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import "../pages/productrecords.css"
 import axios from "axios"
 import { Select, Table, Modal, message, Button, Popconfirm, Spin, Input } from "antd";
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-
+import * as Icons from '@ant-design/icons';
+const { PlusOutlined } = Icons;
+const { DeleteOutlined } = Icons;
 
 function MarketPlaces() {
 

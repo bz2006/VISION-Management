@@ -20,6 +20,9 @@ const invoicesSchema = new Schema({
   poNo: {
     type: String,
   },
+  mrpart:{
+    type:String
+  },
   billCont: [{}],
   grandtotal: {
     type: Number,

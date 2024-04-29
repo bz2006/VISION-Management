@@ -464,6 +464,18 @@
     .print-btn {
         display: none;
     }
+    .printhead{
+        display: none;
+    }
+}
+.printhead{
+    display: flex;
+    flex-direction: row;
+    padding-right: 90px;
+    background-color: black;
+    justify-content: flex-end;
+    align-items: center;
+    height: 50px;
 }
 
 :where(.css-dev-only-do-not-override-mzwlov).ant-modal-confirm .ant-modal-confirm-title {

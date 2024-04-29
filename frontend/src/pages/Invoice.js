@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react'
 import HeaderComp from "../components/header"
 import axios from 'axios';
 import { Select, Input, InputNumber, Checkbox, DatePicker, Spin } from "antd";
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { useNavigate } from "react-router-dom";
 import "./getinvoice.css"
+import * as Icons from '@ant-design/icons';
+const { PlusOutlined } = Icons;
+const { DeleteOutlined } = Icons;
+
+
 
 function Invoice() {
 

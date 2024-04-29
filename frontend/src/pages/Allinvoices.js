@@ -1,11 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Table, Input, Button, Spin, Space, DatePicker } from 'antd';
 import axios from "axios"
-import { SearchOutlined } from '@ant-design/icons';
 import "./allinv.css"
 import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import HeaderComp from '../components/header';
+import * as Icons from '@ant-design/icons';
+const { SearchOutlined } = Icons;
+
 
 const { RangePicker } = DatePicker;
 

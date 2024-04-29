@@ -1,44 +1,27 @@
-.angraph {
-    height: 440px;
-    width: 800px;
-    background-color: rgb(75, 75, 75);
-    border-radius: 10px;
-}
-
-.andiv {
-    padding: 60px;
-    display: flex;
-    align-items: center;
+.graphdiv{
+    height: 450px;
+    width: fit-content;
     justify-content: center;
-}
-
-.anlt {
-    height: 125px;
-    width: 230px;
-    margin-top: 20px;
-    border-radius: 10px;
-    background-color: rgb(132, 132, 132);
     align-content: center;
+    border-radius: 8px;
 }
-
-.anltdiv1 {
-    padding-left: 20px;
-    justify-content: center;
+.anmain{
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    
     align-items: center;
 }
-
-.anltdiv2 {
+.bottomstat{
     display: flex;
-    margin-top: -35px;
     flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
+    align-items: center;
+    width: 95%;
 }
-.anlt2 {
-    height: 125px;
-    width: 240px;
-    margin-right: 20px;
-    border-radius: 10px;
-    background-color: rgb(132, 132, 132);
-    align-content: center;
+.stat{
+    width: 90%;
+    height: 110px;
+    margin: 24px;
+    border-radius: 5px;
+    background-color: #ffffff;
 }

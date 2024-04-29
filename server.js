@@ -6,7 +6,7 @@ import cors from "cors"
 import bodyParser from 'body-parser';
 import ProductRoute from "./routes/ProductRoute.js"
 import MarketsRoute from"./routes/MarketsRoute.js"
-
+import InvoiceRoutes from "./routes/InvoiceRoutes.js"
 
 
 dotenv.config();
@@ -27,6 +27,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use("/api/v1/records/products",ProductRoute)
 app.use("/api/v1/records/markets",MarketsRoute)
+app.use("/api/v1/invoices",InvoiceRoutes)
 
 app.get("/", (req, res) => {
     res.send("<h1>Welcome to VISION-Mangement</h1>");

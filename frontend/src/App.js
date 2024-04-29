@@ -7,6 +7,8 @@ import ProductRecords from "./pages/productRecords";
 import General from "./pages/General";
 import Invoice from "./pages/Invoice";
 import GenerateInvoice from "./pages/GenInvoice";
+import Allinvoices from "./pages/Allinvoices";
+import GenerateExistingInvoice from "./pages/GenExistingInvoice";
 
 axios.defaults.baseURL = "http://localhost:3001"
 axios.defaults.withCredentials = true
@@ -21,6 +23,8 @@ function App() {
         <Route path="/products-records" element={<ProductRecords />} />
         <Route path="/general-details" element={<General />} />
         <Route path="/generate-invoice" element={<GenerateInvoice />} />
+        <Route path="/all-invoices" element={<Allinvoices />} />
+        <Route path="/gen-existing-invoice" element={<GenerateExistingInvoice />} />
       </Routes>
     </>
   );

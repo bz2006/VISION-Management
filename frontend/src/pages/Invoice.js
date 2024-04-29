@@ -8,7 +8,7 @@ import "./getinvoice.css"
 
 function Invoice() {
 
-  const navigate=useNavigate()
+
   const [size] = useState('large');
   const [invoiceNo, setInvoiceNo] = useState("")
   const [Date, setDate] = useState("")
@@ -26,6 +26,7 @@ function Invoice() {
 
 
   const [fetchcatlog, setFetchcatlog] = useState("")
+  const [markid, setmarkid] = useState("")
   const [spinning, setSpinning] = useState(false);
   const [Catlog, setCatlog] = useState([])
   const [Markets, setMarkets] = useState([])
@@ -42,7 +43,10 @@ function Invoice() {
     { value: 'MRP', label: 'MRP' },
     { value: 'Article No', label: 'Article No' }
   ];
-
+  const taxmethodop = [
+    { value: '18%', label: '18%' },
+    { value: '9%', label: '9% + 9%' }
+  ];
 
   const GenerateInvoice = async()=>{
     const res = await axios.get(`/api/v1/records/products/get-catlog/${fetchcatlog}`)
@@ -51,6 +55,7 @@ function Invoice() {
         invNo:invoiceNo+"/24-25",
         Date:Date,
         marketDet:SelectedMarket,
+        marketid:markid,
         PO:POno,
         mrp:Mrpart,
         items:Models,
@@ -58,11 +63,13 @@ function Invoice() {
         Instructions:Instructions,
         VehicleNo:VehicleNo,
         Acno:Acno,
-        tax:Taxmethod
+        taxmeth:Taxmethod,
+        addgstrec:addgst
 
     }]
    localStorage.setItem("Invdet", JSON.stringify(invData));
-   navigate("/generate-invoice")
+   //navigate("/generate-invoice")
+   window.open("/generate-invoice", '_blank');
 }
 
 
@@ -93,6 +100,7 @@ function Invoice() {
 
       setSpinning(true);
       const res = await axios.get(`/api/v1/records/markets/get-market/${id}`)
+      setmarkid(res.data["markets"]["_id"])
       setSelectedMarket(res.data["markets"])
       let catlog = (res.data["linkedcatlog"])
       setFetchcatlog(catlog)
@@ -127,7 +135,8 @@ function Invoice() {
   const Handledate = (date) => {
     setDate(date.format("DD.MM.YYYY"));
   };
-  console.log(invoiceNo, Date, Marketplc,Models, POno, Vendorc, Mrpart, Instructions, Acno, Taxmethod);
+  console.log(addgst);
+  //console.log(invoiceNo, Date, Marketplc,Models, POno, Vendorc, Mrpart, Instructions, Acno, Taxmethod);
   return (
     <>
       <Spin spinning={spinning} fullscreen size='large' />
@@ -155,19 +164,32 @@ function Invoice() {
             <h5 >Vendor Code</h5>
           </div>
           <div style={{ display: "flex", margin: "20px" }}>
-            <Select
-              size={size}
-              value={Marketplc}
-              onChange={(value) => {
-                setMarketplc(value);
-                FetchCatlog(value)
-              }}
-              defaultValue="Market Place"
-              style={{
-                width: 200, marginRight: "5%"
-              }}
-              options={Markets}
-            />
+          <Select
+    showSearch
+    style={{
+        width: 200, marginRight: "5%"
+    }}
+    size='large'
+    placeholder="Search to Select"
+    optionFilterProp="children"
+    filterOption={(input, option) => 
+        (option?.label?.toLowerCase() ?? '').includes(input.toLowerCase())
+    }
+    filterSort={(optionA, optionB) =>
+        (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+    }
+    defaultValue={Marketplc} // Assuming Marketplc is the default value
+    onChange={(value) => {
+        setMarketplc(value);
+        FetchCatlog(value);
+    }}
+>
+    {Markets.map((market) => (
+        <Select.Option key={market.value} value={market.value} label={market.label}>
+            {market.label}
+        </Select.Option>
+    ))}
+</Select>
             
             <Input value={POno} onChange={(event) => { setPOno(event.target.value) }} placeholder="P.O Number" size='large' style={{ width: "200px", marginRight: "5%" }} />
             <Input readOnly value={Vendorc} onChange={(event) => { setVendorc(event.target.value) }} placeholder="Vendor Code" size='large' style={{ width: "200px", marginRight: "5%" }} />
@@ -246,12 +268,12 @@ function Invoice() {
               style={{
                 width: 200,
               }}
-              options={options}
+              options={taxmethodop}
             />
            
           </div>
           <div style={{ display: "flex", margin: "20px", marginTop: "40px" }}>
-            <Checkbox checked={addgst} onChange={(event) => { setAddgst(event.target.value) }} size="large" style={{ color: "white", marginRight: "5%" }}>Add to GST records</Checkbox>
+            <Checkbox checked={addgst} onChange={(event) =>  setAddgst(event.target.checked) } size="large" style={{ color: "white", marginRight: "5%" }}>Add to GST records</Checkbox>
             <Checkbox checked={Genmrp} onChange={(event) => setGenmrp(event.target.checked)} size="large" style={{ color: "white", marginRight: "5%" }}>Generate MRP</Checkbox>
           </div>
           <button onClick={GenerateInvoice}>generate</button>

@@ -5,10 +5,10 @@ import axios from "axios"
 import { Spin, Button, Modal } from "antd";
 import ReactToPrint from 'react-to-print';
 
-const GenerateInvoice = () => {
+const GenerateExistingInvoice = () => {
 
     const [spinning, setSpinning] = useState(false);
-const navigate=useNavigate()
+    const navigate = useNavigate()
     const componentRef = useRef(null);
     const [InvDet, setInvDet] = useState([])
     const [Items, setItems] = useState([])
@@ -31,143 +31,35 @@ const navigate=useNavigate()
 
     useEffect(() => {
         setSpinning(true);
-        const inv = localStorage.getItem("Invdet");
+        const inv = localStorage.getItem("ExistingInvoice");
         const invObject = JSON.parse(inv);
-        if(invObject!==null){
-            setInvDet(invObject[0])
-            setItems(invObject[0]["items"])
-            setMarkadrs(invObject[0]["marketDet"]["address"])
-            setCatlog(invObject[0]["catlog"])
-            setvendorcode(invObject[0]["marketDet"]["vendorcode"])
-            setGSTIN(invObject[0]["marketDet"]["gstNo"])
-            setMarkname(invObject[0]["marketDet"]["marketname"])
-            setinstruction(invObject[0]["Instructions"])
-            setVehicleNo(invObject[0]["VehicleNo"])
-            setmarketid(invObject[0]["marketid"])
-            if (invObject[0]["addgstrec"] === false) {
-                setconfirm(true)
-            }
+        console.log(invObject)
+        if (invObject !== null) {
+            setInvDet(invObject)
+            setItems(invObject["billCont"])
+            // setMarkadrs(invObject[0]["marketDet"]["address"])
+            // setMarkname(invObject["marketname"])
+            // setinstruction(invObject["Instructions"])
+            // setVehicleNo(invObject["VehicleNo"])
+            // setmarketid(invObject["marketid"])
             setSpinning(false);
-        }else{
-            navigate("/new-invoice")
+        } else {
+            navigate("/all-invoices")
         }
-        
-        
+
+
     }, [])
 
+    console.log(InvDet["billCont"].length);
 
-
-    function Organize(input) {
-        const productInfo = [];
-        input.forEach(item => {
-            const product = Catlog.find(p => p.model === item.selectValue);
-            if (product) {
-                const grossPrice = item.inputValue * product.unitPrice;
-                const info = {
-                    model: item.selectValue,
-                    mrp: product.mrp,
-                    unitPrice: product.unitPrice,
-                    artno: product.artno || null,
-                    quantity: item.inputValue,
-                    grossPrice: grossPrice
-                };
-                productInfo.push(info);
-            }
-        });
-        return productInfo;
-    }
-    const Calculate = (Bill) => {
-        let total = 0
-        let tax = 0
-        let quantity = 0
-        for (let cal of Bill) {
-            total = total + cal.grossPrice
-            quantity = quantity + cal.quantity
-        }
-        setTqty(quantity)
-        setTotal(total)
-        if(InvDet.taxmeth==="18%"){
-            tax = total * 0.18;
-            setTax(tax)
-            setGrandTotal(total+tax)
-        }else{
-            tax = total * 0.09;
-        setTax(tax)
-        setGrandTotal(total+tax+tax)
-        }
-        
-    }
-
-    const Bill = Organize(Items);
-    useEffect(() => {
-        if (Bill.length !== 0 || perm === true) {
-            setBillContent(Bill);
-            setperm(false);
-            Calculate(Bill)
-            localStorage.removeItem('Invdet');
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [perm]);
-
-    console.log(BillContent)
-
-
-    const AddtoGSTrecord = async () => {
-        setconfirm(true)
-        try {
-            setSpinning(true);
-            const invData = {
-                marketname:Markname,
-                marketid: marketid,
-                Markadrs: Markadrs,
-                invNo: InvDet.invNo,
-                date: InvDet.Date,
-                poNo: InvDet.PO,
-                billCont: BillContent,
-                subtotal:Total,
-                grandtotal: GrandTotal,
-                tax: Tax,
-                vehicleNo: VehicleNo,
-                instruction: Instruction,
-                Tqty: Tqty,
-                taxmeth:InvDet.taxmeth
-            }
-            await axios.post("/api/v1/invoices/add-invoice", invData)
-            setSpinning(false);
-            window.open("/all-invoices", '_blank');
-        } catch (error) {
-
-        }
-    }
-    const handleConfirm = async () => {
-        try {
-            await Modal.confirm({
-                title: 'Add to GST Records',
-                content: (
-                    <div style={{ fontSize: '16px' }}>
-                        <p>{`Are you sure to add ${InvDet.invNo} Invoice`}</p>
-                        <p>{`for ${Markname} to GST records?`}</p>
-                    </div>
-                ),
-                centered: true,
-                okText: 'Yes',
-                cancelText: 'No',
-                onOk: () => AddtoGSTrecord(),
-            });
-
-        } catch (error) {
-            console.error('An error occurred: ', error);
-        }
-    };
 
     return (
         <>
             <Spin spinning={spinning} fullscreen size='large' />
-            {InvDet.addgstrec === false || (InvDet.addgstrec === true && confirm === true) ?
-                <ReactToPrint
-                    trigger={() => <Button className='printbtn' >Print</Button>}
-                    content={() => componentRef.current}
-                /> : <Button className='printbtn' onClick={handleConfirm}>Verify & Confirm the Invoice</Button>}
+            <ReactToPrint
+                trigger={() => <Button className='printbtn' >Print</Button>}
+                content={() => componentRef.current}
+            />
 
 
             <div style={{ display: "flex", justifyContent: "center", }}>
@@ -231,7 +123,7 @@ const navigate=useNavigate()
                                             <h6 style={{ color: "black", margin: "0px", fontSize: "13px", textAlign: "start", paddingLeft: "2px", justifyContent: "center", fontWeight: "500" }}>Date</h6>
                                         </div>
                                         <div className='billdet2'>
-                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", justifyContent: "center", paddingLeft: "2px", fontWeight: "600" }}>{InvDet.Date}</h6>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", justifyContent: "center", paddingLeft: "2px", fontWeight: "600" }}>{InvDet.date}</h6>
                                         </div>
                                     </div>
                                     <div style={{ display: "flex", flexDirection: "row" }}>
@@ -239,7 +131,7 @@ const navigate=useNavigate()
                                             <h6 style={{ color: "black", margin: "0px", fontSize: "13px", textAlign: "start", paddingLeft: "2px", justifyContent: "center", fontWeight: "500" }}>PO Number</h6>
                                         </div>
                                         <div className='billdet2'>
-                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", justifyContent: "center", paddingLeft: "2px", fontWeight: "600" }}>{InvDet.PO}</h6>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", justifyContent: "center", paddingLeft: "2px", fontWeight: "600" }}>{InvDet.poNo}</h6>
                                         </div>
                                     </div>
 
@@ -265,40 +157,40 @@ const navigate=useNavigate()
                             </table>
                             <table style={{ borderCollapse: "collapse", border: "0px" }}>
                                 <div style={{ display: "flex", flexDirection: "row" }}>
-                                    {BillContent.length > 0 && BillContent.map((model, index) => (
+                                    {Items.length > 0 && Items.map((model, index) => (
                                         console.log(model.model)
 
                                     ))}
                                     <th className='mrp'>
-                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                        {Items.length > 0 && Items.map((model, index) => (
                                             <h6 className='inovicecontent'>{model.mrp}</h6>
                                         ))}
 
                                     </th>
                                     <th className='model'>
-                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                        {Items.length > 0 && Items.map((model, index) => (
                                             <h6 className='inovicecontent'>{model.model}</h6>
                                         ))}
                                         <h6 className='instruction'>{Instruction}</h6>
                                     </th>
                                     <th className='hsn'>
-                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                        {Items.length > 0 && Items.map((model, index) => (
                                             <h6 className='inovicecontent'>9103</h6>
                                         ))}
                                     </th>
                                     <th className='unit'>
-                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                        {Items.length > 0 && Items.map((model, index) => (
                                             <h6 className='inovicecontent'>{model.unitPrice}.00</h6>
                                         ))}
                                     </th>
                                     <th className='qty' >
-                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                        {Items.length > 0 && Items.map((model, index) => (
                                             <h6 className='inovicecontent'>{model.quantity}</h6>
                                         ))}
                                         <h6 className='totalqty'>{Tqty}</h6>
                                     </th>
                                     <th className='gross'>
-                                        {BillContent.length > 0 && BillContent.map((model, index) => (
+                                        {Items.length > 0 && Items.map((model, index) => (
                                             <h6 className='inovicecontent'>{model.grossPrice}.00</h6>
                                         ))}
                                     </th>
@@ -326,30 +218,30 @@ const navigate=useNavigate()
                                     <div className='amountname'>
                                         <h6 className='amtncont'>TOTAL</h6>
                                         <h6 className='amtncont'>AMOUNT</h6>
-                                        {InvDet.taxmeth==="18%"?<h6 className='amtncont'>IGST 18%</h6>:
-                                        <>
-                                        <h6 className='amtncont'>SGST 9%</h6>
-                                        <h6 className='amtncont'>SGST 9%</h6>
-                                        </>}
-                                        
+                                        {InvDet.taxmeth === "18%" ? <h6 className='amtncont'>IGST 18%</h6> :
+                                            <>
+                                                <h6 className='amtncont'>SGST 9%</h6>
+                                                <h6 className='amtncont'>SGST 9%</h6>
+                                            </>}
+
                                         <h6 className='amtncont'>GRAND TOTAL</h6>
                                     </div>
                                     <div className='bill'>
                                         <h6 className='billcont'>{Total}.00</h6>
                                         <h6 className='billcont'>{Total}.00</h6>
-                                        {InvDet.taxmeth==="18%"?
-                                        <>
-                                        <h6 className='billcont'>{Tax.toFixed(2)}</h6>
-                                        <h6 className='billcont'>{Math.ceil(GrandTotal)}</h6>
-                                        <br /><br /><br /><br/>
-                                        </>
-                                        :
-                                        <>
-                                        <h6 className='billcont'>{Tax.toFixed(2)}</h6>
-                                        <h6 className='billcont'>{Tax.toFixed(2)}</h6>
-                                        <h6 className='billcont'>{Math.ceil(GrandTotal)}</h6>
-                                        <br /><br /><br />
-                                        </>}
+                                        {InvDet.taxmeth === "18%" ?
+                                            <>
+                                                <h6 className='billcont'>{Tax.toFixed(2)}</h6>
+                                                <h6 className='billcont'>{Math.ceil(GrandTotal)}</h6>
+                                                <br /><br /><br /><br />
+                                            </>
+                                            :
+                                            <>
+                                                <h6 className='billcont'>{Tax.toFixed(2)}</h6>
+                                                <h6 className='billcont'>{Tax.toFixed(2)}</h6>
+                                                <h6 className='billcont'>{Math.ceil(GrandTotal)}</h6>
+                                                <br /><br /><br />
+                                            </>}
                                         <h6 className='contbottom' style={{ fontWeight: "500", fontSize: "13px", }}>For Authorized Signatory</h6>
                                     </div>
 
@@ -365,5 +257,5 @@ const navigate=useNavigate()
     )
 }
 
-export default GenerateInvoice
+export default GenerateExistingInvoice
 

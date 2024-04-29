@@ -3,7 +3,7 @@
     height: 1110px;
     background-color: rgb(255, 255, 255);
     padding: 30px;
-    
+
 }
 
 .invmain {
@@ -11,23 +11,29 @@
     height: 842px;
     width: 744px;
 }
+
 @media print {
+
     /* Define page size */
     @page {
-      size: A4;
-      margin: 0;
+        size: A4;
+        margin: 0;
     }
-  .printbtn{
-    display: none;
-  }
+
+    .printbtn {
+        display: none;
+    }
+
     /* Define size for the page content */
     .page {
-      width: 100%; /* Adjust to fit the width of A4 */
-      height: auto; /* Let the height adjust proportionally */
-      /* Add any other necessary styles */
+        width: 100%;
+        /* Adjust to fit the width of A4 */
+        height: auto;
+        /* Let the height adjust proportionally */
+        /* Add any other necessary styles */
     }
-  }
-  
+}
+
 /* ------------change to auto------------------ */
 
 .head {
@@ -51,7 +57,7 @@
     margin-bottom: -18px;
     font-size: 12px;
     font-family: Rubik;
-    
+
     font-weight: 500;
     color: black;
 }
@@ -59,7 +65,7 @@
 .compmadrs {
     margin-bottom: -18.5px;
     font-family: Rubik;
-    font-weight:580;
+    font-weight: 580;
     font-size: 13px;
     color: black;
 }
@@ -69,7 +75,7 @@
 
 .invcontent {
     width: 100%;
-    border: 0.5px solid ;
+    border: 0.5px solid;
     height: 400px;
 }
 
@@ -83,7 +89,8 @@
     height: 111px;
     justify-content: space-between;
 }
-.marketadrs{
+
+.marketadrs {
     align-self: flex-end;
     margin: 0;
     text-align: start;
@@ -93,7 +100,8 @@
     font-size: 13px;
     padding-left: 10px;
 }
-.marketadrs1{
+
+.marketadrs1 {
     margin: 0;
     text-align: start;
     color: black;
@@ -103,13 +111,15 @@
     padding-left: 10px;
     padding-top: 5px;
 }
-.gst{
+
+.gst {
     height: 17px;
     display: flex;
     flex-direction: row;
     border-top: 0.5px solid black;
 }
-.gst1{
+
+.gst1 {
     font-size: 10px;
     color: black;
     padding: 2px;
@@ -120,7 +130,8 @@
     border-right: 0.5px solid black;
     margin: 0px;
 }
-.gst2{
+
+.gst2 {
     font-size: 12px;
     padding: 1px;
     color: black;
@@ -128,73 +139,80 @@
     font-family: Rubik;
     margin: 0px;
 }
-.billdet1{
+
+.billdet1 {
     width: 95px;
     font-family: Rubik;
     margin-left: 0px;
-   align-content: center;
-   border-left: 0.5px solid black;
+    align-content: center;
+    border-left: 0.5px solid black;
     border-right: 0.5px solid black;
     border-bottom: 0.5px solid black;
     height: 24.5px;
     padding: 1.5px;
 }
-.billdet1t{
+
+.billdet1t {
     width: 95px;
     margin-left: 0px;
     border-left: 0.5px solid black;
     font-family: Rubik;
     font-weight: 400;
     border-top: 0.5px solid black;
-   align-content: center;
+    align-content: center;
     border-right: 0.5px solid black;
     border-bottom: 0.5px solid black;
     height: 24.5px;
     padding: 1.5px;
 }
-.billdet1v{
+
+.billdet1v {
     width: 95px;
     margin-left: 0px;
     border-left: 0.5px solid black;
     font-family: Rubik;
     border-right: 0.5px solid black;
     border-bottom: 0px solid black;
-        height: 24.5px;
+    height: 24.5px;
     padding: 1.5px;
 }
-.billdet2t{
+
+.billdet2t {
     width: 166px;
     align-content: center;
     border-top: 0.5px solid black;
     margin-left: -1px;
     border-right: 0.5px solid black;
-    font-weight:900;
+    font-weight: 900;
     font-family: Rubik;
     border-bottom: 0.5px solid black;
     height: 24.5px;
     padding: 1.5px;
 }
-.billdet2{
+
+.billdet2 {
     width: 166px;
     align-content: center;
     margin-left: -1px;
     font-family: Rubik;
-    font-weight:600;
+    font-weight: 600;
     border-right: 0.5px solid black;
     border-bottom: 0.5px solid black;
     height: 24.5px;
     padding: 1.5px;
 }
-.billdet2v{
+
+.billdet2v {
     width: 166px;
     font-family: Rubik;
-    font-weight:600;
+    font-weight: 600;
     margin-left: -1px;
     border-right: 0.5px solid black;
     border-bottom: 0px solid black;
     height: 24.5px;
     padding: 1.5px;
 }
+
 .billtype {
     border-top: 0.5px solid black;
     width: 180.5px;
@@ -208,7 +226,7 @@
     width: 267px;
     height: 111px;
     font-family: Rubik;
-    
+
 }
 
 /* ----------------------------------------------------------------- */
@@ -219,7 +237,7 @@
     font-size: 12px;
     width: 44px;
     font-family: Rubik;
-    font-weight:550;
+    font-weight: 550;
     color: black;
     height: 30px;
 }
@@ -229,7 +247,7 @@
     border-bottom: 1px solid black;
     width: 246px;
     font-family: Rubik;
-    font-weight:550;
+    font-weight: 550;
     color: black;
     font-size: 13px;
     height: 30px;
@@ -241,7 +259,7 @@
     color: black;
     font-size: 13px;
     font-family: Rubik;
-    font-weight:550;
+    font-weight: 550;
     height: 30px;
 }
 
@@ -251,7 +269,7 @@
     color: black;
     font-size: 13px;
     font-family: Rubik;
-    font-weight:550;
+    font-weight: 550;
     height: 30px;
 }
 
@@ -260,7 +278,7 @@
     width: 95px;
     color: black;
     font-family: Rubik;
-    font-weight:550;
+    font-weight: 550;
     font-size: 13px;
     height: 30px;
 }
@@ -271,7 +289,7 @@
     border-right: 0.5px solid black;
     width: 165.5px;
     font-family: Rubik;
-    font-weight:550;
+    font-weight: 550;
     font-size: 13px;
     color: black;
     height: 30px;
@@ -291,7 +309,7 @@
 
 .model {
     border-left: 1px solid black;
-    
+
     border-bottom: 1px solid black;
     width: 248px;
     vertical-align: top;
@@ -327,10 +345,11 @@
     color: black;
     vertical-align: top;
     display: table;
-    
+
     height: 450px;
 }
-.totalqty{
+
+.totalqty {
     height: 20px;
     display: table-row;
     color: black;
@@ -339,13 +358,15 @@
     width: 50px;
     border-top: 1px solid black;
 }
-.instruction{
+
+.instruction {
     vertical-align: bottom;
     display: table-row;
     font-family: Rubik;
     font-size: 11px;
     font-weight: 500;
 }
+
 .gross {
     border-bottom: 1px solid black;
     border-left: 1px solid black;
@@ -356,11 +377,12 @@
     color: black;
     height: 450px;
 }
-.inovicecontent{
+
+.inovicecontent {
     margin: 0;
     font-size: 14px;
     font-family: Rubik;
-    font-weight:450;
+    font-weight: 450;
     margin-top: 5px;
 }
 
@@ -389,6 +411,7 @@
     font-size: 12px;
 
 }
+
 .billcont {
     border-bottom: 1px solid black;
     border-right: 1px solid black;
@@ -407,7 +430,7 @@
 .bill {
     width: 169.5px;
     justify-items: center;
-   
+
 }
 
 .comapny {
@@ -424,24 +447,32 @@
     color: black;
     font-size: 15px;
 }
-.contbottom{
+
+.contbottom {
     margin: 0;
     color: black;
     font-family: Rubik;
 }
 
-.print-btn{
+.print-btn {
     position: absolute;
-  }
-  
-  /* Display only the contentToPrint div when printing */
-  @media print {
-  
-    .print-btn{
-      display: none;
-    }
-  }
+}
 
+/* Display only the contentToPrint div when printing */
+@media print {
+
+    .print-btn {
+        display: none;
+    }
+}
+
+:where(.css-dev-only-do-not-override-mzwlov).ant-modal-confirm .ant-modal-confirm-title {
+    color: white;
+}
+
+:where(.css-dev-only-do-not-override-mzwlov).ant-modal-confirm .ant-modal-confirm-content {
+    color: white;
+}
 
 /*
 .marketadrs{

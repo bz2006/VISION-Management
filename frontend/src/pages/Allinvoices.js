@@ -60,7 +60,7 @@ function Allinvoices() {
             const res=await axios.get(`/api/v1/invoices/get-invoice/${id}`)
             console.log(res.data["invoice"])
             setSpinning(false)
-            localStorage.setItem("ExistingInvoice", JSON.stringify(res.data["invoice"]));
+            localStorage.setItem("ExistingInvoice", JSON.stringify([res.data["invoice"],res.data["invoice"]]));
            
             window.open("/gen-existing-invoice", '_blank');
         } catch (error) {

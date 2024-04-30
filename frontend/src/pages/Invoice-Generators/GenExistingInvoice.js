@@ -7,6 +7,7 @@ import ReactToPrint from 'react-to-print';
 import * as Icons from '@ant-design/icons';
 const { PrinterOutlined } = Icons;
 
+
 const GenerateExistingInvoice = () => {
 
     const [spinning, setSpinning] = useState(false);
@@ -41,6 +42,7 @@ const GenerateExistingInvoice = () => {
             setMarkname(res.data["markets"]["marketname"])
             setGSTIN(res.data["markets"]["gstNo"])
             setvendorcode(res.data["markets"]["vendorcode"])
+            setSpinning(false);
         } catch (error) {
             console.log(error)
         }
@@ -49,7 +51,7 @@ const GenerateExistingInvoice = () => {
 
     useEffect(() => {
         setSpinning(true);
-        const inv = localStorage.getItem("ExistingInvoice");
+        const inv = localStorage.getItem("ExistingcInvoice");
         const invObject = JSON.parse(inv);
         console.log(invObject)
         if (invObject !== null) {

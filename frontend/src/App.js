@@ -6,9 +6,11 @@ import GlobalStyle from './globalStyles';
 import ProductRecords from "./pages/productRecords";
 import General from "./pages/General";
 import Invoice from "./pages/Invoice";
-import GenerateInvoice from "./pages/GenInvoice";
+import GenerateInvoice from "./pages/Invoice-Generators/GenInvoice"
 import Allinvoices from "./pages/Allinvoices";
-import GenerateExistingInvoice from "./pages/GenExistingInvoice";
+import GenerateExistingInvoice from "./pages/Invoice-Generators/GenExistingInvoice";
+import MultipleInvoices from "./pages/Invoice-Generators/MultipleInvoices";
+import MonthlyInvoices from "./pages/Invoice-Generators/ViewMonthlyInvoices";
 
 axios.defaults.baseURL = "http://localhost:3001"
 axios.defaults.withCredentials = true
@@ -25,6 +27,8 @@ function App() {
         <Route path="/generate-invoice" element={<GenerateInvoice />} />
         <Route path="/all-invoices" element={<Allinvoices />} />
         <Route path="/gen-existing-invoice" element={<GenerateExistingInvoice />} />
+        <Route path="/multiple-invoice" element={<MultipleInvoices />} />
+        <Route path="/view-monthly-invoices" element={<MonthlyInvoices />} />
       </Routes>
     </>
   );

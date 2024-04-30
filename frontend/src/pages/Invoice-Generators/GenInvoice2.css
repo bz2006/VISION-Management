@@ -2,7 +2,7 @@
     width: 755px;
     height: 1110px;
     background-color: rgb(255, 255, 255);
-    padding: 30px;
+    padding: 10px;
 
 }
 
@@ -11,7 +11,13 @@
     height: 842px;
     width: 744px;
 }
+.page {
+    page-break-after: always;
+}
 
+.page-break {
+    page-break-after: always;
+}
 @media print {
 
     /* Define page size */

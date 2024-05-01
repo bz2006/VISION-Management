@@ -1,35 +1,22 @@
 import React, { useRef, useEffect, useState } from 'react'
 import "./GenInvoice.css";
+import numberToWords from "number-to-words"
 import axios from "axios"
-
 import { Spin } from "antd";
-import ReactToPrint from 'react-to-print';
-import * as Icons from '@ant-design/icons';
-const { PrinterOutlined } = Icons;
 
 
-const GenerateMultipleInvoice = ({invoice}) => {
+const GenerateMultipleInvoice = ({ invoice }) => {
 
     const [spinning, setSpinning] = useState(false);
     const componentRef = useRef(null);
     const [InvDet, setInvDet] = useState([])
     const [Items, setItems] = useState([])
     const [Markadrs, setMarkadrs] = useState([])
-    const [marketid, setmarketid] = useState("")
-    const [Catlog, setCatlog] = useState([])
-    const [BillContent, setBillContent] = useState([])
     const [vendorcode, setvendorcode] = useState("")
     const [GSTIN, setGSTIN] = useState("")
     const [Markname, setMarkname] = useState("")
-    const [Instruction, setinstruction] = useState("")
-    const [VehicleNo, setVehicleNo] = useState("")
-    const [Total, setTotal] = useState(0)
-    const [GrandTotal, setGrandTotal] = useState(0)
-    const [Tax, setTax] = useState(0)
-    const [Tqty, setTqty] = useState(0)
-    const [perm, setperm] = useState(true)
-    const [confirm, setconfirm] = useState(false)
-
+    const [Instruction] = useState("")
+    const [VehicleNo] = useState("")
 
     const FetchCatlog = async (id) => {
         console.log("calog fetch")
@@ -47,34 +34,28 @@ const GenerateMultipleInvoice = ({invoice}) => {
         }
     }
 
+    const amountwords = () => {
+        const wordsWithDashes = numberToWords.toWords(Math.ceil(InvDet.grandtotal));
+        const amountwords = wordsWithDashes.replace(/[-, ]/g, ' ')
+        return amountwords.charAt(0).toUpperCase() + amountwords.slice(1)
+    }
 
     useEffect(() => {
         setSpinning(true);
-        
+
         const invObject = invoice
         console.log(invObject)
-            FetchCatlog(invObject.marketid)
-            setInvDet(invObject)
-            setItems(invObject["billCont"])
-            // setMarkadrs(invObject[0]["marketDet"]["address"])
-            // setMarkname(invObject["marketname"])
-
-         
-
-
+        FetchCatlog(invObject.marketid)
+        setInvDet(invObject)
+        setItems(invObject["billCont"])
+        setSpinning(false);
     }, [])
 
- 
+    console.log(InvDet);
 
     return (
         <>
             <Spin spinning={spinning} fullscreen size='large' />
-            {/* <div className='printhead'>
-                <ReactToPrint
-                    trigger={() => <PrinterOutlined className='printbtn' style={{ fontSize: "30px" }} />}
-                    content={() => componentRef.current}
-                />
-            </div> */}
 
             <div >
                 <div className='page' ref={componentRef}>
@@ -177,7 +158,8 @@ const GenerateMultipleInvoice = ({invoice}) => {
                                     ))}
                                     <th className='mrp'>
                                         {Items.length > 0 && Items.map((model, index) => (
-                                            <h6 className='inovicecontent'>{model.mrp}</h6>
+                                            InvDet.mrpart === "MRP" ? <h6 className='inovicecontent'>{model.mrp}</h6> : <h6 className='inovicecontent' style={{ fontSize: "10px", marginTop: "9.5px" }}>{model.artno}</h6>
+
                                         ))}
 
                                     </th>
@@ -216,7 +198,7 @@ const GenerateMultipleInvoice = ({invoice}) => {
 
                                 <div className='comapny'>
                                     <h6 className='comapnycont'>Amount in words:</h6>
-                                    <h6 className='comapnycont'>One thousand two hundred only</h6><br />
+                                    <h6 className='comapnycont'>{InvDet.grandtotal?amountwords():null} only</h6><br />
                                     <h6 className='comapnycont'>A/C No: 37647177049 </h6>
                                     <h6 className='comapnycont'>IFS Code :SBIN0001108 </h6>
                                     <h6 className='comapnycont'>Branch: State Bank of India Ambalamedu</h6>

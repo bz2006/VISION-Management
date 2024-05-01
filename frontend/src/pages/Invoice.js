@@ -85,7 +85,6 @@ function Invoice() {
       const res = await axios.get("/api/v1/records/markets/get-markets")
       console.log(res)
       setSpinning(false);
-      console.log(res.data["markets"])
       setMarkets(res.data["markets"].map(market => ({ value: market._id, label: market.marketname })))
 
     } catch (error) {

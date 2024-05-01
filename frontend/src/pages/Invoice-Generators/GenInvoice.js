@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import "./GenInvoice.css";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios"
+import numberToWords from "number-to-words"
 import { Spin, Button, Modal } from "antd";
 import ReactToPrint from 'react-to-print';
 
@@ -27,7 +28,8 @@ const GenerateInvoice = () => {
     const [Tqty, setTqty] = useState(0)
     const [perm, setperm] = useState(true)
     const [confirm, setconfirm] = useState(false)
-
+    const wordsWithDashes = numberToWords.toWords(Math.ceil(GrandTotal));
+    const amountwords = wordsWithDashes.replace(/[-, ]/g, ' ');
 
     useEffect(() => {
         setSpinning(true);
@@ -67,7 +69,7 @@ const GenerateInvoice = () => {
                     model: item.selectValue,
                     mrp: product.mrp,
                     unitPrice: product.unitPrice,
-                    artno: product.artno || null,
+                    artno: product.articleNo || null,
                     quantity: item.inputValue,
                     grossPrice: grossPrice
                 };
@@ -104,7 +106,7 @@ const GenerateInvoice = () => {
             setBillContent(Bill);
             setperm(false);
             Calculate(Bill)
-            localStorage.removeItem('Invdet');
+            //localStorage.removeItem('Invdet');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [perm]);
@@ -120,19 +122,20 @@ const GenerateInvoice = () => {
         day = (day < 10 ? '0' : '') + day;
         month = (month < 10 ? '0' : '') + month;
         var formattedDate = day + '.' + month + '.' + year;
-        const currentMonthIndex = currentDate.getMonth();
-        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].slice(0, currentMonthIndex + 1);
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
+        const parts = InvDet.Date.split('.');
+        const monthNumber = parseInt(parts[1]);
         const prft = Math.ceil(GrandTotal) * 0.53 - Math.ceil(GrandTotal)
         const profit = Math.ceil(Math.abs(prft))
-        const presentMonth = months[currentMonthIndex]
+        const Month = months[monthNumber-1]
         const updateDate = formattedDate
 
-        console.log(profit, presentMonth, updateDate);
+
 
         try {
             const res = await axios.post("/api/v1/analytics/update-analytics", {
-                profit: profit, presentMonth: presentMonth,year:year, updateDate: updateDate
+                profit: profit, Month: Month,year:year, updateDate: updateDate,sold:Tqty
             })
             console.log(res)
         } catch (error) {
@@ -189,6 +192,8 @@ const GenerateInvoice = () => {
             console.error('An error occurred: ', error);
         }
     };
+
+    
 
     return (
         <>
@@ -301,7 +306,8 @@ const GenerateInvoice = () => {
                                     ))}
                                     <th className='mrp'>
                                         {BillContent.length > 0 && BillContent.map((model, index) => (
-                                            <h6 className='inovicecontent'>{model.mrp}</h6>
+                                            InvDet.mrp === "MRP" ? <h6 className='inovicecontent'>{model.mrp}</h6>: <h6 className='inovicecontent' style={{fontSize:"10px",marginTop:"9.5px"}}>{model.artno}</h6>
+
                                         ))}
 
                                     </th>
@@ -340,10 +346,11 @@ const GenerateInvoice = () => {
 
 
                             <div style={{ display: "flex", flexDirection: "row" }}>
+                                
 
                                 <div className='comapny'>
                                     <h6 className='comapnycont'>Amount in words:</h6>
-                                    <h6 className='comapnycont'>One thousand two hundred only</h6><br />
+                                    <h6 className='comapnycont'>{amountwords.charAt(0).toUpperCase() + amountwords.slice(1)} only</h6><br />
                                     <h6 className='comapnycont'>A/C No: 37647177049 </h6>
                                     <h6 className='comapnycont'>IFS Code :SBIN0001108 </h6>
                                     <h6 className='comapnycont'>Branch: State Bank of India Ambalamedu</h6>

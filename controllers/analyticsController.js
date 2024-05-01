@@ -4,22 +4,25 @@ import Analytics from "../models/AnalyticsModel.js"
 export const UpdateAnalytics = async (req, res) => {
     try {
         const invprofit = req.body["profit"]
-        const presentMonth = req.body["presentMonth"]
+        const sold = req.body["sold"]
+        const Month = req.body["Month"]
         const updateDate = req.body["updateDate"]
         const year = req.body["year"]
 
-        console.log(presentMonth, updateDate)
-        let analytics = await Analytics.findOne({ monthname: presentMonth });
+
+        let analytics = await Analytics.findOne({ monthname: Month });
 
         if (!analytics) {
             analytics = new Analytics({
-                monthname: presentMonth,
+                monthname: Month,
                 profit: invprofit,
+                sold:sold,
                 lastupdated: updateDate,
                 year: year
             });
         } else {
             analytics.noinv += 1;
+            analytics.sold+=sold
             analytics.profit += invprofit;
             analytics.lastupdated = updateDate;
 

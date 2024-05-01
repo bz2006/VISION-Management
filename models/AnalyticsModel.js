@@ -11,6 +11,9 @@ const analyticsSchema = new Schema({
       type: Number,
       default:1
   },
+  sold: {
+    type: Number,
+},
   profit: {
       type: Number
   },

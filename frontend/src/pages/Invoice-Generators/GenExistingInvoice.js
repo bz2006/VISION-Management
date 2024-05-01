@@ -3,6 +3,7 @@ import "./GenInvoice.css";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios"
 import { Spin } from "antd";
+import numberToWords from "number-to-words"
 import ReactToPrint from 'react-to-print';
 import * as Icons from '@ant-design/icons';
 const { PrinterOutlined } = Icons;
@@ -30,6 +31,7 @@ const GenerateExistingInvoice = () => {
     const [Tqty, setTqty] = useState(0)
     const [perm, setperm] = useState(true)
     const [confirm, setconfirm] = useState(false)
+    
 
 
     const FetchCatlog = async (id) => {
@@ -51,7 +53,7 @@ const GenerateExistingInvoice = () => {
 
     useEffect(() => {
         setSpinning(true);
-        const inv = localStorage.getItem("ExistingcInvoice");
+        const inv = localStorage.getItem("ExistingInvoice");
         const invObject = JSON.parse(inv);
         console.log(invObject)
         if (invObject !== null) {
@@ -69,8 +71,12 @@ const GenerateExistingInvoice = () => {
 
     }, [])
 
- 
-
+    const amountwords = () => {
+        const wordsWithDashes = numberToWords.toWords(Math.ceil(InvDet.grandtotal));
+        const amountwords = wordsWithDashes.replace(/[-, ]/g, ' ')
+        return amountwords.charAt(0).toUpperCase() + amountwords.slice(1)
+    }
+    
     return (
         <>
             <Spin spinning={spinning} fullscreen size='large' />
@@ -180,9 +186,10 @@ const GenerateExistingInvoice = () => {
                                         console.log(model.model)
 
                                     ))}
-                                    <th className='mrp'>
+                                   <th className='mrp'>
                                         {Items.length > 0 && Items.map((model, index) => (
-                                            <h6 className='inovicecontent'>{model.mrp}</h6>
+                                            InvDet.mrpart === "MRP" ? <h6 className='inovicecontent'>{model.mrp}</h6>: <h6 className='inovicecontent' style={{fontSize:"10px",marginTop:"9.5px"}}>{model.artno}</h6>
+
                                         ))}
 
                                     </th>
@@ -221,7 +228,7 @@ const GenerateExistingInvoice = () => {
 
                                 <div className='comapny'>
                                     <h6 className='comapnycont'>Amount in words:</h6>
-                                    <h6 className='comapnycont'>One thousand two hundred only</h6><br />
+                                    <h6 className='comapnycont'>{InvDet.grandtotal?amountwords():null}only</h6><br />
                                     <h6 className='comapnycont'>A/C No: 37647177049 </h6>
                                     <h6 className='comapnycont'>IFS Code :SBIN0001108 </h6>
                                     <h6 className='comapnycont'>Branch: State Bank of India Ambalamedu</h6>

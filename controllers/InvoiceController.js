@@ -12,12 +12,12 @@ export const AddtoGSTrecord = async (req, res) => {
     const mrpart = req.body["mrpart"]
     const billCont = req.body["billCont"]
     const grandtotal = req.body["grandtotal"]
-    const subtotal =req.body["subtotal"]
+    const subtotal = req.body["subtotal"]
     const tax = req.body["tax"]
     const vehicleNo = req.body["vehicleNo"]
     const instruction = req.body["instruction"]
     const Tqty = req.body["Tqty"]
-    const taxmeth=req.body["taxmeth"]
+    const taxmeth = req.body["taxmeth"]
     let Invoice = await Invoices.findOne({ invNo: invNo });
 
     if (!Invoice) {
@@ -28,15 +28,15 @@ export const AddtoGSTrecord = async (req, res) => {
         invNo: invNo,
         date: date,
         poNo: poNo,
-        mrpart:mrpart,
+        mrpart: mrpart,
         billCont: billCont,
-        grandtotal:grandtotal,
+        grandtotal: grandtotal,
         subtotal: subtotal,
         tax: tax,
         vehicleNo: vehicleNo,
         instruction: instruction,
         Tqty: Tqty,
-        taxmeth:taxmeth
+        taxmeth: taxmeth
 
       });
     } else {
@@ -70,6 +70,7 @@ export const GetallIvoices = async (req, res) => {
     });
   }
 };
+
 export const Getinvoicebyid = async (req, res) => {
   const id = req.params.id;
   try {
@@ -90,51 +91,28 @@ export const Getinvoicebyid = async (req, res) => {
   }
 };
 
-export const UpdateMarket = async (req, res) => {
+export const GetMonthlyInvoicces = async (req, res) => {
+
+  const startDate = req.query["startDate"]
+  const endDate = req.query["endDate"]
+  console.log(req.query,"body");
+
   try {
-    const Marketid = req.params.id
-    const mpname = req.body["upmarketname"]
-    const gst = req.body["upgst"]
-    const address = req.body["upaddress"]
-    const vendorcode = req.body["upvendorcode"]
-    const Catlog = req.body["upCatlog"]
+    const allinvoices = await Invoices.find({
+      date: { $gte: startDate, $lte: endDate }
+    });
 
-    let market = await Markets.findByIdAndUpdate(
-      Marketid,
-      {
-        marketname: mpname,
-        gstNo: gst,
-        address: address,
-        vendorcode: vendorcode,
-        linkedcatlog: Catlog
-      },
-      { new: true }
-
-    )
-
-    if (!market) {
-      return res.status(404).json({ error: 'Product not found or cannot be updated.' });
-    }
-    res.json({ message: 'Product updated successfully', updatedmarket: market });
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-export const deleteMarket = async (req, res) => {
-  try {
-    const id = req.params.id;
-    await Markets.findByIdAndDelete(id);
     res.status(200).send({
       success: true,
-      message: "market Deleted Successfully",
+      allinvoices
+
     });
   } catch (error) {
+    console.log(error)
     res.status(500).send({
       success: false,
-      message: "error while deleting market",
       error,
+      message: "Error while getting invoice",
     });
   }
 };
-

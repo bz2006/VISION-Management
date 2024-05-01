@@ -11,11 +11,19 @@ function HomePage() {
     const [Data, setData] = useState([])
     const [Profit, setprofit] = useState(0)
     const [invNo, setinvNo] = useState(0)
+    const [Sold, setSold] = useState(0)
+    const [Monthname, setMonthname] = useState("")
+
+    const [LastmProfit, setLastmprofit] = useState(0)
+    const [LastminvNo, setLastminvNo] = useState(0)
+    const [LastmSold, setLastmSold] = useState(0)
 
     var currentDate = new Date();
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var currentMonthName = months[currentDate.getMonth()];
+    var lastMonthName = months[currentDate.getMonth() - 1];
 
+    console.log(lastMonthName);
     const FetchAnalytics = async () => {
         try {
             const res = await axios.get("/api/v1/analytics/get-analytics")
@@ -26,20 +34,30 @@ function HomePage() {
                 Invs: anlyct.noinv
 
             })))
-            for(let i of res.data){
-                if(i.monthname===currentMonthName){
+            for (let i of res.data) {
+                if (i.monthname === currentMonthName) {
                     setprofit(i.profit)
                     setinvNo(i.noinv)
+                    setSold(i.sold)
+                }
+                if (i.monthname === lastMonthName) {
+                    setLastmprofit(i.profit)
+                    setLastminvNo(i.noinv)
+                    setLastmSold(i.sold)
                 }
             }
-            
+
         } catch (error) {
             console.log(error);
         }
     }
+
+    console.log(Data);
     useEffect(() => {
 
         FetchAnalytics()
+        setMonthname(currentMonthName)
+  
 
     }, [])
 
@@ -53,69 +71,103 @@ function HomePage() {
                     </div>
                     <div className='bottomstat'>
                         <div className='stat'>
+                            {Profit >= LastmProfit ?
+                                <Card bordered={false}>
+                                    <Statistic
+                                        title={`Profit Gained in ${Monthname}`}
+                                        value={"₹" + Profit + ".00"}
+                                        precision={2}
+                                        valueStyle={{
+                                            color: '#3f8600',
+                                        }}
+                                        prefix={<ArrowUpOutlined />}
+                                    />
+                                </Card> :
+                                <Card bordered={false}>
+                                    <Statistic
+                                        title={`Profit Gained in ${Monthname}`}
+                                        value={"₹" + Profit + ".00"}
+                                        precision={2}
+                                        valueStyle={{ color: '#cf1322' }}
+                                        prefix={<ArrowDownOutlined />}
+                                    />
+                                </Card>
+                            }
+
+                        </div>
+                        <div className='stat'>
+                            {invNo >= LastminvNo ?
+                                <Card bordered={false}>
+                                    <Statistic
+                                        title={`No: of Invoices in ${Monthname}`}
+                                        value={invNo}
+                                        valueStyle={{
+                                            color: '#3f8600',
+                                        }}
+                                        prefix={<ArrowUpOutlined />}
+                                    />
+                                </Card>
+                                :
+                                <Card bordered={false}>
+                                    <Statistic
+                                        title={`No: of Invoices in ${Monthname}`}
+                                        value={invNo}
+                                        valueStyle={{ color: '#cf1322' }}
+                                        prefix={<ArrowDownOutlined />}
+                                    />
+                                </Card>
+                            }
+
+                        </div>
+                        <div className='stat'>
+                            {Sold >= LastmSold ?
+                                <Card bordered={false}>
+                                    <Statistic
+                                        title={`Clocks Sold in ${Monthname}`}
+                                        value={Sold}
+                                        valueStyle={{
+                                            color: '#3f8600',
+                                        }}
+                                        prefix={<ArrowUpOutlined />}
+                                        suffix="Clocks"
+                                    />
+                                </Card>
+                                :
+                                <Card bordered={false}>
+                                    <Statistic
+                                        title={`Clocks Sold in ${Monthname}`}
+                                        value={Sold}
+                                        valueStyle={{ color: '#cf1322' }}
+                                        prefix={<ArrowDownOutlined />}
+                                        suffix="Clocks"
+                                    />
+                                </Card>
+                            }
+
+                        </div>
+                        <div className='stat'>
                             <Card bordered={false}>
                                 <Statistic
-                                    title="Profit"
-                                    value={"₹"+Profit+".00"}
-                                    precision={2}
+                                    title="Website Orders"
+                                    value={12}
                                     valueStyle={{
                                         color: '#3f8600',
                                     }}
                                     prefix={<ArrowUpOutlined />}
+                                    suffix="Orders"
                                 />
                             </Card>
                         </div>
                         <div className='stat'>
                             <Card bordered={false}>
                                 <Statistic
-                                    title="Invoice #"
-                                    value={invNo}
+                                    title="Amazon Orders"
+                                    value={11}
                                     valueStyle={{
                                         color: '#3f8600',
                                     }}
                                     prefix={<ArrowUpOutlined />}
-                                />
-                            </Card>
-                        </div>
-                        <div className='stat'>
-                            <Card bordered={false}>
-                                <Statistic
-                                    title="Active"
-                                    value={11.28}
-                                    precision={2}
-                                    valueStyle={{
-                                        color: '#3f8600',
-                                    }}
-                                    prefix={<ArrowUpOutlined />}
-                                    suffix="%"
-                                />
-                            </Card>
-                        </div>
-                        <div className='stat'>
-                            <Card bordered={false}>
-                                <Statistic
-                                    title="Active"
-                                    value={11.28}
-                                    precision={2}
-                                    valueStyle={{
-                                        color: '#3f8600',
-                                    }}
-                                    prefix={<ArrowUpOutlined />}
-                                    suffix="%"
-                                />
-                            </Card>
-                        </div>
-                        <div className='stat'>
-                            <Card bordered={false}>
-                                <Statistic
-                                    title="Active"
-                                    value={11.28}
-                                    precision={2}
-                                    valueStyle={{
-                                        color: '#3f8600',
-                                    }}
-                                    prefix={<ArrowUpOutlined />}
-                                    suffix="%"
+                                    suffix="Orders"
                                 />
                             </Card>
                         </div>

@@ -26,7 +26,7 @@ function Invoice() {
   const [VehicleNo, setVehicleNo] = useState("")
   const [addgst, setAddgst] = useState(true)
   const [Genmrp, setGenmrp] = useState(true)
-
+console.log(Genmrp);
 
   const [fetchcatlog, setFetchcatlog] = useState("")
   const [markid, setmarkid] = useState("")
@@ -36,7 +36,7 @@ function Invoice() {
   const [Modellist, setModellist] = useState([])
   const [SelectedMarket, setSelectedMarket] = useState([])
 
-
+  console.log(Models);
   const options = [
     { value: 'orange', label: 'Orange' },
     { value: 'banana', label: 'bbbbb' },
@@ -51,31 +51,75 @@ function Invoice() {
     { value: '9%', label: '9% + 9%' }
   ];
 
-  const GenerateInvoice = async()=>{
+  const GenerateInvoice = async () => {
     const res = await axios.get(`/api/v1/records/products/get-catlog/${fetchcatlog}`)
     console.log(res.data[0]["products"])
-    const invData= [{
-        invNo:invoiceNo+"/24-25",
-        Date:Date,
-        marketDet:SelectedMarket,
-        marketid:markid,
-        PO:POno,
-        mrp:Mrpart,
-        items:Models,
-        catlog:res.data[0]['products'],
-        Instructions:Instructions,
-        VehicleNo:VehicleNo,
-        Acno:Acno,
-        taxmeth:Taxmethod,
-        addgstrec:addgst
+    const invData = [{
+      invNo: invoiceNo + "/24-25",
+      Date: Date,
+      marketDet: SelectedMarket,
+      marketid: markid,
+      PO: POno,
+      mrp: Mrpart,
+      items: Models,
+      catlog: res.data[0]['products'],
+      Instructions: Instructions,
+      VehicleNo: VehicleNo,
+      Acno: Acno,
+      taxmeth: Taxmethod,
+      addgstrec: addgst
 
     }]
-   localStorage.setItem("Invdet", JSON.stringify(invData));
-   //navigate("/generate-invoice")
-   window.open("/generate-invoice", '_blank');
-}
+    localStorage.setItem("Invdet", JSON.stringify(invData));
+    if(Genmrp===true){
+      GenerateMRP()
+    }
+    //navigate("/generate-invoice")
+    window.open("/generate-invoice", '_blank');
+  }
+
+  const GenerateMRP = () => {
+    let Combined = splitProducts(Models)
+    let Organized = GroupModels(Combined)
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const ds = Date.split(".")
+    const year = ds[2]
+    const month = months[ds[1] - 1]
+    const MrpData = [{
+      Date: `${month} ${year}`,
+      Models: Organized,
+    }]
+
+    console.log(Organized);
+    localStorage.setItem("mrp", JSON.stringify(MrpData));
+    window.open("/generate-mrp", '_blank');
+  }
+
+  const splitProducts = (products) => {
+    let result = [];
+    products.forEach(product => {
+      if (product.inputValue > 1) {
+        for (let i = 0; i < product.inputValue; i++) {
+          result.push({ selectValue: product.selectValue, inputValue: 1, mrp: product.mrp });
+        }
+      } else {
+        result.push(product);
+      }
+    });
+    return result;
+  }
 
 
+  const GroupModels = (array) => {
+    const groupedObjects = [];
+    for (let i = 0; i < array.length; i += 12) {
+      groupedObjects[i / 12] = array.slice(i, i + 12);
+    }
+    return groupedObjects;
+  }
 
 
 
@@ -110,7 +154,7 @@ function Invoice() {
       const rescatlog = await axios.get(`/api/v1/records/products/get-catlog/${catlog}`)
       setSpinning(false);
       console.log(rescatlog.data)
-      setModellist(rescatlog.data[0]["products"].map(catlog => ({ value: catlog.model, label: catlog.model })))
+      setModellist(rescatlog.data[0]["products"].map(catlog => ({ value: catlog.model, label: catlog.model, mrp: catlog.mrp })))
     } catch (error) {
       console.log(error)
     }
@@ -122,7 +166,19 @@ function Invoice() {
 
   const handleChange = (value, index, field) => {
     const updatedModels = [...Models];
-    updatedModels[index] = { ...updatedModels[index], [field]: value };
+    if (field === 'selectValue') {
+      // Find the corresponding model object from Modellist
+      const selectedModel = Modellist.find(model => model.value === value);
+      if (selectedModel) {
+        updatedModels[index] = {
+          selectValue: selectedModel.value,
+          inputValue: 1, // Default quantity to 1 when model is selected
+          mrp: selectedModel.mrp // Set MRP from Modellist
+        };
+      }
+    } else {
+      updatedModels[index] = { ...updatedModels[index], [field]: value };
+    }
     setModels(updatedModels);
   };
 
@@ -133,12 +189,14 @@ function Invoice() {
     const updatedModels = [...Models];
     updatedModels.splice(index, 1);
     setModels(updatedModels);
+
   };
   const Handledate = (date) => {
-    setDate(date.format("DD.MM.YYYY"));
+    if (date != null) {
+      setDate(date.format("DD.MM.YYYY"));
+    }
+
   };
-  console.log(addgst);
-  //console.log(invoiceNo, Date, Marketplc,Models, POno, Vendorc, Mrpart, Instructions, Acno, Taxmethod);
   return (
     <>
       <Spin spinning={spinning} fullscreen size='large' />
@@ -166,33 +224,33 @@ function Invoice() {
             <h5 >Vendor Code</h5>
           </div>
           <div style={{ display: "flex", margin: "20px" }}>
-          <Select
-    showSearch
-    style={{
-        width: 200, marginRight: "5%"
-    }}
-    size='large'
-    placeholder="Search to Select"
-    optionFilterProp="children"
-    filterOption={(input, option) => 
-        (option?.label?.toLowerCase() ?? '').includes(input.toLowerCase())
-    }
-    filterSort={(optionA, optionB) =>
-        (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-    }
-    defaultValue={Marketplc} // Assuming Marketplc is the default value
-    onChange={(value) => {
-        setMarketplc(value);
-        FetchCatlog(value);
-    }}
->
-    {Markets.map((market) => (
-        <Select.Option key={market.value} value={market.value} label={market.label}>
-            {market.label}
-        </Select.Option>
-    ))}
-</Select>
-            
+            <Select
+              showSearch
+              style={{
+                width: 200, marginRight: "5%"
+              }}
+              size='large'
+              placeholder="Search to Select"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                (option?.label?.toLowerCase() ?? '').includes(input.toLowerCase())
+              }
+              filterSort={(optionA, optionB) =>
+                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+              }
+              defaultValue={Marketplc} // Assuming Marketplc is the default value
+              onChange={(value) => {
+                setMarketplc(value);
+                FetchCatlog(value);
+              }}
+            >
+              {Markets.map((market) => (
+                <Select.Option key={market.value} value={market.value} label={market.label}>
+                  {market.label}
+                </Select.Option>
+              ))}
+            </Select>
+
             <Input value={POno} onChange={(event) => { setPOno(event.target.value) }} placeholder="P.O Number" size='large' style={{ width: "200px", marginRight: "5%" }} />
             <Input readOnly value={Vendorc} onChange={(event) => { setVendorc(event.target.value) }} placeholder="Vendor Code" size='large' style={{ width: "200px", marginRight: "5%" }} />
           </div>
@@ -272,10 +330,10 @@ function Invoice() {
               }}
               options={taxmethodop}
             />
-           
+
           </div>
           <div style={{ display: "flex", margin: "20px", marginTop: "40px" }}>
-            <Checkbox checked={addgst} onChange={(event) =>  setAddgst(event.target.checked) } size="large" style={{ color: "white", marginRight: "5%" }}>Add to GST records</Checkbox>
+            <Checkbox checked={addgst} onChange={(event) => setAddgst(event.target.checked)} size="large" style={{ color: "white", marginRight: "5%" }}>Add to GST records</Checkbox>
             <Checkbox checked={Genmrp} onChange={(event) => setGenmrp(event.target.checked)} size="large" style={{ color: "white", marginRight: "5%" }}>Generate MRP</Checkbox>
           </div>
           <button onClick={GenerateInvoice}>generate</button>

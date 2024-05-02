@@ -1,3 +1,22 @@
 .imgdiv{
 display: flex;
 }
+.navbtn{
+    margin-right: 10px;
+    color: white;
+    border-color: #000000;
+    background-color: black;
+    font-family: Rubik;
+    font-size: 15px;
+    border-radius: 0px;
+    font-weight: 400;
+}
+.navbtn:hover{
+    border-color: azure;
+}
+:where(.css-dev-only-do-not-override-mzwlov).ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+ border-color: #000000;
+ color: white;
+    border-bottom: 2px solid #005067;
+    background: #000000;
+}

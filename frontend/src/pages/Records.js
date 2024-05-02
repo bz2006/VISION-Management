@@ -1,12 +1,12 @@
 import React from 'react'
 import HeaderComp from '../components/header'
-import "./productrecords.css"
+import "./Records.css"
 import { Tabs } from "antd";
 import Catlogs from '../components/Catlogs';
 import MarketPlaces from '../components/MarketPlaces';
 const { TabPane } = Tabs;
 
-function ProductRecords() {
+function Records() {
     return (
         <>
             <HeaderComp />
@@ -32,4 +32,4 @@ function ProductRecords() {
     )
 }
 
-export default ProductRecords
+export default Records

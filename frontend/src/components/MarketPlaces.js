@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import "../pages/productrecords.css"
+import "../pages/Records.css"
 import axios from "axios"
 import { Select, Table, Modal, message, Button, Popconfirm, Spin, Input } from "antd";
 import * as Icons from '@ant-design/icons';
 const { PlusOutlined } = Icons;
 const { DeleteOutlined } = Icons;
+const { SearchOutlined } = Icons
 
 function MarketPlaces() {
 
@@ -42,8 +43,8 @@ function MarketPlaces() {
     const GetCatlog = async () => {
         setaddcatlog(false)
         try {
-                    const res = await axios.get("/api/v1/records/products/get-catlogs")
-               setoptions(res.data.map(catlog => ({ value: catlog.catlogname, label: catlog.catlogname })))
+            const res = await axios.get("/api/v1/records/products/get-catlogs")
+            setoptions(res.data.map(catlog => ({ value: catlog.catlogname, label: catlog.catlogname })))
         } catch (error) {
 
         }
@@ -84,16 +85,16 @@ function MarketPlaces() {
     }
     const handlemarketDelete = async (id) => {
         try {
-            console.log(id,"delete")
+            console.log(id, "delete")
             setSpinning(true);
             await axios.delete(`/api/v1/records/markets/delete-market/${id}`);
             FetchMarkets()
             setSpinning(false);
         } catch (error) {
-           console.log(error)
+            console.log(error)
         }
     };
-   
+
 
     const HandleUpdateinit = (record) => {
         GetCatlog()
@@ -110,7 +111,7 @@ function MarketPlaces() {
         console.log(upmarketname, upgst, upaddress, upvendorcode, upCatlog)
         try {
             setSpinning(true);
-           await axios.post(`/api/v1/records/markets/update-market/${Marketid}`, { upmarketname, upgst, upaddress, upvendorcode, upCatlog })
+            await axios.post(`/api/v1/records/markets/update-market/${Marketid}`, { upmarketname, upgst, upaddress, upvendorcode, upCatlog })
             setSpinning(false);
             window.location.reload();
         } catch (error) {
@@ -154,7 +155,7 @@ function MarketPlaces() {
         updatedAddresses.splice(index, 1);
         setaddress(updatedAddresses);
     };
-   
+
 
 
 
@@ -164,12 +165,63 @@ function MarketPlaces() {
             title: 'Market Name',
             dataIndex: 'market',
             key: 'market',
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+                <div style={{ padding: 8 }}>
+                    <Input
+                        placeholder="Search Market Name"
+                        value={selectedKeys[0]}
+                        onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={() => { confirm(); }}
+                        style={{ width: 188, marginBottom: 8, display: 'block' }}
+                    />
+                    <Button
+                        type="primary"
+                        onClick={() => { confirm(); }}
+                        icon={<SearchOutlined />}
+                        size="small"
+                        style={{ width: 90, marginRight: 8 }}
+                    >
+                        Search
+                    </Button>
+                    <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+                        Reset
+                    </Button>
+                </div>
+            ),
+            onFilter: (value, record) => record.market.toLowerCase().includes(value.toLowerCase()),
+            filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
         },
         {
             title: 'GST No',
             dataIndex: 'gst',
             key: 'gst',
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+                <div style={{ padding: 8 }}>
+                    <Input
+                        placeholder="Search GST No"
+                        value={selectedKeys[0]}
+                        onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={() => { confirm(); }}
+                        style={{ width: 188, marginBottom: 8, display: 'block' }}
+                    />
+                    <Button
+                        type="primary"
+                        onClick={() => { confirm(); }}
+                        icon={<SearchOutlined />}
+                        size="small"
+                        style={{ width: 90, marginRight: 8 }}
+                    >
+                        Search
+                    </Button>
+                    <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+                        Reset
+                    </Button>
+                </div>
+            ),
+            onFilter: (value, record) => record.gst.toLowerCase().includes(value.toLowerCase()),
+            filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
         },
+
         {
             title: 'Address',
             dataIndex: 'address',
@@ -190,7 +242,7 @@ function MarketPlaces() {
             key: 'action',
             render: (text, record) => (
                 <>
-                    <Button type="primary" onClick={() => { HandleUpdateinit(record) }}>Update</Button>
+                    <Button type="primary" onClick={() => { HandleUpdateinit(record) }} style={{marginRight:"10px"}}>Update</Button>
                     <Popconfirm
                         title="Delete Market Place"
                         description="Are you sure to delete this Market Place?"
@@ -209,7 +261,9 @@ function MarketPlaces() {
     return (
         <>
             <Spin spinning={spinning} fullscreen size='large' />
-            <Button type="primary" style={{ marginRight: "50px" }} onClick={() => { GetCatlog(); setaddmp(true); }}>Add</Button>
+            <div style={{display:"flex",flexDirection:"row",justifyContent:"flex-end"}}>
+            <Button type="primary" style={{margin:"20px"}} onClick={() => { GetCatlog(); setaddmp(true); }}>Add New Market</Button><br/><br/>
+            </div>
             <div className="table-container">
                 <Table columns={mpcolumns} dataSource={Markets} style={{ width: "fit-content", fontSize: "50px" }} />
             </div>

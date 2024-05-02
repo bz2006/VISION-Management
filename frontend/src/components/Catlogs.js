@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import "../pages/productrecords.css"
+import "../pages/Records.css"
 import axios from "axios"
 import { Select, Table, Modal, message, Button, Popconfirm, Input, Spin } from "antd";
 import * as Icons from '@ant-design/icons';
@@ -149,7 +149,7 @@ function Catlogs() {
 
     return (
         <>
-        <DeleteOutlined/>
+     
             <div>
                 <Spin spinning={spinning} fullscreen size='large' />
                 <Select

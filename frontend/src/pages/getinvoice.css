@@ -26,6 +26,12 @@
     background-color: #1f1f1f;
     
 };
+:where(.css-dev-only-do-not-override-mzwlov).ant-picker .ant-picker-clear:hover {
+    color:white;
+}
+:where(.css-dev-only-do-not-override-mzwlov).ant-picker .ant-picker-clear:hover {
+    color:white;
+}
 
 :where(.css-dev-only-do-not-override-mzwlov).ant-input-outlined:hover {
     border-color: #4096ff;

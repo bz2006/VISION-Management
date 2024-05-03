@@ -52,7 +52,7 @@ console.log(Genmrp);
   ];
 
   const GenerateInvoice = async () => {
-    const res = await axios.get(`/api/v1/records/products/get-catlog/${fetchcatlog}`)
+    const res = await axios.get(`/api/v1/records/catlog/get-catlog/${fetchcatlog}`)
     console.log(res.data[0]["products"])
     const invData = [{
       invNo: invoiceNo + "/24-25",
@@ -151,7 +151,7 @@ console.log(Genmrp);
       let catlog = (res.data["linkedcatlog"])
       setFetchcatlog(catlog)
       setVendorc(res.data["vendorcode"])
-      const rescatlog = await axios.get(`/api/v1/records/products/get-catlog/${catlog}`)
+      const rescatlog = await axios.get(`/api/v1/records/catlog/get-catlog/${catlog}`)
       setSpinning(false);
       console.log(rescatlog.data)
       setModellist(rescatlog.data[0]["products"].map(catlog => ({ value: catlog.model, label: catlog.model, mrp: catlog.mrp })))

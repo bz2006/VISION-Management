@@ -1,24 +1,24 @@
-// import express from "express";
-// import { signupcontroller, logincontroller, test } from "../controllers/authcontroller.js"
-// import { requireSignup, isAdmin } from "../middlewares/authMiddleware.js"
-// const router = express.Router()
+import express from "express";
+import { signupcontroller, logincontroller, test } from "../controllers/authcontroller.js"
+import { requireSignup, isAdmin } from "../middlewares/authMiddleware.js"
+const router = express.Router()
 
 
-// router.post("/signup", signupcontroller)
+router.post("/signup", signupcontroller)
 
-// //LOGIN
+//LOGIN
 
-// router.post("/login", logincontroller)
+router.post("/login", logincontroller)
 
-// router.get("/test", requireSignup, isAdmin, test)
+router.get("/test", requireSignup, isAdmin, test)
 
-// router.get("/user-auth", requireSignup, (req, res) => {
-//     res.status(200).send({ ok: true });
-//   });
+router.get("/user-auth", requireSignup, (req, res) => {
+    res.status(200).send({ ok: true });
+  });
 
-//   router.get("/admin-auth", requireSignup,isAdmin, (req, res) => {
-//     res.status(200).send({ ok: true });
-//   });
+  router.get("/admin-auth", requireSignup,isAdmin, (req, res) => {
+    res.status(200).send({ ok: true });
+  });
 
 
-// export default router
+export default router

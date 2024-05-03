@@ -43,7 +43,7 @@ function MarketPlaces() {
     const GetCatlog = async () => {
         setaddcatlog(false)
         try {
-            const res = await axios.get("/api/v1/records/products/get-catlogs")
+            const res = await axios.get("/api/v1/records/catlog/get-catlogs")
             setoptions(res.data.map(catlog => ({ value: catlog.catlogname, label: catlog.catlogname })))
         } catch (error) {
 

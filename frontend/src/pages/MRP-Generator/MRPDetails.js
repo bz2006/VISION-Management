@@ -78,7 +78,7 @@ function MRPDetails() {
             const res = await axios.get(`/api/v1/records/markets/get-market/${id}`)
             let catlog = (res.data["linkedcatlog"])
             // setFetchcatlog(catlog)
-            const rescatlog = await axios.get(`/api/v1/records/products/get-catlog/${catlog}`)
+            const rescatlog = await axios.get(`/api/v1/records/catlog/get-catlog/${catlog}`)
             setSpinning(false);
             console.log(rescatlog.data)
             setModellist(rescatlog.data[0]["products"].map(catlog => ({ value: catlog.model, label: catlog.model, mrp: catlog.mrp })))

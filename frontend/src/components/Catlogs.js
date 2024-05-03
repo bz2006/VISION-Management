@@ -26,7 +26,7 @@ function Catlogs() {
     const GetCatlog = async () => {
         setaddcatlog(false)
         try {
-            const res = await axios.get("/api/v1/records/products/get-catlogs")
+            const res = await axios.get("/api/v1/records/catlog/get-catlogs")
             setoptions(res.data.map(catlog => ({ value: catlog.catlogname, label: catlog.catlogname })))
         } catch (error) {
 
@@ -41,7 +41,7 @@ function Catlogs() {
         setaddcatlog(false)
         try {
             setSpinning(true);
-            await axios.post(`/api/v1/records/products/${catname}`, Models)
+            await axios.post(`/api/v1/records/catlog/${catname}`, Models)
             setSpinning(false);
             window.location.reload();
         } catch (error) {
@@ -52,7 +52,7 @@ function Catlogs() {
         setupdatecatlog(false)
         try {
             setSpinning(true);
-            await axios.post(`/api/v1/records/products/update-products/${Catlogid}`, { catname, Models })
+            await axios.post(`/api/v1/records/catlog/update-catlog/${Catlogid}`, { catname, Models })
             setSpinning(false);
             window.location.reload();
         } catch (error) {
@@ -64,7 +64,7 @@ function Catlogs() {
         try {
             let keyvalue = 0
             setSpinning(true);
-            const res = await axios.get(`/api/v1/records/products/get-catlog/${fetchcatlog}`)
+            const res = await axios.get(`/api/v1/records/catlog/get-catlog/${fetchcatlog}`)
             setSpinning(false);
             setCatlogid(res.data[0]["_id"])
             settcatname(res.data[0]["catlogname"])
@@ -84,7 +84,7 @@ function Catlogs() {
         try {
             console.log(id, "delete")
             setSpinning(true);
-            await axios.delete(`/api/v1/records/products/delete-catlog/${Catlogid}`);
+            await axios.delete(`/api/v1/records/catlog/delete-catlog/${Catlogid}`);
             setSpinning(false);
             window.location.reload();
         } catch (error) {

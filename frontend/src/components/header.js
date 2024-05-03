@@ -19,7 +19,7 @@ const HeaderComp = () => {
                 </div>
                 <div>
                 <Button className='navbtn' href='/'>Home</Button>
-                <Button className='navbtn' >Website</Button>
+                <Button className='navbtn' href='/web-dashboard'>Website</Button>
                 <Button className='navbtn' href='/new-invoice'>New Invoice</Button>
                 <Button className='navbtn' href='/all-invoices'>All Invoices</Button>
                 <Button className='navbtn' href='/mrp-gen-details'>Generate MRP</Button>

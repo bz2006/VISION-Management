@@ -13,9 +13,9 @@ import MultipleInvoices from "./pages/Invoice-Generators/MultipleInvoices";
 import MonthlyInvoices from "./pages/Invoice-Generators/ViewMonthlyInvoices";
 import MRPDetails from "./pages/MRP-Generator/MRPDetails";
 import MRPGenerate from "./pages/MRP-Generator/MRP-Generate";
-// import Admindashboard from "./pages/Website-Management/Admindashboard";
 import Login from "./pages/Auth/login";
 import { AuthProvider } from "./context/auth";
+import UpdateInvoice from "./pages/UpdateInvoice";
 
 
 
@@ -23,24 +23,34 @@ axios.defaults.baseURL = "http://localhost:3001"
 axios.defaults.withCredentials = true
 
 function App() {
+  const authData = JSON.parse(localStorage.getItem("auth"));
+
   return (
     <>
       <AuthProvider>
         <GlobalStyle />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/new-invoice" element={<Invoice />} />
-          <Route path="/records" element={<Records />} />
-          <Route path="/general-details" element={<General />} />
-          <Route path="/generate-invoice" element={<GenerateInvoice />} />
-          <Route path="/all-invoices" element={<Allinvoices />} />
-          <Route path="/gen-existing-invoice" element={<GenerateExistingInvoice />} />
-          <Route path="/multiple-invoice" element={<MultipleInvoices />} />
-          <Route path="/view-monthly-invoices" element={<MonthlyInvoices />} />
-          <Route path="/mrp-gen-details" element={<MRPDetails />} />
-          <Route path="/generate-mrp" element={<MRPGenerate />} />
-          {/* <Route path="/web-dashboard" element={<Admindashboard />} /> */}
-          <Route path="/login" element={<Login />} />
+
+          {authData === null ? (<Route path="*" element={<Login />} />)
+            :
+            <>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/new-invoice" element={<Invoice />} />
+              <Route path="/records" element={<Records />} />
+              <Route path="/general-details" element={<General />} />
+              <Route path="/generate-invoice" element={<GenerateInvoice />} />
+              <Route path="/all-invoices" element={<Allinvoices />} />
+              <Route path="/gen-existing-invoice" element={<GenerateExistingInvoice />} />
+              <Route path="/multiple-invoice" element={<MultipleInvoices />} />
+              <Route path="/view-monthly-invoices" element={<MonthlyInvoices />} />
+              <Route path="/mrp-gen-details" element={<MRPDetails />} />
+              <Route path="/generate-mrp" element={<MRPGenerate />} />
+              <Route path="/update-invoice/:id" element={<UpdateInvoice />} />
+              {/* <Route path="/web-dashboard" element={<Admindashboard />} /> */}
+            </>
+          }
+
+
 
         </Routes>
       </AuthProvider>

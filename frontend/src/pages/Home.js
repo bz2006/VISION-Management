@@ -23,7 +23,7 @@ function HomePage() {
     var currentMonthName = months[currentDate.getMonth()];
     var lastMonthName = months[currentDate.getMonth() - 1];
 
-    console.log(lastMonthName);
+
     const FetchAnalytics = async () => {
         try {
             const res = await axios.get("/api/v1/analytics/get-analytics")
@@ -52,7 +52,7 @@ function HomePage() {
         }
     }
 
-    console.log(Data);
+
     useEffect(() => {
 
         FetchAnalytics()

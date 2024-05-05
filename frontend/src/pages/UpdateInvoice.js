@@ -9,7 +9,7 @@ const { DeleteOutlined } = Icons;
 
 
 
-function Invoice() {
+function UpdateInvoice() {
 
 
   const [size] = useState('large');
@@ -343,5 +343,5 @@ console.log(Genmrp);
   )
 }
 
-export default Invoice
+export default UpdateInvoice
 

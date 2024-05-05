@@ -1,4 +1,4 @@
-import Product from "../models/productModel.js";
+
 import User from "../models/userModel.js";
 import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
 
@@ -6,14 +6,17 @@ import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
 
 export const getUserById = async (req, res) => {
   const userId = req.params.id;
+  console.log("hi",userId);
   try {
     const user = await User.findById(userId);
+    console.log(user);
     if (!user) {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
     return res.json({ user });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Table, Input, Button, Spin, Space, DatePicker } from 'antd';
+import { Table, Input, Button, Spin, Space, DatePicker, message, Popconfirm } from 'antd';
 import axios from "axios"
 import "./allinv.css"
 import Highlighter from 'react-highlight-words';
+import { useNavigate } from "react-router-dom"
 import moment from 'moment';
 import HeaderComp from '../components/header';
 import * as Icons from '@ant-design/icons';
@@ -15,6 +16,7 @@ function Allinvoices() {
 
     const [allinvoices, setallinvoices] = useState([])
     const [spinning, setSpinning] = useState(false);
+    const navigate = useNavigate();
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
     const [filteredData, setFilteredData] = useState([]);
@@ -54,16 +56,41 @@ function Allinvoices() {
         FetchAllinvoices()
     }, [])
 
-    const FetchInvoice = async(id)=>{
+    const FetchInvoice = async (id) => {
         try {
             setSpinning(true)
-            const res=await axios.get(`/api/v1/invoices/get-invoice/${id}`)
+            const res = await axios.get(`/api/v1/invoices/get-invoice/${id}`)
             console.log(res.data["invoice"])
             setSpinning(false)
             localStorage.setItem("ExistingInvoice", JSON.stringify(res.data["invoice"]));
-           
+
             window.open("/gen-existing-invoice", '_blank');
         } catch (error) {
+            console.log(error);
+        }
+    }
+    const DeleteInvoice = async (id) => {
+        try {
+            setSpinning(true)
+            await axios.delete(`/api/v1/invoices/delete-invoice/${id}`)
+            setSpinning(false)
+            message.success("Invoice Deleted")
+            FetchAllinvoices()
+        } catch (error) {
+            message.error("Request failed")
+            console.log(error);
+        }
+    }
+    const Updateinvoice = async(id) => {
+        try {
+            setSpinning(true)
+            const res = await axios.get(`/api/v1/invoices/get-invoice/${id}`)
+            console.log(res.data["invoice"])
+            setSpinning(false)
+            localStorage.setItem("Updateinvoice", JSON.stringify(res.data["invoice"]));
+            navigate(`/update-invoice/${id}`)
+        } catch (error) {
+            message.error("Request failed")
             console.log(error);
         }
     }
@@ -184,15 +211,49 @@ function Allinvoices() {
                                 <>
                                     <p style={{ margin: 0 }}>
                                         {record.taxmeth === "18%" ?
-                                            <>
-                                                {record.subtotal} + {record.tax}({record.taxmeth}) = {record.grandtotal}
-                                                <Button onClick={() => { FetchInvoice(record.key) }}></Button>
-                                            </>
+                                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
+
+                                                <div style={{ display: "flex", alignItems: "flex-end", flexDirection: "column" }}>
+                                                    <h6 className='invdet'>SubTotal : {record.subtotal}</h6>
+                                                    <h6 className='invdet'>Tax 18% : {record.tax}</h6>
+                                                    <h6 className='invdet'>Tax 18% : {record.tax}</h6>
+                                                    <h6 className='invdet'>Grand Total : {record.grandtotal}</h6>
+                                                </div>
+
+                                                <Button onClick={() => { FetchInvoice(record.key) }} className='viewinv'>View Invoice</Button>
+                                                <Button onClick={() => { Updateinvoice(record.key) }} className='viewinv'>Update invoice</Button>
+                                                <Popconfirm
+                                                    title="Are you sure you want to delete this invoice?"
+                                                    description="This action cannot be undone and Invoice cannot be retrived!"
+                                                    onConfirm={() => DeleteInvoice(record.key)}
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                >
+                                                    <Button className='viewinv'>Delete</Button>
+                                                </Popconfirm>
+                                            </div>
                                             :
-                                            <>
-                                                {record.subtotal} + {record.tax}({record.taxmeth}) + {record.tax}({record.taxmeth}) = {record.grandtotal}
-                                                <Button onClick={() => { FetchInvoice(record.key) }}></Button>
-                                            </>
+                                            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
+
+                                                <div style={{ display: "flex", alignItems: "flex-end", flexDirection: "column" }}>
+                                                    <h6 className='invdet'>SubTotal : {record.subtotal}</h6>
+                                                    <h6 className='invdet'>Tax 9% : {record.tax}</h6>
+                                                    <h6 className='invdet'>Tax 9% : {record.tax}</h6>
+                                                    <h6 className='invdet'>Grand Total : {record.grandtotal}</h6>
+                                                </div>
+
+                                                <Button onClick={() => { FetchInvoice(record.key) }} className='viewinv'>View Invoice</Button>
+                                                <Button onClick={() => { Updateinvoice(record.key) }} className='viewinv'>Update invoice</Button>
+                                                <Popconfirm
+                                                    title="Are you sure you want to delete this invoice?"
+                                                    description="This action cannot be undone and Invoice cannot be retrived!"
+                                                    onConfirm={() => DeleteInvoice(record.key)}
+                                                    okText="Yes"
+                                                    cancelText="No"
+                                                >
+                                                    <Button className='viewinv'>Delete</Button>
+                                                </Popconfirm>
+                                            </div>
                                         }
                                     </p>
                                 </>

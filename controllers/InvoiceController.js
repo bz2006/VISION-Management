@@ -116,3 +116,21 @@ export const GetMonthlyInvoicces = async (req, res) => {
     });
   }
 };
+
+
+export const deleteInvoice= async (req, res) => {
+  try {
+    const  id  = req.params.id;
+    await Invoices.findByIdAndDelete(id);
+    res.status(200).send({
+      success: true,
+      message: "invoice Deleted Successfully",
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "error while deleting invoice",
+      error,
+    });
+  }
+};

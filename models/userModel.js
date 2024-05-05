@@ -15,43 +15,9 @@ const userSchema = new mongoose.Schema({
         required: true
 
     },
-    ordersNo: {
-        type: Number,
-        default: 0,
-    },
-    addresses: [{
-        name: {
-            type: String,
-        },
-        address: {
-            type: String,
-        },
-        city: {
-            type: String
-        },
-        state: {
-            type: String
-        },
-        country: {
-            type: String
-        },
-        pin: {
-            type: Number
-        },
-        phone: {
-            type: Number
-        }
-    
-    }],
-    defaddress:{
-        type:String,
-    },
     role: {
         type: Number,
-        default: 0,
-    },
-    date:{
-        type:String,
+        default: 1,
     },
 
 },

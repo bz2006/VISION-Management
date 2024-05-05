@@ -26,10 +26,8 @@ export const signupcontroller = async (req, res) => {
             })
         }
         //registering
-        const currentDate = new Date();
-        const signupdate = currentDate.toDateString()
         const hashedpass = await hashPassword(password)
-        const user = await new userModel({ username, email, password: hashedpass, date:signupdate,}).save()
+        const user = await new userModel({ username, email, password: hashedpass,}).save()
         res.status(201).send({
             success: true,
             message: "User Register Successfully",

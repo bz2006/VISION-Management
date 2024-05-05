@@ -8,8 +8,9 @@ import cron from 'node-cron';
 import CatlogRoute from "./routes/CatlogRoute.js"
 import MarketsRoute from "./routes/MarketsRoute.js"
 import InvoiceRoutes from "./routes/InvoiceRoutes.js"
+import UserRoutes from "./routes/usersRoute.js"
 import AnalyticsRoutes from "./routes/AnalyticsRoutes.js"
-import { sendEmail } from "./middlewares/nodemailerMiddleware.js";
+import { sendEmail ,sendOTP} from "./middlewares/nodemailerMiddleware.js";
 import { FetchMonthlyInvoices } from "./middlewares/MonthlyInvoice.js";
 
 import authRoute from "./routes/authRoute.js"
@@ -35,6 +36,7 @@ app.use("/api/v1/records/catlog", CatlogRoute)
 app.use("/api/v1/records/markets", MarketsRoute)
 app.use("/api/v1/invoices", InvoiceRoutes)
 app.use("/api/v1/analytics", AnalyticsRoutes)
+app.use("/vm-api/v1/users", UserRoutes)
 
 app.use("/api/v1/auth",authRoute)
 
@@ -50,8 +52,9 @@ cron.schedule('5 18 * * *', () => {
 
 
 app.post('/send-email', sendEmail);
+app.post('/send-verification', sendOTP);
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 5001
 app.listen(PORT, () => {
   console.log('****Server Started on ' + process.env.DEV_MODE + " Mode PORT:" + PORT + "****")
 })

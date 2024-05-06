@@ -16,6 +16,7 @@ import MRPGenerate from "./pages/MRP-Generator/MRP-Generate";
 import Login from "./pages/Auth/login";
 import { AuthProvider } from "./context/auth";
 import UpdateInvoice from "./pages/UpdateInvoice";
+import GenerateUpdatedInvoice from "./pages/Invoice-Generators/UpdatedInvoice";
 
 
 
@@ -46,6 +47,7 @@ function App() {
               <Route path="/mrp-gen-details" element={<MRPDetails />} />
               <Route path="/generate-mrp" element={<MRPGenerate />} />
               <Route path="/update-invoice/:id" element={<UpdateInvoice />} />
+              <Route path="/gen-updated-invoice" element={<GenerateUpdatedInvoice />} />
               {/* <Route path="/web-dashboard" element={<Admindashboard />} /> */}
             </>
           }

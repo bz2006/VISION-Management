@@ -23,10 +23,10 @@ function UpdateInvoice() {
   const [Instructions, setInstructions] = useState("")
   const [Acno, setAcno] = useState("")
   const [Taxmethod, setTaxmethod] = useState("")
+  const [Invid, setinvid] = useState("")
   const [VehicleNo, setVehicleNo] = useState("")
   const [addgst, setAddgst] = useState(true)
-  const [Genmrp, setGenmrp] = useState(true)
-console.log(Genmrp);
+
 
   const [fetchcatlog, setFetchcatlog] = useState("")
   const [markid, setmarkid] = useState("")
@@ -51,11 +51,32 @@ console.log(Genmrp);
     { value: '9%', label: '9% + 9%' }
   ];
 
+  useEffect(() => {
+    const inv = localStorage.getItem("Updateinvoice");
+    const invObject = JSON.parse(inv);
+    setinvid(invObject._id)
+    setDate(invObject.date)
+    setInvoiceNo(invObject.invNo.replace("/24-25", ""))
+    setMarketplc(invObject.marketname)
+    setmarkid(invObject.marketid)
+    FetchCatlog(invObject.marketid)
+    setPOno(invObject.poNo)
+    setMrpart(invObject.mrpart)
+    setVehicleNo(invObject.vehicleNo)
+    setInstructions(invObject.instruction)
+    setTaxmethod(invObject.taxmeth)
+    setModels(invObject.billCont.map(({ unitPrice, artno, grossPrice, ...rest }) => rest))
+
+    FetchMarkets()
+  }, [])
+
   const GenerateInvoice = async () => {
+    console.log(Models)
     const res = await axios.get(`/api/v1/records/catlog/get-catlog/${fetchcatlog}`)
     console.log(res.data[0]["products"])
     const invData = [{
-      invNo: invoiceNo + "/24-25",
+      invId:Invid,
+      invNo: invoiceNo,
       Date: Date,
       marketDet: SelectedMarket,
       marketid: markid,
@@ -70,56 +91,13 @@ console.log(Genmrp);
       addgstrec: addgst
 
     }]
+    console.log("data",invData)
     localStorage.setItem("Invdet", JSON.stringify(invData));
-    if(Genmrp===true){
-      GenerateMRP()
-    }
-    //navigate("/generate-invoice")
-    window.open("/generate-invoice", '_blank');
+  
+    window.open("/gen-updated-invoice", '_blank');
   }
 
-  const GenerateMRP = () => {
-    let Combined = splitProducts(Models)
-    let Organized = GroupModels(Combined)
-    const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-    const ds = Date.split(".")
-    const year = ds[2]
-    const month = months[ds[1] - 1]
-    const MrpData = [{
-      Date: `${month} ${year}`,
-      Models: Organized,
-    }]
-
-    console.log(Organized);
-    localStorage.setItem("mrp", JSON.stringify(MrpData));
-    window.open("/generate-mrp", '_blank');
-  }
-
-  const splitProducts = (products) => {
-    let result = [];
-    products.forEach(product => {
-      if (product.inputValue > 1) {
-        for (let i = 0; i < product.inputValue; i++) {
-          result.push({ selectValue: product.selectValue, inputValue: 1, mrp: product.mrp });
-        }
-      } else {
-        result.push(product);
-      }
-    });
-    return result;
-  }
-
-
-  const GroupModels = (array) => {
-    const groupedObjects = [];
-    for (let i = 0; i < array.length; i += 12) {
-      groupedObjects[i / 12] = array.slice(i, i + 12);
-    }
-    return groupedObjects;
-  }
+  
 
 
 
@@ -127,7 +105,6 @@ console.log(Genmrp);
     try {
       setSpinning(true);
       const res = await axios.get("/api/v1/records/markets/get-markets")
-      console.log(res)
       setSpinning(false);
       setMarkets(res.data["markets"].map(market => ({ value: market._id, label: market.marketname })))
 
@@ -135,9 +112,7 @@ console.log(Genmrp);
       console.log(error)
     }
   }
-  useEffect(() => {
-    FetchMarkets()
-  }, [])
+
 
 
   const FetchCatlog = async (id) => {
@@ -166,13 +141,13 @@ console.log(Genmrp);
 
   const handleChange = (value, index, field) => {
     const updatedModels = [...Models];
-    if (field === 'selectValue') {
+    if (field === 'model') {
       // Find the corresponding model object from Modellist
       const selectedModel = Modellist.find(model => model.value === value);
       if (selectedModel) {
         updatedModels[index] = {
-          selectValue: selectedModel.value,
-          inputValue: 1, // Default quantity to 1 when model is selected
+          model: selectedModel.value,
+          quantity: 1, // Default quantity to 1 when model is selected
           mrp: selectedModel.mrp // Set MRP from Modellist
         };
       }
@@ -213,7 +188,7 @@ console.log(Genmrp);
           <div style={{ display: "flex", margin: "20px" }}>
 
             <Input value={invoiceNo} onChange={(event) => { setInvoiceNo(event.target.value) }} suffix="/24-25" placeholder="Invoice No (V001)" size='large' style={{ width: "200px", marginRight: "5%" }} />
-            <Input style={{ marginRight: "5%", width: "200px" }} value={"V005/24-25"} readOnly />
+
             <DatePicker onChange={Handledate} format={"DD.MM.YYYY"} />
           </div>
 
@@ -238,7 +213,7 @@ console.log(Genmrp);
               filterSort={(optionA, optionB) =>
                 (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
               }
-              defaultValue={Marketplc} // Assuming Marketplc is the default value
+              value={Marketplc} // Assuming Marketplc is the default value
               onChange={(value) => {
                 setMarketplc(value);
                 FetchCatlog(value);
@@ -279,16 +254,15 @@ console.log(Genmrp);
                     <Select
                       size={size}
                       placeholder="Select Model"
-                      value={model.selectValue}
-                      onChange={(value) => handleChange(value, index, 'selectValue')}
-                      defaultValue="Model"
+                      value={model.model}
+                      onChange={(value) => handleChange(value, index, 'model')}
                       style={{ width: 200, marginRight: "5%" }}
                       options={Modellist}
                     />
                     <InputNumber
                       min={1}
-                      value={model.inputValue}
-                      onChange={(value) => handleChange(value, index, 'inputValue')}
+                      value={model.quantity}
+                      onChange={(value) => handleChange(value, index, 'quantity')}
                       defaultValue={1}
                       style={{ width: "200px", marginRight: "5%" }}
                       size='large'
@@ -334,7 +308,7 @@ console.log(Genmrp);
           </div>
           <div style={{ display: "flex", margin: "20px", marginTop: "40px" }}>
             <Checkbox checked={addgst} onChange={(event) => setAddgst(event.target.checked)} size="large" style={{ color: "white", marginRight: "5%" }}>Add to GST records</Checkbox>
-            <Checkbox checked={Genmrp} onChange={(event) => setGenmrp(event.target.checked)} size="large" style={{ color: "white", marginRight: "5%" }}>Generate MRP</Checkbox>
+           
           </div>
           <button onClick={GenerateInvoice} className='geninvbtn'>Generate Invoice</button>
         </div>

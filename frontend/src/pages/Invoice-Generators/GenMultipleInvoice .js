@@ -36,8 +36,8 @@ const GenerateMultipleInvoice = ({ invoice }) => {
 
     const amountwords = () => {
         const wordsWithDashes = numberToWords.toWords(Math.ceil(InvDet.grandtotal));
-        const amountwords = wordsWithDashes.replace(/[-, ]/g, ' ')
-        return amountwords.charAt(0).toUpperCase() + amountwords.slice(1)
+        const words = wordsWithDashes.replace(/[-, ]/g, ' ')
+        return words.charAt(0).toUpperCase() + words.slice(1)
     }
 
     useEffect(() => {
@@ -109,7 +109,7 @@ const GenerateMultipleInvoice = ({ invoice }) => {
                                             <h6 style={{ color: "black", margin: "0px", fontSize: "13px", paddingLeft: "2px", textAlign: "start", fontWeight: "500" }}>Invoice No</h6>
                                         </div>
                                         <div className='billdet2t'>
-                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", paddingLeft: "2px", justifyContent: "center", fontWeight: "600" }}>{InvDet.invNo}</h6>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", paddingLeft: "2px", justifyContent: "center", fontWeight: "600" }}>{InvDet.invNo}/24-25</h6>
                                         </div>
                                     </div>
 

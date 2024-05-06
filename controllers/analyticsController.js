@@ -16,13 +16,13 @@ export const UpdateAnalytics = async (req, res) => {
             analytics = new Analytics({
                 monthname: Month,
                 profit: invprofit,
-                sold:sold,
+                sold: sold,
                 lastupdated: updateDate,
                 year: year
             });
         } else {
             analytics.noinv += 1;
-            analytics.sold+=sold
+            analytics.sold += sold
             analytics.profit += invprofit;
             analytics.lastupdated = updateDate;
 
@@ -51,6 +51,38 @@ export const GetAnalytics = async (req, res) => {
         return res.json(analytics);
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server Error' });
+    }
+};
+
+
+export const DeleteAnalytics = async (req, res) => {
+    try {
+        const invprofit = req.body["profit"]
+        const sold = req.body["sold"]
+        const Month = req.body["Month"]
+        const updateDate = req.body["updateDate"]
+        const year = req.body["year"]
+
+
+        let analytics = await Analytics.findOne({ monthname: Month });
+
+        if (analytics) {
+            analytics.noinv -= 1;
+            analytics.sold -= sold
+            analytics.profit -= invprofit;
+            analytics.lastupdated = updateDate;
+        } else {
+
+            res.status(404).json("Analytics not found")
+        }
+
+
+        await analytics.save();
+
+        res.status(200).json({ analytics });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 

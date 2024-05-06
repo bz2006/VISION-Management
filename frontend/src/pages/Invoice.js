@@ -55,7 +55,7 @@ console.log(Genmrp);
     const res = await axios.get(`/api/v1/records/catlog/get-catlog/${fetchcatlog}`)
     console.log(res.data[0]["products"])
     const invData = [{
-      invNo: invoiceNo + "/24-25",
+      invNo: invoiceNo,
       Date: Date,
       marketDet: SelectedMarket,
       marketid: markid,

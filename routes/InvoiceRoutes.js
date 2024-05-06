@@ -1,9 +1,11 @@
 import express from "express";
-import { AddtoGSTrecord, GetMonthlyInvoicces, GetallIvoices, Getinvoicebyid, deleteInvoice } from "../controllers/InvoiceController.js";
+import { AddtoGSTrecord, GetMonthlyInvoicces, GetallIvoices, Getinvoicebyid, UpdateGSTRecord, deleteInvoice } from "../controllers/InvoiceController.js";
 
 const router = express.Router();
 
 router.post("/add-invoice",AddtoGSTrecord)
+
+router.post("/update-invoice/:id",UpdateGSTRecord)
 
 router.get("/get-allinvoice",GetallIvoices)
 

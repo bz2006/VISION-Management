@@ -32,9 +32,10 @@ function Allinvoices() {
                 invoiceNumber: data["invNo"],
                 date: data["date"],
                 tax: data["tax"],
+                Tqty: data["Tqty"],
                 subtotal: data["subtotal"],
                 taxmeth: data["taxmeth"],
-                grandtotal: ("₹") + data["grandtotal"] + (".00")
+                grandtotal: data["grandtotal"]
             })))
             setFilteredData(res.data["Allinvoice"].map((data) => ({
                 key: data["_id"],
@@ -42,9 +43,10 @@ function Allinvoices() {
                 invoiceNumber: data["invNo"],
                 date: data["date"],
                 tax: data["tax"],
+                Tqty: data["Tqty"],
                 subtotal: data["subtotal"],
                 taxmeth: data["taxmeth"],
-                grandtotal: ("₹") + data["grandtotal"] + (".00")
+                grandtotal: data["grandtotal"]
             })))
             setSpinning(false);
         } catch (error) {
@@ -81,7 +83,7 @@ function Allinvoices() {
             console.log(error);
         }
     }
-    const Updateinvoice = async(id) => {
+    const Updateinvoice = async (id) => {
         try {
             setSpinning(true)
             const res = await axios.get(`/api/v1/invoices/get-invoice/${id}`)
@@ -95,6 +97,32 @@ function Allinvoices() {
         }
     }
 
+    const UpdateAnalytics = async (date, GrandTotal, Tqty) => {
+
+        const currentDate = new Date();
+        var day = currentDate.getDate();
+        var month = currentDate.getMonth() + 1;
+        var year = currentDate.getFullYear();
+        day = (day < 10 ? '0' : '') + day;
+        month = (month < 10 ? '0' : '') + month;
+        var formattedDate = day + '.' + month + '.' + year;
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+        const parts = date.split('.');
+        const monthNumber = parseInt(parts[1]);
+        const prft = Math.ceil(GrandTotal) * 0.53 - Math.ceil(GrandTotal)
+        const profit = Math.ceil(Math.abs(prft))
+        const Month = months[monthNumber - 1]
+        const updateDate = formattedDate
+        try {
+            const res = await axios.post("/api/v1/analytics/delete-analytics", {
+                profit: profit, Month: Month, year: year, updateDate: updateDate, sold: Tqty
+            })
+            console.log(res)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const handleDateFilter = (dates) => {
         if (!dates || dates.length !== 2) {
@@ -214,10 +242,11 @@ function Allinvoices() {
                                             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
 
                                                 <div style={{ display: "flex", alignItems: "flex-end", flexDirection: "column" }}>
+                                                    <h6 className='invdet'>Total Qty : {record.Tqty}</h6>
                                                     <h6 className='invdet'>SubTotal : {record.subtotal}</h6>
                                                     <h6 className='invdet'>Tax 18% : {record.tax}</h6>
                                                     <h6 className='invdet'>Tax 18% : {record.tax}</h6>
-                                                    <h6 className='invdet'>Grand Total : {record.grandtotal}</h6>
+                                                    <h6 className='invdet'>Grand Total : ₹{record.grandtotal}.00</h6>
                                                 </div>
 
                                                 <Button onClick={() => { FetchInvoice(record.key) }} className='viewinv'>View Invoice</Button>
@@ -225,7 +254,7 @@ function Allinvoices() {
                                                 <Popconfirm
                                                     title="Are you sure you want to delete this invoice?"
                                                     description="This action cannot be undone and Invoice cannot be retrived!"
-                                                    onConfirm={() => DeleteInvoice(record.key)}
+                                                    onConfirm={() => { DeleteInvoice(record.key); UpdateAnalytics(record.date, record.grandtotal, record.Tqty) }}
                                                     okText="Yes"
                                                     cancelText="No"
                                                 >
@@ -236,6 +265,7 @@ function Allinvoices() {
                                             <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
 
                                                 <div style={{ display: "flex", alignItems: "flex-end", flexDirection: "column" }}>
+                                                    <h6 className='invdet'>Total Qty : {record.Tqty}</h6>
                                                     <h6 className='invdet'>SubTotal : {record.subtotal}</h6>
                                                     <h6 className='invdet'>Tax 9% : {record.tax}</h6>
                                                     <h6 className='invdet'>Tax 9% : {record.tax}</h6>

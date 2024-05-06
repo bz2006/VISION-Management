@@ -54,6 +54,60 @@ export const AddtoGSTrecord = async (req, res) => {
   }
 };
 
+
+export const UpdateGSTRecord = async (req, res) => {
+
+  const invid = req.params.id
+
+  try {
+    const markname = req.body["marketname"]
+    const marketid = req.body["marketid"]
+    const Markadrs = req.body["Markadrs"]
+    const invNo = req.body["invNo"]
+    const date = req.body["date"]
+    const poNo = req.body["poNo"]
+    const mrpart = req.body["mrpart"]
+    const billCont = req.body["billCont"]
+    const grandtotal = req.body["grandtotal"]
+    const subtotal = req.body["subtotal"]
+    const tax = req.body["tax"]
+    const vehicleNo = req.body["vehicleNo"]
+    const instruction = req.body["instruction"]
+    const Tqty = req.body["Tqty"]
+    const taxmeth = req.body["taxmeth"]
+    let Invoice = await Invoices.findByIdAndUpdate(
+      invid,
+      {
+        marketname: markname,
+        marketid: marketid,
+        Markadrs: Markadrs,
+        invNo: invNo,
+        date: date,
+        poNo: poNo,
+        mrpart: mrpart,
+        billCont: billCont,
+        grandtotal: grandtotal,
+        subtotal: subtotal,
+        tax: tax,
+        vehicleNo: vehicleNo,
+        instruction: instruction,
+        Tqty: Tqty,
+        taxmeth: taxmeth
+      }
+    );
+
+
+
+
+    await Invoice.save();
+
+    res.status(200).json({ Invoice });
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 export const GetallIvoices = async (req, res) => {
   try {
     const Allinvoice = await Invoices.find({});
@@ -95,7 +149,7 @@ export const GetMonthlyInvoicces = async (req, res) => {
 
   const startDate = req.query["startDate"]
   const endDate = req.query["endDate"]
-  console.log(req.query,"body");
+  console.log(req.query, "body");
 
   try {
     const allinvoices = await Invoices.find({
@@ -118,9 +172,9 @@ export const GetMonthlyInvoicces = async (req, res) => {
 };
 
 
-export const deleteInvoice= async (req, res) => {
+export const deleteInvoice = async (req, res) => {
   try {
-    const  id  = req.params.id;
+    const id = req.params.id;
     await Invoices.findByIdAndDelete(id);
     res.status(200).send({
       success: true,

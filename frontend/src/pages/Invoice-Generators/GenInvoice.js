@@ -99,7 +99,9 @@ const GenerateInvoice = () => {
         }
 
     }
-
+    window.addEventListener("beforeunload", function(event) {
+        localStorage.removeItem('Invdet');
+    });
     const Bill = Organize(Items);
     useEffect(() => {
         if (Bill.length !== 0 || perm === true) {
@@ -257,7 +259,7 @@ const GenerateInvoice = () => {
                                             <h6 style={{ color: "black", margin: "0px", fontSize: "13px", paddingLeft: "2px", textAlign: "start", fontWeight: "500" }}>Invoice No</h6>
                                         </div>
                                         <div className='billdet2t'>
-                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", paddingLeft: "2px", justifyContent: "center", fontWeight: "600" }}>{InvDet.invNo}</h6>
+                                            <h6 style={{ color: "black", margin: "0px", fontSize: "14px", paddingLeft: "2px", justifyContent: "center", fontWeight: "600" }}>{InvDet.invNo}/24-25</h6>
                                         </div>
                                     </div>
 

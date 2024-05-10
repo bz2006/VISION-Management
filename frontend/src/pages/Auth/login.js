@@ -17,9 +17,7 @@ function Login() {
     const [auth] = useAuth();
     const authData = JSON.parse(localStorage.getItem("auth"));
 
-    const showMessage = (message) => {
-        message.info("Login successful");
-    };
+   
 
 
     useEffect(() => {

@@ -8,21 +8,24 @@ const analyticsSchema = new Schema({
     required: true,
   },
   noinv: {
-      type: Number,
-      default:1
+    type: Number,
+    default: 1
   },
   sold: {
     type: Number,
-},
+  },
+  weborders: {
+    type: Number,
+  },
   profit: {
-      type: Number
+    type: Number
   },
   lastupdated: {
-      type: String
+    type: String
   },
   year: {
     type: String
-}
+  }
 });
 
 

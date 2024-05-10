@@ -22,7 +22,7 @@ connectdb();
 const app = express()
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'http://localhost:4000'],
   credentials: true,
 };
 
@@ -54,7 +54,7 @@ cron.schedule('5 18 * * *', () => {
 app.post('/send-email', sendEmail);
 app.post('/send-verification', sendOTP);
 
-const PORT = process.env.PORT || 5001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log('****Server Started on ' + process.env.DEV_MODE + " Mode PORT:" + PORT + "****")
 })

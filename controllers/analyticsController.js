@@ -40,13 +40,14 @@ export const UpdateAnalytics = async (req, res) => {
 
 
 
+
 export const GetAnalytics = async (req, res) => {
 
     try {
         const analytics = await Analytics.find({});
 
         if (analytics.length === 0) {
-            return res.status(404).json({ success: false, message: 'No analytics found.' });
+            return res.status(204).json({ success: false, message: 'No analytics found.' });
         }
         return res.json(analytics);
     } catch (error) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import { Card, Col, Row, Statistic } from 'antd';
+import { Card, Statistic } from 'antd';
 import Header from '../components/header'
 import axios from 'axios';
 import "./home.css"
@@ -18,6 +18,9 @@ function HomePage() {
     const [LastminvNo, setLastminvNo] = useState(0)
     const [LastmSold, setLastmSold] = useState(0)
 
+    const [LastordSold, setLastordSold] = useState(0)
+    const [webrods, setwebrods] = useState(0)
+
     var currentDate = new Date();
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var currentMonthName = months[currentDate.getMonth()];
@@ -27,8 +30,9 @@ function HomePage() {
     const FetchAnalytics = async () => {
         try {
             const res = await axios.get("/api/v1/analytics/get-analytics")
-            console.log(res.data);
-            setData(res.data.map((anlyct) => ({
+            const webord = await axios.get("http://localhost:5000/w-vm-api/v1/analytics/get-order-analytics")
+            console.log(webord.data);
+            setData(res.data.length > 0 && res.data.map((anlyct) => ({
                 month: anlyct.monthname,
                 Profit: anlyct.profit,
                 Invs: anlyct.noinv
@@ -47,6 +51,15 @@ function HomePage() {
                 }
             }
 
+            for (let i of webord.data) {
+                if (i.monthname === currentMonthName) {
+                    setwebrods(i.sold)
+                }
+                if (i.monthname === lastMonthName) {
+                    setLastordSold(i.sold)
+                }
+            }
+
         } catch (error) {
             console.log(error);
         }
@@ -57,21 +70,28 @@ function HomePage() {
 
         FetchAnalytics()
         setMonthname(currentMonthName)
-  
+
 
     }, [])
+console.log(Data);
 
     return (
         <>
             <Header />
             <div >
                 <div className='anmain'>
-                    <div className='graphdiv'>
-                        <Chart Data={Data} />
-                    </div>
+                    {Data === false ?
+                        <div style={{ display: "flex", justifyContent: "center", marginBottom: "-40px", marginTop: "-40px" }}>
+                            <img style={{ width: "400px" }} src='https://static-vision.s3.ap-south-1.amazonaws.com/%E2%80%94Pngtree%E2%80%94404+not+found+or+page_5595003.png' />
+                        </div>
+                        :
+
+                        <div className='graphdiv'>
+                            <Chart Data={Data} />
+                        </div>}
                     <div className='bottomstat'>
                         <div className='stat'>
-                            {Profit >= LastmProfit ?
+                            {Profit > LastmProfit ?
                                 <Card bordered={false}>
                                     <Statistic
                                         title={`Profit Gained in ${Monthname}`}
@@ -96,7 +116,7 @@ function HomePage() {
 
                         </div>
                         <div className='stat'>
-                            {invNo >= LastminvNo ?
+                            {invNo > LastminvNo ?
                                 <Card bordered={false}>
                                     <Statistic
                                         title={`No: of Invoices in ${Monthname}`}
@@ -120,7 +140,7 @@ function HomePage() {
 
                         </div>
                         <div className='stat'>
-                            {Sold >= LastmSold ?
+                            {Sold > LastmSold ?
                                 <Card bordered={false}>
                                     <Statistic
                                         title={`Clocks Sold in ${Monthname}`}
@@ -146,27 +166,37 @@ function HomePage() {
 
                         </div>
                         <div className='stat'>
-                            <Card bordered={false}>
-                                <Statistic
-                                    title="Website Orders"
-                                    value={12}
-                                    valueStyle={{
-                                        color: '#3f8600',
-                                    }}
-                                    prefix={<ArrowUpOutlined />}
-                                    suffix="Orders"
-                                />
-                            </Card>
+                            {webrods > LastordSold ?
+                                <Card bordered={false}>
+                                    <Statistic
+                                        title={`Website Orders in ${Monthname}`}
+                                        value={webrods}
+                                        valueStyle={{
+                                            color: '#3f8600',
+                                        }}
+                                        prefix={<ArrowUpOutlined />}
+                                        suffix="Orders"
+                                    />
+                                </Card>
+                                :
+                                <Card bordered={false}>
+                                    <Statistic
+                                        title={`Website Orders in ${Monthname}`}
+                                        value={webrods}
+                                        valueStyle={{ color: '#cf1322' }}
+                                        prefix={<ArrowDownOutlined />}
+                                        suffix="Orders"
+                                    />
+                                </Card>
+                            }
                         </div>
                         <div className='stat'>
                             <Card bordered={false}>
                                 <Statistic
                                     title="Amazon Orders"
-                                    value={11}
-                                    valueStyle={{
-                                        color: '#3f8600',
-                                    }}
-                                    prefix={<ArrowUpOutlined />}
+                                    value={0}
+                                    valueStyle={{ color: '#cf1322' }}
+                                    prefix={<ArrowDownOutlined />}
                                     suffix="Orders"
                                 />
                             </Card>

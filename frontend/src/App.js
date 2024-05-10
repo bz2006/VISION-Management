@@ -24,7 +24,13 @@ axios.defaults.baseURL = "http://localhost:3001"
 axios.defaults.withCredentials = true
 
 function App() {
+
+  let Access =false
+
   const authData = JSON.parse(localStorage.getItem("auth"));
+  if (authData) {
+    Access=authData["success"]
+  }
 
   return (
     <>
@@ -32,7 +38,7 @@ function App() {
         <GlobalStyle />
         <Routes>
 
-          {authData === null ? (<Route path="*" element={<Login />} />)
+          {authData === null && Access === false ? (<Route path="*" element={<Login />} />)
             :
             <>
               <Route path="/" element={<HomePage />} />

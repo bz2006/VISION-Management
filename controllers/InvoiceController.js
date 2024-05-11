@@ -15,6 +15,7 @@ export const AddtoGSTrecord = async (req, res) => {
     const subtotal = req.body["subtotal"]
     const tax = req.body["tax"]
     const vehicleNo = req.body["vehicleNo"]
+    const AccNo = req.body["AccNo"]
     const instruction = req.body["instruction"]
     const Tqty = req.body["Tqty"]
     const taxmeth = req.body["taxmeth"]
@@ -33,6 +34,7 @@ export const AddtoGSTrecord = async (req, res) => {
         grandtotal: grandtotal,
         subtotal: subtotal,
         tax: tax,
+        AccNo:AccNo,
         vehicleNo: vehicleNo,
         instruction: instruction,
         Tqty: Tqty,
@@ -73,6 +75,7 @@ export const UpdateGSTRecord = async (req, res) => {
     const tax = req.body["tax"]
     const vehicleNo = req.body["vehicleNo"]
     const instruction = req.body["instruction"]
+    const AccNo = req.body["AccNo"]
     const Tqty = req.body["Tqty"]
     const taxmeth = req.body["taxmeth"]
     let Invoice = await Invoices.findByIdAndUpdate(
@@ -89,6 +92,7 @@ export const UpdateGSTRecord = async (req, res) => {
         grandtotal: grandtotal,
         subtotal: subtotal,
         tax: tax,
+        AccNo:AccNo,
         vehicleNo: vehicleNo,
         instruction: instruction,
         Tqty: Tqty,
@@ -141,6 +145,26 @@ export const Getinvoicebyid = async (req, res) => {
       success: false,
       error,
       message: "Error while getting invoice",
+    });
+  }
+};
+
+export const GetLatestInv = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const inv = await Invoices.findOne().sort({_id:-1});
+
+    res.status(200).send({
+      success: true,
+      inv
+
+    });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while getting invoice No",
     });
   }
 };

@@ -38,10 +38,6 @@ function MultipleInvoices() {
                     </div>
                 ))}
             </div>
-            <div>
-                <p>Share this page:</p>
-                <a href={generateShareableURL()}>Link to Invoices</a>
-            </div>
         </>
     )
 }

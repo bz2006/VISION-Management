@@ -19,7 +19,9 @@ function MRPGenerate() {
   }, [])
 
 
-
+  window.addEventListener("beforeunload", function (event) {
+    localStorage.removeItem('mrp');
+});
 console.log(Models,Date);
   return (
     <>

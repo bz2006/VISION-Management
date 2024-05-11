@@ -21,6 +21,7 @@ function Login() {
 
 
     useEffect(() => {
+        message.info("Login to continue to Manage Console")
         const authData = JSON.parse(localStorage.getItem("auth"));
         const redirectUrl = sessionStorage.getItem("redirectUrl");
 

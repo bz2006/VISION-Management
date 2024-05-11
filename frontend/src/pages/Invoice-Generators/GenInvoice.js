@@ -22,6 +22,7 @@ const GenerateInvoice = () => {
     const [Markname, setMarkname] = useState("")
     const [Instruction, setinstruction] = useState("")
     const [VehicleNo, setVehicleNo] = useState("")
+    const [AccNo, setAccNo] = useState("")
     const [Total, setTotal] = useState(0)
     const [GrandTotal, setGrandTotal] = useState(0)
     const [Tax, setTax] = useState(0)
@@ -46,6 +47,7 @@ const GenerateInvoice = () => {
             setinstruction(invObject[0]["Instructions"])
             setVehicleNo(invObject[0]["VehicleNo"])
             setmarketid(invObject[0]["marketid"])
+            setAccNo(invObject[0]["Acno"])
             if (invObject[0]["addgstrec"] === false) {
                 setconfirm(true)
             }
@@ -99,7 +101,7 @@ const GenerateInvoice = () => {
         }
 
     }
-    window.addEventListener("beforeunload", function(event) {
+    window.addEventListener("beforeunload", function (event) {
         localStorage.removeItem('Invdet');
     });
     const Bill = Organize(Items);
@@ -130,14 +132,14 @@ const GenerateInvoice = () => {
         const monthNumber = parseInt(parts[1]);
         const prft = Math.ceil(GrandTotal) * 0.53 - Math.ceil(GrandTotal)
         const profit = Math.ceil(Math.abs(prft))
-        const Month = months[monthNumber-1]
+        const Month = months[monthNumber - 1]
         const updateDate = formattedDate
 
 
 
         try {
             const res = await axios.post("/api/v1/analytics/update-analytics", {
-                profit: profit, Month: Month,year:year, updateDate: updateDate,sold:Tqty
+                profit: profit, Month: Month, year: year, updateDate: updateDate, sold: Tqty
             })
             console.log(res)
         } catch (error) {
@@ -162,6 +164,7 @@ const GenerateInvoice = () => {
                 grandtotal: Math.ceil(GrandTotal),
                 tax: Tax.toFixed(2),
                 vehicleNo: VehicleNo,
+                AccNo:AccNo,
                 instruction: Instruction,
                 Tqty: Tqty,
                 taxmeth: InvDet.taxmeth
@@ -195,7 +198,7 @@ const GenerateInvoice = () => {
         }
     };
 
-    
+
 
     return (
         <>
@@ -308,7 +311,7 @@ const GenerateInvoice = () => {
                                     ))}
                                     <th className='mrp'>
                                         {BillContent.length > 0 && BillContent.map((model, index) => (
-                                            InvDet.mrp === "MRP" ? <h6 className='inovicecontent'>{model.mrp}</h6>: <h6 className='inovicecontent' style={{fontSize:"10px",marginTop:"9.5px"}}>{model.artno}</h6>
+                                            InvDet.mrp === "MRP" ? <h6 className='inovicecontent'>{model.mrp}</h6> : <h6 className='inovicecontent' style={{ fontSize: "10px", marginTop: "9.5px" }}>{model.artno}</h6>
 
                                         ))}
 
@@ -348,13 +351,13 @@ const GenerateInvoice = () => {
 
 
                             <div style={{ display: "flex", flexDirection: "row" }}>
-                                
+
 
                                 <div className='comapny'>
                                     <h6 className='comapnycont'>Amount in words:</h6>
                                     <h6 className='comapnycont'>{amountwords.charAt(0).toUpperCase() + amountwords.slice(1)} only</h6><br />
-                                    <h6 className='comapnycont'>A/C No: 37647177049 </h6>
-                                    <h6 className='comapnycont'>IFS Code :SBIN0001108 </h6>
+                                    <h6 className='comapnycont'>A/C No: {AccNo}</h6>
+                                    <h6 className='comapnycont'>IFS Code: SBIN0001108 </h6>
                                     <h6 className='comapnycont'>Branch: State Bank of India Ambalamedu</h6>
                                     <br /><br /><br /><br />
                                     {VehicleNo ? <h6 className='contbottom' style={{ fontWeight: "400", fontSize: "13px" }}>Vehicle No : {VehicleNo}</h6> : null}

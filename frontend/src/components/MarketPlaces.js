@@ -265,7 +265,7 @@ function MarketPlaces() {
             <Button type="primary" style={{margin:"20px"}} onClick={() => { GetCatlog(); setaddmp(true); }}>Add New Market</Button><br/><br/>
             </div>
             <div className="table-container">
-                <Table columns={mpcolumns} dataSource={Markets} style={{ width: "fit-content", fontSize: "50px" }} />
+                <Table pagination={{ pageSize: 5 }} columns={mpcolumns} dataSource={Markets} style={{ width: "fit-content", fontSize: "50px" }} />
             </div>
             <>
                 <Modal

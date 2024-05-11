@@ -24,10 +24,9 @@ function Invoice() {
   const [Acno, setAcno] = useState("")
   const [Taxmethod, setTaxmethod] = useState("")
   const [VehicleNo, setVehicleNo] = useState("")
+  const [latest, setlatest] = useState("")
   const [addgst, setAddgst] = useState(true)
   const [Genmrp, setGenmrp] = useState(true)
-console.log(Genmrp);
-
   const [fetchcatlog, setFetchcatlog] = useState("")
   const [markid, setmarkid] = useState("")
   const [spinning, setSpinning] = useState(false);
@@ -36,11 +35,9 @@ console.log(Genmrp);
   const [Modellist, setModellist] = useState([])
   const [SelectedMarket, setSelectedMarket] = useState([])
 
-  console.log(Models);
-  const options = [
-    { value: 'orange', label: 'Orange' },
-    { value: 'banana', label: 'bbbbb' },
-    { value: 'bannnana', label: 'Banana' },
+  const accno = [
+    { value: '30891188652', label: ' 30891188652' },
+    { value: '37647177049', label: '37647177049' },
   ];
   const mrporart = [
     { value: 'MRP', label: 'MRP' },
@@ -50,6 +47,9 @@ console.log(Genmrp);
     { value: '18%', label: '18%' },
     { value: '9%', label: '9% + 9%' }
   ];
+
+
+
 
   const GenerateInvoice = async () => {
     const res = await axios.get(`/api/v1/records/catlog/get-catlog/${fetchcatlog}`)
@@ -71,10 +71,9 @@ console.log(Genmrp);
 
     }]
     localStorage.setItem("Invdet", JSON.stringify(invData));
-    if(Genmrp===true){
+    if (Genmrp === true) {
       GenerateMRP()
     }
-    //navigate("/generate-invoice")
     window.open("/generate-invoice", '_blank');
   }
 
@@ -127,7 +126,6 @@ console.log(Genmrp);
     try {
       setSpinning(true);
       const res = await axios.get("/api/v1/records/markets/get-markets")
-      console.log(res)
       setSpinning(false);
       setMarkets(res.data["markets"].map(market => ({ value: market._id, label: market.marketname })))
 
@@ -135,8 +133,22 @@ console.log(Genmrp);
       console.log(error)
     }
   }
+
+  const GetLatestInv = async () => {
+    try {
+      setSpinning(true);
+      const res = await axios.get("/api/v1/invoices/latest-inv")
+      setlatest(res.data.inv["invNo"])
+      setSpinning(false);
+
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
   useEffect(() => {
     FetchMarkets()
+    GetLatestInv()
   }, [])
 
 
@@ -213,7 +225,7 @@ console.log(Genmrp);
           <div style={{ display: "flex", margin: "20px" }}>
 
             <Input value={invoiceNo} onChange={(event) => { setInvoiceNo(event.target.value) }} suffix="/24-25" placeholder="Invoice No (V001)" size='large' style={{ width: "200px", marginRight: "5%" }} />
-            <Input style={{ marginRight: "5%", width: "200px" }} value={"V005/24-25"} readOnly />
+            <Input style={{ marginRight: "5%", width: "200px" }} value={latest+"/24-25"} readOnly />
             <DatePicker onChange={Handledate} format={"DD.MM.YYYY"} />
           </div>
 
@@ -318,7 +330,7 @@ console.log(Genmrp);
               style={{
                 width: 200, marginRight: "5%"
               }}
-              options={options}
+              options={accno}
             />
             <Select
               size={size}

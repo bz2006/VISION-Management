@@ -36,6 +36,9 @@ const invoicesSchema = new Schema({
   vehicleNo: {
     type: String,
   },
+  AccNo: {
+    type: String,
+  },
   instruction: {
     type: String,
   },

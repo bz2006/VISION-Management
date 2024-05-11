@@ -37,10 +37,9 @@ function UpdateInvoice() {
   const [SelectedMarket, setSelectedMarket] = useState([])
 
   console.log(Models);
-  const options = [
-    { value: 'orange', label: 'Orange' },
-    { value: 'banana', label: 'bbbbb' },
-    { value: 'bannnana', label: 'Banana' },
+  const accno = [
+    { value: '30891188652', label: ' 30891188652' },
+    { value: '37647177049', label: '37647177049' },
   ];
   const mrporart = [
     { value: 'MRP', label: 'MRP' },
@@ -63,6 +62,7 @@ function UpdateInvoice() {
     setPOno(invObject.poNo)
     setMrpart(invObject.mrpart)
     setVehicleNo(invObject.vehicleNo)
+    setAcno(invObject.AccNo)
     setInstructions(invObject.instruction)
     setTaxmethod(invObject.taxmeth)
     setModels(invObject.billCont.map(({ unitPrice, artno, grossPrice, ...rest }) => rest))
@@ -86,7 +86,7 @@ function UpdateInvoice() {
       catlog: res.data[0]['products'],
       Instructions: Instructions,
       VehicleNo: VehicleNo,
-      Acno: Acno,
+      AccNo: Acno,
       taxmeth: Taxmethod,
       addgstrec: addgst
 
@@ -182,7 +182,6 @@ function UpdateInvoice() {
 
           <div style={{ display: "flex", paddingLeft: "20px", marginBottom: "-25px" }}>
             <h5 style={{ marginRight: "18%" }}>Invoice No</h5>
-            <h5 style={{ marginRight: "15%" }}>Last Invoice No</h5>
             <h5 style={{ marginRight: "0%" }}>Date</h5>
           </div>
           <div style={{ display: "flex", margin: "20px" }}>
@@ -292,7 +291,7 @@ function UpdateInvoice() {
               style={{
                 width: 200, marginRight: "5%"
               }}
-              options={options}
+              options={accno}
             />
             <Select
               size={size}

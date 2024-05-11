@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
 });
 
 
-cron.schedule('5 18 * * *', () => {
+cron.schedule('5 15 * * *', () => {
   sendEmail(); 
 });
 

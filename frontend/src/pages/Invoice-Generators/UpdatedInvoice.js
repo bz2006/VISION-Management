@@ -22,6 +22,7 @@ const GenerateUpdatedInvoice = () => {
     const [Invid, setinvid] = useState("")
     const [Markname, setMarkname] = useState("")
     const [Instruction, setinstruction] = useState("")
+    const [Accno, setAccno] = useState("")
     const [VehicleNo, setVehicleNo] = useState("")
     const [Total, setTotal] = useState(0)
     const [GrandTotal, setGrandTotal] = useState(0)
@@ -46,6 +47,7 @@ const GenerateUpdatedInvoice = () => {
             setGSTIN(invObject[0]["marketDet"]["gstNo"])
             setMarkname(invObject[0]["marketDet"]["marketname"])
             setinstruction(invObject[0]["Instructions"])
+            setAccno(invObject[0]["AccNo"])
             setVehicleNo(invObject[0]["VehicleNo"])
             setmarketid(invObject[0]["marketid"])
             if (invObject[0]["addgstrec"] === false) {
@@ -59,7 +61,7 @@ const GenerateUpdatedInvoice = () => {
 
     }, [])
 
-    window.addEventListener("beforeunload", function(event) {
+    window.addEventListener("beforeunload", function (event) {
         localStorage.removeItem('Updateinvoice');
         localStorage.removeItem('Invdet');
     });
@@ -118,7 +120,8 @@ const GenerateUpdatedInvoice = () => {
 
     console.log(BillContent)
 
-    const UpdateAnalytics = async () => {
+    const UpdateAnalytics = async (OldTqty, Oldgtotal) => {
+        console.log(OldTqty, Oldgtotal)
 
         const currentDate = new Date();
         var day = currentDate.getDate();
@@ -133,14 +136,25 @@ const GenerateUpdatedInvoice = () => {
         const monthNumber = parseInt(parts[1]);
         const prft = Math.ceil(GrandTotal) * 0.53 - Math.ceil(GrandTotal)
         const profit = Math.ceil(Math.abs(prft))
-        const Month = months[monthNumber-1]
+        const Month = months[monthNumber - 1]
         const updateDate = formattedDate
 
+        const Oldprft = Math.ceil(Oldgtotal) * 0.53 - Math.ceil(Oldgtotal)
+        const Oldprofit = Math.ceil(Math.abs(Oldprft))
+        // const updatedqty = Math.abs(OldTqty - Tqty)
+        // const updatedprofit = Math.abs(Oldgtotal-GrandTotal)
+        // console.log("oldg",Oldgtotal)
+        // console.log("gt",GrandTotal);
+        // console.log("uppr",updatedprofit,"profit",prft)
 
+      
 
         try {
-            const res = await axios.post("/api/v1/analytics/update-analytics", {
-                profit: profit, Month: Month,year:year, updateDate: updateDate,sold:Tqty
+            await axios.post("/api/v1/analytics/update-analytics-invinit", {
+                profit: Oldprofit, Month: Month, sold:OldTqty
+            })
+            const res = await axios.post("/api/v1/analytics/update-analytics-inv", {
+                profit: profit, Month: Month, year: year, updateDate: updateDate, sold:Tqty
             })
             console.log(res)
         } catch (error) {
@@ -172,12 +186,16 @@ const GenerateUpdatedInvoice = () => {
                 grandtotal: Math.ceil(GrandTotal),
                 tax: Tax.toFixed(2),
                 vehicleNo: VehicleNo,
+                AccNo: Accno,
                 instruction: Instruction,
                 Tqty: Tqty,
                 taxmeth: InvDet.taxmeth
             }
+            const res = await axios.get(`/api/v1/invoices/get-invoice/${Invid}`)
+            const OldTqty = res.data.invoice["Tqty"]
+            const Oldgtotal = res.data.invoice["grandtotal"]
             await axios.post(`/api/v1/invoices/update-invoice/${Invid}`, invData)
-            UpdateAnalytics()
+            UpdateAnalytics(OldTqty, Oldgtotal)
             setSpinning(false);
             window.open("/all-invoices", '_blank');
         } catch (error) {
@@ -187,11 +205,11 @@ const GenerateUpdatedInvoice = () => {
     const handleConfirm = async () => {
         try {
             await Modal.confirm({
-                title: 'Add to GST Records',
+                title: 'Update GST Records',
                 content: (
                     <div style={{ fontSize: '16px' }}>
-                        <p>{`Are you sure to add ${InvDet.invNo} Invoice`}</p>
-                        <p>{`for ${Markname} to GST records?`}</p>
+                        <p>{`Are you sure to update ${InvDet.invNo} Invoice for ${Markname}`}</p>
+                        <p>{"This procces cannot be undone!"}</p>
                     </div>
                 ),
                 centered: true,
@@ -205,7 +223,7 @@ const GenerateUpdatedInvoice = () => {
         }
     };
 
-    
+
 
     return (
         <>
@@ -318,7 +336,7 @@ const GenerateUpdatedInvoice = () => {
                                     ))}
                                     <th className='mrp'>
                                         {BillContent.length > 0 && BillContent.map((model, index) => (
-                                            InvDet.mrp === "MRP" ? <h6 className='inovicecontent'>{model.mrp}</h6>: <h6 className='inovicecontent' style={{fontSize:"10px",marginTop:"9.5px"}}>{model.artno}</h6>
+                                            InvDet.mrp === "MRP" ? <h6 className='inovicecontent'>{model.mrp}</h6> : <h6 className='inovicecontent' style={{ fontSize: "10px", marginTop: "9.5px" }}>{model.artno}</h6>
 
                                         ))}
 
@@ -358,12 +376,12 @@ const GenerateUpdatedInvoice = () => {
 
 
                             <div style={{ display: "flex", flexDirection: "row" }}>
-                                
+
 
                                 <div className='comapny'>
                                     <h6 className='comapnycont'>Amount in words:</h6>
-                                    <h6 className='comapnycont'>{GrandTotal?amountwords():null} only</h6><br />
-                                    <h6 className='comapnycont'>A/C No: 37647177049 </h6>
+                                    <h6 className='comapnycont'>{GrandTotal ? amountwords() : null} only</h6><br />
+                                    <h6 className='comapnycont'>A/C No: {Accno}</h6>
                                     <h6 className='comapnycont'>IFS Code :SBIN0001108 </h6>
                                     <h6 className='comapnycont'>Branch: State Bank of India Ambalamedu</h6>
                                     <br /><br /><br /><br />

@@ -199,7 +199,7 @@ const GenerateMultipleInvoice = ({ invoice }) => {
                                 <div className='comapny'>
                                     <h6 className='comapnycont'>Amount in words:</h6>
                                     <h6 className='comapnycont'>{InvDet.grandtotal?amountwords():null} only</h6><br />
-                                    <h6 className='comapnycont'>A/C No: 37647177049 </h6>
+                                    <h6 className='comapnycont'>A/C No: {InvDet.AccNo}</h6>
                                     <h6 className='comapnycont'>IFS Code :SBIN0001108 </h6>
                                     <h6 className='comapnycont'>Branch: State Bank of India Ambalamedu</h6>
                                     <br /><br /><br /><br />

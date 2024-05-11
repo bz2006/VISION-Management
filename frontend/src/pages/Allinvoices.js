@@ -97,8 +97,8 @@ function Allinvoices() {
         }
     }
 
-    const UpdateAnalytics = async (date, GrandTotal, Tqty) => {
-
+    const UpdateAnalytics = async (date, GrandTotal, Tqty,record) => {
+console.log("delete");
         const currentDate = new Date();
         var day = currentDate.getDate();
         var month = currentDate.getMonth() + 1;
@@ -119,6 +119,7 @@ function Allinvoices() {
                 profit: profit, Month: Month, year: year, updateDate: updateDate, sold: Tqty
             })
             console.log(res)
+            DeleteInvoice(record);
         } catch (error) {
             console.log(error);
         }
@@ -200,6 +201,7 @@ function Allinvoices() {
         {
             title: 'Invoice Number',
             dataIndex: 'invoiceNumber',
+            
             key: 'invoiceNumber',
             ...getColumnSearchProps('invoiceNumber', 'Search Invoice Number'),
         },
@@ -233,7 +235,7 @@ function Allinvoices() {
                         <RangePicker onChange={handleDateFilter} format={"DD.MM.YYYY"} />
                     </Space>
                     <br />
-                    <Table columns={columns} dataSource={filteredData}
+                    <Table columns={columns} dataSource={filteredData} pagination={{ pageSize: 5 }}
                         expandable={{
                             expandedRowRender: (record) =>
                                 <>
@@ -245,7 +247,6 @@ function Allinvoices() {
                                                     <h6 className='invdet'>Total Qty : {record.Tqty}</h6>
                                                     <h6 className='invdet'>SubTotal : {record.subtotal}</h6>
                                                     <h6 className='invdet'>Tax 18% : {record.tax}</h6>
-                                                    <h6 className='invdet'>Tax 18% : {record.tax}</h6>
                                                     <h6 className='invdet'>Grand Total : ₹{record.grandtotal}.00</h6>
                                                 </div>
 
@@ -254,8 +255,9 @@ function Allinvoices() {
                                                 <Popconfirm
                                                     title="Are you sure you want to delete this invoice?"
                                                     description="This action cannot be undone and Invoice cannot be retrived!"
-                                                    onConfirm={() => { DeleteInvoice(record.key); UpdateAnalytics(record.date, record.grandtotal, record.Tqty) }}
+                                                    onConfirm={() => {  UpdateAnalytics(record.date, record.grandtotal, record.Tqty,record.key) }}
                                                     okText="Yes"
+                                                
                                                     cancelText="No"
                                                 >
                                                     <Button className='viewinv'>Delete</Button>

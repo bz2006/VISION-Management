@@ -36,7 +36,7 @@ const HeaderComp = () => {
             key: '1',
             label: (
                 <a >
-                    Hi, { }
+                    Hi,
                 </a>
             ),
         },
@@ -134,7 +134,7 @@ return (
                 </div>
                 <div>
                     <Button className='navbtn' href='/'>Home</Button>
-                    <Button className='navbtn' href='http://localhost:4000'>Website</Button>
+                    <Button className='navbtn' href='/web-management'>Website</Button>
                     <Button className='navbtn' href='/new-invoice'>New Invoice</Button>
                     <Button className='navbtn' href='/all-invoices'>All Invoices</Button>
                     <Button className='navbtn' href='/mrp-gen-details'>Generate MRP</Button>

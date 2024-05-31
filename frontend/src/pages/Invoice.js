@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import HeaderComp from "../components/header"
 import axios from 'axios';
-import { Select, Input, InputNumber, Checkbox, DatePicker, Spin } from "antd";
+import { Select, Input, InputNumber, Checkbox, DatePicker, Spin,message } from "antd";
 import "./getinvoice.css"
 import * as Icons from '@ant-design/icons';
+import warning from 'antd/es/_util/warning';
 const { PlusOutlined } = Icons;
 const { DeleteOutlined } = Icons;
 
@@ -34,6 +35,10 @@ function Invoice() {
   const [Markets, setMarkets] = useState([])
   const [Modellist, setModellist] = useState([])
   const [SelectedMarket, setSelectedMarket] = useState([])
+
+if(Models.length>=18){
+message.warning("Please dont add more than 19 models")
+}
 
   const accno = [
     { value: '30891188652', label: ' 30891188652' },
@@ -78,6 +83,7 @@ function Invoice() {
   }
 
   const GenerateMRP = () => {
+    console.log("mm",Models)
     let Combined = splitProducts(Models)
     let Organized = GroupModels(Combined)
     const months = [
@@ -179,13 +185,12 @@ function Invoice() {
   const handleChange = (value, index, field) => {
     const updatedModels = [...Models];
     if (field === 'selectValue') {
-      // Find the corresponding model object from Modellist
       const selectedModel = Modellist.find(model => model.value === value);
       if (selectedModel) {
         updatedModels[index] = {
           selectValue: selectedModel.value,
-          inputValue: 1, // Default quantity to 1 when model is selected
-          mrp: selectedModel.mrp // Set MRP from Modellist
+          inputValue: 1, 
+          mrp: selectedModel.mrp 
         };
       }
     } else {
@@ -250,7 +255,7 @@ function Invoice() {
               filterSort={(optionA, optionB) =>
                 (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
               }
-              defaultValue={Marketplc} // Assuming Marketplc is the default value
+              defaultValue={Marketplc} 
               onChange={(value) => {
                 setMarketplc(value);
                 FetchCatlog(value);

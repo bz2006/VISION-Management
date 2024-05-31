@@ -97,8 +97,8 @@ function Allinvoices() {
         }
     }
 
-    const UpdateAnalytics = async (date, GrandTotal, Tqty,record) => {
-console.log("delete");
+    const UpdateAnalytics = async (date, GrandTotal, Tqty, record) => {
+
         const currentDate = new Date();
         var day = currentDate.getDate();
         var month = currentDate.getMonth() + 1;
@@ -201,7 +201,7 @@ console.log("delete");
         {
             title: 'Invoice Number',
             dataIndex: 'invoiceNumber',
-            
+
             key: 'invoiceNumber',
             ...getColumnSearchProps('invoiceNumber', 'Search Invoice Number'),
         },
@@ -224,6 +224,69 @@ console.log("delete");
         },
 
     ];
+
+
+
+
+    const GenerateMRP = async (id,Date) => {
+        let Models
+        try {
+            setSpinning(true)
+            const res = await axios.get(`/api/v1/invoices/get-invoice/${id}`)
+            console.log(res.data["invoice"]["billCont"])
+            Models = res.data["invoice"]["billCont"]
+            setSpinning(false)
+            console.log(Models)
+        } catch (error) {
+            console.log(error)
+        }
+
+        let Combined = splitProducts(Models)
+        let Organized = GroupModels(Combined)
+        const months = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        const ds = Date.split(".")
+        const year = ds[2]
+        const month = months[ds[1] - 1]
+        const MrpData = [{
+            Date: `${month} ${year}`,
+            Models: Organized,
+        }]
+
+        console.log("orr",Organized);
+        localStorage.setItem("mrp", JSON.stringify(MrpData));
+        window.open("/generate-mrp", '_blank');
+    }
+
+    const splitProducts = (products) => {
+        let result = [];
+        products.forEach(product => {
+            if (product.quantity > 1) {
+                for (let i = 0; i < product.quantity; i++) {
+                    result.push({ selectValue: product.model, inputValue: 1, mrp: product.mrp });
+                }
+            } else {
+                result.push({ selectValue: product.model, inputValue: 1, mrp: product.mrp });
+            }
+        });
+        return result;
+    }
+
+
+    const GroupModels = (array) => {
+        const groupedObjects = [];
+        for (let i = 0; i < array.length; i += 12) {
+            groupedObjects[i / 12] = array.slice(i, i + 12);
+        }
+        return groupedObjects;
+    }
+
+    const Test = async (id) => {
+        console.log(id)
+
+    }
 
     return (
         <>
@@ -255,9 +318,9 @@ console.log("delete");
                                                 <Popconfirm
                                                     title="Are you sure you want to delete this invoice?"
                                                     description="This action cannot be undone and Invoice cannot be retrived!"
-                                                    onConfirm={() => {  UpdateAnalytics(record.date, record.grandtotal, record.Tqty,record.key) }}
+                                                    onConfirm={() => { UpdateAnalytics(record.date, record.grandtotal, record.Tqty, record.key) }}
                                                     okText="Yes"
-                                                
+
                                                     cancelText="No"
                                                 >
                                                     <Button className='viewinv'>Delete</Button>
@@ -275,11 +338,12 @@ console.log("delete");
                                                 </div>
 
                                                 <Button onClick={() => { FetchInvoice(record.key) }} className='viewinv'>View Invoice</Button>
+                                                <Button onClick={() => { GenerateMRP(record.key,record.date) }} className='viewinv'>Generate MRP</Button>
                                                 <Button onClick={() => { Updateinvoice(record.key) }} className='viewinv'>Update invoice</Button>
                                                 <Popconfirm
                                                     title="Are you sure you want to delete this invoice?"
                                                     description="This action cannot be undone and Invoice cannot be retrived!"
-                                                    onConfirm={() => DeleteInvoice(record.key)}
+                                                    onConfirm={() => { UpdateAnalytics(record.date, record.grandtotal, record.Tqty, record.key) }}
                                                     okText="Yes"
                                                     cancelText="No"
                                                 >

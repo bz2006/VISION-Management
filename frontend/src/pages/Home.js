@@ -31,7 +31,7 @@ function HomePage() {
         try {
             const res = await axios.get("/api/v1/analytics/get-analytics")
             console.log(res);
-            const webord = await axios.get("http://localhost:5000/w-vm-api/v1/analytics/get-order-analytics")
+            const webord =""
             console.log(webord.data);
             setData(res.data.length > 0 && res.data.map((anlyct) => ({
                 month: anlyct.monthname,

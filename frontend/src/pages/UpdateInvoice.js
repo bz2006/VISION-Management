@@ -31,7 +31,6 @@ function UpdateInvoice() {
   const [fetchcatlog, setFetchcatlog] = useState("")
   const [markid, setmarkid] = useState("")
   const [spinning, setSpinning] = useState(false);
-  const [Catlog, setCatlog] = useState([])
   const [Markets, setMarkets] = useState([])
   const [Modellist, setModellist] = useState([])
   const [SelectedMarket, setSelectedMarket] = useState([])

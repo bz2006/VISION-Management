@@ -17,20 +17,12 @@ const GenerateExistingInvoice = () => {
     const [InvDet, setInvDet] = useState([])
     const [Items, setItems] = useState([])
     const [Markadrs, setMarkadrs] = useState([])
-    const [marketid, setmarketid] = useState("")
-    const [Catlog, setCatlog] = useState([])
-    const [BillContent, setBillContent] = useState([])
     const [vendorcode, setvendorcode] = useState("")
     const [GSTIN, setGSTIN] = useState("")
     const [Markname, setMarkname] = useState("")
     const [Instruction, setinstruction] = useState("")
     const [VehicleNo, setVehicleNo] = useState("")
     const [Total, setTotal] = useState(0)
-    const [GrandTotal, setGrandTotal] = useState(0)
-    const [Tax, setTax] = useState(0)
-    const [Tqty, setTqty] = useState(0)
-    const [perm, setperm] = useState(true)
-    const [confirm, setconfirm] = useState(false)
     
     window.addEventListener("beforeunload", function(event) {
         localStorage.removeItem('ExistingInvoice');

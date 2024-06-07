@@ -4,7 +4,6 @@ import axios from 'axios';
 import { Select, Input, InputNumber, Checkbox, DatePicker, Spin,message } from "antd";
 import "./getinvoice.css"
 import * as Icons from '@ant-design/icons';
-import warning from 'antd/es/_util/warning';
 const { PlusOutlined } = Icons;
 const { DeleteOutlined } = Icons;
 
@@ -31,7 +30,6 @@ function Invoice() {
   const [fetchcatlog, setFetchcatlog] = useState("")
   const [markid, setmarkid] = useState("")
   const [spinning, setSpinning] = useState(false);
-  const [Catlog, setCatlog] = useState([])
   const [Markets, setMarkets] = useState([])
   const [Modellist, setModellist] = useState([])
   const [SelectedMarket, setSelectedMarket] = useState([])

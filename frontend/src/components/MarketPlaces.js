@@ -218,7 +218,7 @@ function MarketPlaces() {
                     </Button>
                 </div>
             ),
-            onFilter: (value, record) => record.gst.toLowerCase().includes(value.toLowerCase()),
+            onFilter: (value, record) => record.gst ? record.gst.toLowerCase().includes(value.toLowerCase()) : false,
             filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
         },
 
@@ -395,7 +395,7 @@ function MarketPlaces() {
                                             value={address}
                                             onChange={(e) => handleChangeUpdate(e.target.value, index)}
                                             placeholder="Address"
-                                            maxLength={22}
+                                          
                                             size='large'
                                             style={{ width: "250px", marginRight: "10px" }}
                                         />

@@ -8,9 +8,7 @@ const marketSchema = new Schema({
     required: true,
   },
   gstNo: {
-    type: String,
-    required: true,
-    unique: true,
+    type: String
   },
   address: [{}],
   vendorcode: {
